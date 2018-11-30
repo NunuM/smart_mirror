@@ -29,7 +29,7 @@ func main(){
 		"Optional: list of comma separated integers that represent: " +
 		"1:LowImpact, " +
 		"2:Minor, " +
-		"3:Moderate: " +
+		"3:Moderate: if" +
 		"4:Serious")
 
 	flag.Var(&point, "point", "Required : list of 2 floats representing Latitude and Longitude")
@@ -50,7 +50,7 @@ func main(){
 	var traffic = TrafficIncident{bbox,*boolPtr,severity,types}
 	resp,err := traffic.makeRequest()
 	if err == nil {
-		fmt.Print(resp.ResourceSets)
+		fmt.Printf("%+v\n",resp.ResourceSets)
 	}else{
 		fmt.Print(err)
 	}
