@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
 	"os"
@@ -50,7 +51,12 @@ func main(){
 	var traffic = TrafficIncident{bbox,*boolPtr,severity,types}
 	resp,err := traffic.makeRequest()
 	if err == nil {
-		fmt.Printf("%+v\n",resp.ResourceSets)
+		res, err1 := json.MarshalIndent(resp.ResourceSets,"","    ")
+		if err1 == nil {
+			fmt.Println(string(res))
+		} else{
+			fmt.Println(err1)
+		}
 	}else{
 		fmt.Print(err)
 	}

@@ -34,7 +34,13 @@ func main(){
 		if err1 != nil {
 			fmt.Print("Error fetching news...")
 		} else{
-			fmt.Printf("%+v",news)
+			res, err1 := json.MarshalIndent(news,"","    ")
+			if err1 == nil {
+				fmt.Println(string(res))
+			} else{
+				fmt.Println(err)
+			}
+
 		}
 	} else{
 		var result bool = false
@@ -50,7 +56,13 @@ func main(){
 			if err1 != nil {
 				fmt.Print("Error fetching news...")
 			} else{
-				fmt.Printf("%+v\n",news)
+				res, err1 := json.MarshalIndent(news,"","    ")
+				if err1 == nil {
+					fmt.Println(string(res))
+				} else{
+					fmt.Println(err1)
+				}
+
 			}
 		}else{
 			fmt.Printf("Invalid Country code must be %v",ACCEPTED_COUNTRY_CODES)
