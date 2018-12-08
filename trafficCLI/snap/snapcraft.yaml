@@ -1,0 +1,21 @@
+name: trafficz # app name'
+version: '0.1' # git tag version'
+summary: Traffic information # 79 char long summary
+description: |
+  Read the top headlines.
+
+grade: stable # must be 'stable' to release into candidate/stable channels
+confinement: strict # use 'strict' once you have the right plugs and slots
+
+parts:
+  traffic-part:
+    # See 'snapcraft plugins'
+    plugin: go
+    source: .
+
+apps:
+  trafficz:
+    command: trafficCLI
+    plugs: 
+      - home
+      - network
