@@ -1,0 +1,36 @@
+name: blockbuster # app name'
+version: '0.2' # git tag version'
+summary: Search for your favourite movies # 79 char long summary
+description: |
+  Update your movie database:-
+    $ blockbuster -r
+  Search by category
+    $ blockbuster -g action
+  Search by name and print as JSON
+    $ blockbuster -j "The movie"
+icon: icon.png
+
+grade: stable # must be 'stable' to release into candidate/stable channels
+confinement: strict # use 'strict' once you have the right plugs and slots
+
+parts:
+  blockbuster-part:
+    # See 'snapcraft plugins'
+    plugin: python
+    source: .
+  config-part:
+    after: [blockbuster-part]
+    plugin: dump
+    organize:
+      'config.cfg' : etc/blockbuster/config.cfg
+    stage:
+      - etc/blockbuster/config.cfg
+    prime:
+      - etc/blockbuster/config.cfg
+
+apps:
+  blockbuster:
+    command: blockbuster
+    plugs: 
+      - home
+      - network
