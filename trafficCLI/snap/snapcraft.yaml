@@ -2,7 +2,7 @@ name: trafficz # app name'
 version: '0.1' # git tag version'
 summary: Traffic information # 79 char long summary
 description: |
-  Read the top headlines.
+  All Traffic information.
 
 grade: stable # must be 'stable' to release into candidate/stable channels
 confinement: strict # use 'strict' once you have the right plugs and slots
