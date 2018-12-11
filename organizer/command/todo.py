@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
 import sqlite3
@@ -97,7 +98,7 @@ def find_all(conn):
     :param conn:
     :return:
     """
-    query = "SELECT * FROM todo"
+    query = "SELECT * FROM todo ORDER BY alarm DESC"
 
     cur = conn.execute(query)
 
@@ -110,8 +111,8 @@ def create_todo(conn, config, title, alarm=None, is_verbose=True):
     New database entry
     :param conn:
     :param config:
-    :param title:
-    :param alarm:
+    :param str title:
+    :param str alarm:
     :param is_verbose
     :return:
     """
@@ -127,9 +128,9 @@ def create_todo(conn, config, title, alarm=None, is_verbose=True):
         else:
             alarm_utc = normalize_date(config, alarm)
             if alarm_utc > now:
-                row = (title, alarm_utc.strftime(db_date_format), True, now.strftime(db_date_format))
+                row = (title.encode("utf-8"), alarm_utc.strftime(db_date_format), True, now.strftime(db_date_format))
             else:
-                row = (title, alarm_utc.strftime(db_date_format), False, now.strftime(db_date_format))
+                row = (title.encode("utf-8"), alarm_utc.strftime(db_date_format), False, now.strftime(db_date_format))
 
         conn.execute(query, row)
         conn.commit()
@@ -172,7 +173,7 @@ def find_newest_todo(conn):
     """
     now = datetime.now(tz=pytz.utc)
 
-    query = """SELECT * FROM todo WHERE alarm > '{}'""".format(now)
+    query = """SELECT * FROM todo WHERE alarm > '{}' ORDER BY alarm DESC""".format(now)
     cur = conn.execute(query)
 
     return [dict((cur.description[i][0], value) \
@@ -187,7 +188,7 @@ def find_oldest_todo(conn):
     """
     now = datetime.now(tz=pytz.utc)
 
-    query = """SELECT * FROM todo WHERE alarm <= '{}'""".format(now)
+    query = """SELECT * FROM todo WHERE alarm <= '{}' ORDER BY alarm ASC""".format(now)
     cur = conn.execute(query)
 
     return [dict((cur.description[i][0], value) \
@@ -347,7 +348,7 @@ def paginate(todos, config):
 
         pretty_print([todo], config)
         current += 1
-        char = input("{} in total of {}. Press enter to continue or q to exit.".format(current, num_todos))
+        char = input("{} in total of {}. Press enter to continue or q to exit $".format(current, num_todos))
         if char == "q":
             break
         os.system('cls' if os.name == 'nt' else 'clear')
