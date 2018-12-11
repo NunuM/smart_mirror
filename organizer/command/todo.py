@@ -9,6 +9,7 @@ import sys
 import os.path
 from datetime import datetime
 import pytz
+import socket
 
 
 def usage():
@@ -65,11 +66,11 @@ def usage():
     return True
 
 
-def init_database(config):
+def init_database(config) -> sqlite3.Connection:
     """
     Create database connection, and required tables
     :param config:
-    :return: sqlite connection
+    :return: sqlite3.Connection
     """
 
     db_name = config.get('sqlite', 'name')
@@ -85,6 +86,12 @@ def init_database(config):
                      notifiable   BOOLEAN  DEFAULT FALSE,
                      created      DATETIME NOT NULL
                     )""")
+
+    conn.execute("""CREATE TABLE IF NOT EXISTS events
+                    (uid          TEXT    NOT NULL,
+                     todo_id      INT     NOT NULL
+                    )""")
+
     # speed up searches
     conn.execute("CREATE INDEX IF NOT EXISTS idx_title ON todo(title)")
     conn.execute("CREATE INDEX IF NOT EXISTS idx_alarm ON todo(alarm)")
@@ -109,7 +116,7 @@ def find_all(conn):
 def create_todo(conn, config, title, alarm=None, is_verbose=True):
     """
     New database entry
-    :param conn:
+    :param sqlite3.Connection conn:
     :param config:
     :param str title:
     :param str alarm:
@@ -123,6 +130,7 @@ def create_todo(conn, config, title, alarm=None, is_verbose=True):
         now = datetime.now(tz=pytz.utc)
 
         if alarm is None:
+            alarm_utc = now
             now_formatted = now.strftime(db_date_format)
             row = (title, now_formatted, False, now_formatted)
         else:
@@ -132,10 +140,13 @@ def create_todo(conn, config, title, alarm=None, is_verbose=True):
             else:
                 row = (title.encode("utf-8"), alarm_utc.strftime(db_date_format), False, now.strftime(db_date_format))
 
-        conn.execute(query, row)
+        cursor = conn.execute(query, row)
         conn.commit()
 
-        return {'title': row[0], 'alarm': row[1], 'notifiable': row[2], 'created': row[3]}
+        if row[2]:
+            with_notification(conn, config, cursor.lastrowid, title, alarm_utc)
+
+        return {'title': title, 'alarm': row[1], 'notifiable': row[2], 'created': row[3]}
 
     except Exception as e:
         if is_verbose:
@@ -146,17 +157,17 @@ def create_todo(conn, config, title, alarm=None, is_verbose=True):
 def find_todo_by_title(conn, config, title, alarm=None):
     """
     Find by title
-    :param conn:
+    :param sqlite3.Connection conn:
     :param config:
     :param title:
     :param alarm:
     :return:
     """
     if alarm is None:
-        query = """SELECT * FROM todo WHERE title LIKE '%{}%' """.format(title.replace('\'', '´'))
+        query = """SELECT rowid,* FROM todo WHERE LOWER(title) LIKE '%{}%' """.format(title.replace('\'', '´').lower())
     else:
-        query = """SELECT * FROM todo WHERE title LIKE '%{}%' AND alarm='{}' """ \
-            .format(title.replace('\'', '´'),
+        query = """SELECT rowid,* FROM todo WHERE LOWER(title) LIKE '%{}%' AND alarm='{}' """ \
+            .format(title.replace('\'', '´').lower(),
                     normalize_date(config, alarm).strftime(config.get('sqlite', 'dateformat')))
 
     cur = conn.execute(query)
@@ -168,7 +179,7 @@ def find_todo_by_title(conn, config, title, alarm=None):
 def find_newest_todo(conn):
     """
 
-    :param conn:
+    :param sqlite3.Connection conn:
     :return:
     """
     now = datetime.now(tz=pytz.utc)
@@ -183,7 +194,7 @@ def find_newest_todo(conn):
 def find_oldest_todo(conn):
     """
     List all entries older than now UTC
-    :param conn:
+    :param sqlite3.Connection conn:
     :return:
     """
     now = datetime.now(tz=pytz.utc)
@@ -195,30 +206,29 @@ def find_oldest_todo(conn):
                  for i, value in enumerate(row)) for row in cur.fetchall()]
 
 
-def update_todo(conn, config, original_title, new_title, alarm=None, is_verbose=False):
+def update_todo(conn, config, original_title, new_title, affected_rows, alarm=None, is_verbose=False):
     """
     Update entry
-    :param conn:
+    :param sqlite3.Connection conn:
     :param config:
     :param original_title:
     :param new_title:
+    :param list affected_rows:
     :param alarm:
     :param is_verbose
     :return:
     """
+    notifiable = False
 
     if alarm is None:
         query = "UPDATE todo set title = '{}' WHERE title='{}'" \
             .format(new_title.replace('\'', '´'),
                     original_title)
     else:
-
         now = datetime.now(tz=pytz.utc)
         alarm_utc = normalize_date(config, alarm)
         if alarm_utc > now:
             notifiable = True
-        else:
-            notifiable = False
 
         query = "UPDATE todo set title = '{}', alarm='{}', notifiable = {} WHERE title='{}'" \
             .format(new_title.replace('\'', '´'),
@@ -229,6 +239,10 @@ def update_todo(conn, config, original_title, new_title, alarm=None, is_verbose=
     try:
         cursor = conn.execute(query)
         conn.commit()
+        cursor.close()
+
+        if affected_rows is not None:
+            calculate_event_changes(conn, config, new_title, affected_rows, notifiable)
 
         return {'updated': cursor.rowcount}
     except Exception as e:
@@ -241,7 +255,7 @@ def update_todo(conn, config, original_title, new_title, alarm=None, is_verbose=
 def delete_todo(conn, config, title, alarm=None, is_verbose=False):
     """
     Delete entry
-    :param conn:
+    :param sqlite3.Connection conn:
     :param config:
     :param title:
     :param alarm:
@@ -301,7 +315,7 @@ def date_to_local(config, date):
 def print_in_json(container):
     """
     Output as JSON format
-    :param container:
+    :param dict container:
     :return:
     """
     print(json.dumps(container))
@@ -337,7 +351,7 @@ def pretty_print(container, config):
 def paginate(todos, config):
     """
     Paginate entries
-    :param todos:
+    :param list todos:
     :param config:
     :return:
     """
@@ -352,6 +366,90 @@ def paginate(todos, config):
         if char == "q":
             break
         os.system('cls' if os.name == 'nt' else 'clear')
+
+    return True
+
+
+def calculate_event_changes(conn, config, new_title, affected_todos, notifiable):
+    """
+
+    :param sqlite3.Connection conn:
+    :param config:
+    :param list affected_todos:
+    :param notifiable
+    :return:
+    """
+    ids = []
+    for row in affected_todos:
+        ids.append(row.get('rowid'))
+    ids_str = ','.join(str(x) for x in ids)
+
+    cursor = conn.execute("SELECT rowid,* FROM events WHERE todo_id in ({})".format(ids_str))
+
+    for row in cursor:
+        if notifiable and row[2] not in ids:
+            data = [(k['title'], k['alarm']) for k in affected_todos if k['rowid'] == row[2]]
+            if len(data) == 1:
+                alarm = datetime.strptime(data[0][1], config.get('sqlite', 'dateformat'))
+                with_notification(conn, config, row[0], new_title, alarm)
+        else:
+            message = json.dumps({'id': row[1]})
+            action = 1
+
+            message_size = len(message)
+
+            payload = "{}{}{}".format(str(message_size).zfill(4), str(action).zfill(2), message)
+
+            with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as s:
+                s.connect(config.get('daemon', 'socket'))
+                s.sendall(str(payload).encode())
+                s.recv(4)  # wait for response
+
+            conn.execute("DELETE FROM events WHERE rowid={}".format(row[0]))
+            conn.commit()
+
+    cursor.close()
+
+    if notifiable:
+        for todo_id in ids:
+            data = [(k['title'], k['alarm']) for k in affected_todos if k['rowid'] == todo_id]
+            if len(data) == 1:
+                alarm = datetime.strptime(data[0][1], config.get('sqlite', 'dateformat'))
+                with_notification(conn, config, todo_id, new_title, alarm)
+
+    return True
+
+
+def with_notification(conn, config, row_id, title, alarm):
+    """
+
+    :param sqlite3.Connection conn:
+    :param config:
+    :param row_id
+    :param str title:
+    :param datetime alarm:
+    :return:
+    """
+    message = json.dumps({'message': title, 'alarm': alarm.strftime(config.get('daemon', 'dateformat'))})
+    message_size = len(message)
+
+    payload = "{}{}{}".format(str(message_size).zfill(4), str(0).zfill(2), message)
+
+    with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as s:
+        s.connect(config.get('daemon', 'socket'))
+        s.sendall(str(payload).encode())
+        size = s.recv(4)
+
+        try:
+            size = int(size)
+            response = json.loads(s.recv(size), encoding='utf-8')
+
+            if response.get('success'):
+                uid = response.get('id')
+                conn.execute("""INSERT INTO events (uid,todo_id) VALUES (?,?)""", (uid, row_id))
+                conn.commit()
+        except Exception:
+            pass
 
     return True
 
@@ -456,13 +554,13 @@ def main():
                     pretty_print(to_update, config)
                     consent = input('You confirm update y/n?')
                     if consent == 'y':
-                        response = update_todo(db_connection, config, args[0], args[1], defined_alarm, True)
+                        response = update_todo(db_connection, config, args[0], args[1], to_update, defined_alarm, True)
                         pretty_print([response], config)
                 else:
                     response = update_todo(db_connection, config, args[0], args[1], defined_alarm)
                     print_in_json([response])
             else:
-                print ("To update todo two arguments must be provided")
+                print("To update todo two arguments must be provided")
         elif is_to_delete:
 
             for title in args:
