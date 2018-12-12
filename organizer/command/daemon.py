@@ -12,6 +12,71 @@ import threading
 import smtplib
 import configparser
 from email.mime.text import MIMEText
+import heapq
+
+
+class BreakableScheduler(sched.scheduler):
+
+    def __init__(self, timefunc=time.time, delayfunc=time.sleep):
+        super().__init__(timefunc, delayfunc)
+        self.sleeper = None
+
+    def evaluate_next_event(self):
+        print("Try to call sleeper")
+        if self.sleeper is not None:
+            print("Calling sleeper to wake")
+            self.sleeper.wake()
+
+    def run(self, blocking=True):
+        lock = self._lock
+        q = self._queue
+        delayfunc = self.delayfunc
+        timefunc = self.timefunc
+        pop = heapq.heappop
+        while True:
+            with lock:
+                if not q:
+                    break
+                time, priority, action, argument, kwargs = q[0]
+                now = timefunc()
+                if time > now:
+                    delay = True
+                else:
+                    delay = False
+                    pop(q)
+            if delay:
+                if not blocking:
+                    return time - now
+                delta = time - now
+                print("Sleeping " + str(time))
+                self.sleeper = Sleep(delta, False)
+                self.sleeper.sleep()
+                future_now = timefunc()
+                new_delta = future_now - now
+                print("old delta" + str(delta) + ", new delta" + str(new_delta))
+                if new_delta <= delta:
+                    print("Get new list.............")
+                    q = self._queue
+            else:
+                action(*argument, **kwargs)
+                delayfunc(0)  # Let other threads run
+
+
+class Sleep(object):
+    def __init__(self, seconds, immediate=True):
+        self.seconds = seconds
+        self.event = threading.Event()
+        if immediate:
+            self.sleep()
+
+    def sleep(self, seconds=None):
+        if seconds is None:
+            seconds = self.seconds
+        self.event.clear()
+        self.event.wait(timeout=seconds)
+
+    def wake(self):
+        self.event.set()
 
 
 class EventManager:
@@ -20,10 +85,11 @@ class EventManager:
         :param ConfigParser config:
         """
         self.events = {}
-        self.scheduler = sched.scheduler(time.time, time.sleep)
+        self.scheduler = BreakableScheduler(time.time, time.sleep)
         self.config = config
         self._semaphore = threading.Semaphore(0)
         self._stop = False
+        self.sleeper = None
 
     def __len__(self):
         return len(self.events)
@@ -51,28 +117,38 @@ class EventManager:
         :param dict message:
         :return:
         """
-        email_from = self.config.get('email', 'user')
-        email_to = self.config.get('organizer', 'recipients')
+        try:
+            email_from = self.config.get('email', 'user')
+            email_to = self.config.get('organizer', 'recipients')
 
-        msg = MIMEText("Thank you for using organizer.")
-        msg['Subject'] = message
-        msg['From'] = email_from
-        msg['To'] = email_to
+            msg = MIMEText("Thank you for using organizer.")
+            msg['Subject'] = message
+            msg['From'] = email_from
+            msg['To'] = email_to
 
-        email_server = self.connect_to_email_server()
-        email_server.sendmail(email_from, email_to, msg.as_string())
+            email_server = self.connect_to_email_server()
+            email_server.sendmail(email_from, email_to, msg.as_string())
 
-        email_server.close()
+            email_server.close()
+        except Exception as e:
+            print(str(e))
 
     def run(self):
         print("Running...")
-        self._semaphore.acquire()
-        if not self._stop:
-            print("Unlocked")
-            self.scheduler.run(blocking=True)
-            print("Alarm")
 
-            return self.run()
+        while not self._stop:
+            self._semaphore.acquire()
+            print("Unlocked")
+            if not self._stop:
+                print("Awaiting")
+                self.scheduler.run(blocking=True)
+                print("Alarm")
+
+        print("Leaving")
+        return True
+
+    def evaluate_next_event(self):
+        self.scheduler.evaluate_next_event()
 
     def stop_and_exit(self):
         self._stop = True
@@ -90,6 +166,7 @@ class EventManager:
         event = self.scheduler.enterabs(required_time, 1, self.dispatch_event, (message,))
         generated_uuid = uuid.uuid1()
         self.events[generated_uuid] = event
+        self.evaluate_next_event()
         self._semaphore.release()
 
         return generated_uuid.__str__()
@@ -131,36 +208,40 @@ class CommunicationManager:
             if os.path.exists(self.server_address):
                 raise ValueError('Please provide a valid socket address')
 
-    def run(self, event_manager, prepare=True, stop=False):
+    def run(self, event_manager):
         """
 
-        :param prepare:
         :param EventManager event_manager:
-        :param stop:
         :return:
         """
-        if prepare:
-            self.sock.bind(self.server_address)
-            self.sock.listen(1)
 
-        connection, client_address = self.sock.accept()
-        try:
-            while True:
-                size = connection.recv(4)
-                action = connection.recv(2)
+        self.sock.bind(self.server_address)
+        self.sock.listen(1)
 
+        stop = False
+        connection = None
+
+        while True:
+            try:
+                connection, client_address = self.sock.accept()
+
+                connection.settimeout(2)
                 try:
+                    size = connection.recv(4)
+                    action = connection.recv(2)
                     msg_size = int(size)
                     action = int(action)
-                except ValueError:
-                    break
+                except (ValueError, socket.timeout) as e:
+                    connection.close()
+                    continue
 
                 if msg_size > 2:
                     message = connection.recv(msg_size)
                     try:
                         decoded_message = json.loads(message, encoding='utf-8')
                     except:
-                        break
+                        connection.close()
+                        continue
                 else:
                     decoded_message = {}
 
@@ -168,6 +249,8 @@ class CommunicationManager:
 
                     event_id = event_manager.queue_notification_event(decoded_message.get('alarm'),
                                                                       decoded_message.get('message'))
+
+                    print("Received new event")
 
                     response = json.dumps(
                         {
@@ -190,20 +273,27 @@ class CommunicationManager:
                     stop = True
                     response = json.dumps({'success': True, 'ticket': self.ticket})
                 else:
-                    break
+                    response = json.dumps({'success': True, 'ticket': self.ticket})
 
                 response_len = str(len(response)).zfill(4)
                 srt_response = '{}{}'.format(str(response_len), response)
 
-                while connection.sendall(str.encode(srt_response, encoding='utf-8')) is None:
-                    break
+                try:
+                    while connection.sendall(str.encode(srt_response, encoding='utf-8')) is None:
+                        break
+                except BrokenPipeError as e:
+                    pass
 
-                break
-        finally:
-            connection.close()
+                connection.close()
+            except Exception as e:
+                print(str(e))
+                if connection is not None:
+                    connection.close()
+
             self.ticket += 1
-            if not stop:
-                self.run(event_manager, False)
+
+            if stop:
+                return True
 
 
 def main():
@@ -217,6 +307,7 @@ def main():
 
     communication_manager = CommunicationManager("./test")
     communication_manager.run(event_manger)
+
     event_manger.stop_and_exit()
 
 
