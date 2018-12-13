@@ -1,0 +1,10 @@
+<RCC>
+   <qresource prefix="/">
+        <file>ui/main.qml</file>
+        <file>ui/application/Application.ui.qml</file>
+        <file>ui/home/HomeForm.ui.qml</file>
+        <file>ui/sensor/SensorDelegate.qml</file>
+        <file>ui/sensor/SensorDelegateForm.ui.qml</file>
+        <file>qtquickcontrols2.conf</file>
+    </qresource>
+</RCC>
