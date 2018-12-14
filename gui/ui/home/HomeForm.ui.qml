@@ -16,6 +16,9 @@ Page {
         height: parent.height
 
         model: sensorModel
-        delegate: SensorDelegate { }
+        delegate: SensorDelegate {
+
+        }
     }
+
 }

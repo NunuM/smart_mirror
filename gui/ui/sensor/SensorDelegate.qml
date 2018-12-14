@@ -1,51 +1,38 @@
 import QtQuick 2.4
 import QtQuick.Controls 2.4
+import CustomControls 1.0
 
 Item {
     id: container
     height: 110
     width: container.ListView.view ? container.ListView.view.width : 0
-    Rectangle {
+
+    RadialBar {
         width: parent.width - 10
         height: 100
-        anchors.rightMargin: 5
-        color: "orange"
-        Column{
-            anchors.centerIn: parent
-            Text {
-                id: title
-                text: model.name
-                x: 10;
-                font.pixelSize: 12
-                font.bold: true
-                color: "white"
-                linkColor: "white"
-            }
-
-            Text {
-                id: last
-                text: model.lastReading
-                x: 10;
-                font.pixelSize: 34
-                font.bold: true
-                color: "white"
-                linkColor: "white"
-            }
+        anchors.centerIn: parent
+        penStyle: Qt.FlatCap
+        dialType: model.index % 2 == 0 ? RadialBar.MinToMax : RadialBar.NoDial
+        progressColor: "#e2801d"
+        backgroundColor: "#34495e"
+        dialWidth: 2
+        startAngle: 0
+        spanAngle: 320
+        minValue: 0
+        maxValue: 100
+        value: model.lastReading
+        textFont {
+            family: "Consolas"
+            italic: false
+            pointSize: 12
         }
+        suffixText: model.name
+        textColor: "#FFFFFF"
+    }
 
-        MouseArea {
-            anchors.fill: parent
-            cursorShape: Qt.OpenHandCursor
-        }
-
-        Connections
-        {
-            target: model
-            nameChanged: {
-                console.log("Got signal from SerialCom in QML. passed bool value is: ");
-            }
-        }
-
+    MouseArea {
+        anchors.fill: parent
+        cursorShape: Qt.OpenHandCursor
     }
 
 }

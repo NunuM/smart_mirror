@@ -19,7 +19,7 @@ class Sensor : public QObject
 
 public:
     explicit Sensor(QObject *parent = nullptr);
-    Sensor(QString name, QJsonArray readings, QObject *parent= nullptr);
+    Sensor(QString name, QString unit, QJsonArray readings, QObject *parent= nullptr);
 
     QString name() const;
     void setName(const QString &name);
@@ -36,6 +36,7 @@ public slots:
 
 private:
     QString mName;
+    QString mUnit;
     QJsonArray mReadings;
 };
 

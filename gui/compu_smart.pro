@@ -1,4 +1,4 @@
-QT += quick
+QT += quick dbus
 CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
@@ -15,7 +15,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     src/smart/sensor.cpp \
     src/smart/softwarecenter.cpp \
-    src/main.cpp
+    src/main.cpp \
+    src/smart/radialbar.cpp \
+    src/smart/sensormanager.cpp \
+    src/smart/sensormodel.cpp
 
 RESOURCES += qml.qrc
 
@@ -39,4 +42,7 @@ DISTFILES += \
 
 HEADERS += \
     src/smart/sensor.h \
-    src/smart/softwarecenter.h
+    src/smart/softwarecenter.h \
+    src/smart/radialbar.h \
+    src/smart/sensormanager.h \
+    src/smart/sensormodel.h

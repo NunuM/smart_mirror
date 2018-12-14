@@ -16,8 +16,8 @@ Sensor::Sensor(QObject *parent) : QObject(parent)
  * @param readings
  * @param parent
  */
-Sensor::Sensor(QString name, QJsonArray readings, QObject *parent)
-    : QObject(parent), mName(name), mReadings(readings)
+Sensor::Sensor(QString name, QString unit, QJsonArray readings, QObject *parent)
+    : QObject(parent), mName(name), mUnit(unit), mReadings(readings)
 {
 }
 
@@ -72,7 +72,7 @@ QVariantList Sensor::olderReadings()
 void Sensor::newReading(const QJsonObject &newReading)
 {
     qDebug("New reading");
-    auto value = newReading["value"].toInt();
+    auto value = newReading["value"].toDouble();
     mReadings.append(newReading);
     emit readingChanged(value);
 }
