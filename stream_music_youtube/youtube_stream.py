@@ -1,149 +1,86 @@
-import pafy, pyglet
-import urllib.request
-from urllib.parse import *
-from bs4 import BeautifulSoup
-from pathlib import Path
-pyglet.lib.load_library('avbin')
-pyglet.have_avbin=True
+import argparse
+import pafy
+import vlc
+from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
 
-PREF_AUDIO_TYPE='m4a'
-PREF_AUDIO_TYPE_EXT='.m4a'
+DEVELOPER_KEY = 'AIzaSyC3B9tKyRRq95nClQhKxRGR12zFK2-P4V4'
+YOUTUBE_API_SERVICE_NAME = 'youtube'
+YOUTUBE_API_VERSION = 'v3'
+YOUTUBE_URL_VIDEO ='https://www.youtube.com/watch?v='
+MAX_VOLUME = 200
+MIN_VOLUME = 0
 
-class Youtube_mp3():
-    def __init__(self):
-        self.lst = []
-        self.dict = {}
-        self.dict_names = {}
-        self.playlist = []	
+def pafy_video(video_id):
+    url = 'https://www.youtube.com/watch?v={0}'.format(video_id)
+    vid = pafy.new(url)
 
-    def url_search(self, search_string, max_search):
-        textToSearch = search_string
-        query = urllib.parse.quote(textToSearch)
-        url = "https://www.youtube.com/results?search_query=" + query
-        response = urllib.request.urlopen(url)
-        html = response.read()
-        soup = BeautifulSoup(html, 'lxml')
-        i = 1
-        for vid in soup.findAll(attrs={'class':'yt-uix-tile-link'}):
-            if len(self.dict) < max_search:
-                self.dict[i] = 'https://www.youtube.com' + vid['href']
-                i += 1
-            else:
-                break
+def pafy_playlist(playlist_id):
+    url = "https://www.youtube.com/playlist?list={0}".format(playlist_id)
+    playlist = pafy.get_playlist(url)
 
 
-    def get_search_items(self, max_search):
+def youtube_search(options):
+  youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION, developerKey=DEVELOPER_KEY)
 
-        if self.dict != {}:
-            i = 1
-            for url in self.dict.values():
-                try:
-                    info = pafy.new(url)
-                    self.dict_names[i] = info.title
-                    print("{0}. {1}".format(i, info.title))
-                    i += 1
+  search_response = youtube.search().list(
+    q=options.search,
+    part='id,snippet',
+    maxResults=options.max_results
+  ).execute()
 
-                except ValueError:
-                    pass
+  videos = []
 
-    def play_media(self, num):
-        url = self.dict[int(num)]
-        info = pafy.new(url)
-        #audio = info.m4astreams[-1]
-        audio = info.getbestaudio(preftype=PREF_AUDIO_TYPE)
-        fullname = self.dict_names[int(num)] + PREF_AUDIO_TYPE_EXT
-        my_file = Path(fullname)
-        if (not my_file.is_file()):
-		    # file exists
-            audio.download(fullname, quiet=False)
+  for search_result in search_response.get('items', []):
+    if search_result['id']['kind'] == 'youtube#video':
+      videos.append('%s' % (search_result['id']['videoId']))
 
-        song = pyglet.media.load(fullname)
-        player = pyglet.media.Player()
-        player.queue(song)
-        print("Playing: {0}.".format(self.dict_names[int(num)]))
-        player.play()
-        stop = ''
-        while True:
-            stop = input('Type "s" to stop; "p" to pause; "" to play; : ')
-            if stop == 's':
-                player.pause()
-                break
-            elif stop == 'p':
-                player.pause()
-            elif stop == '':
-                player.play()
-            elif stop == 'r':
-                #player.queue(song)
-                #player.play()
-                print('Replaying: {0}'.format(self.dict_names[int(num)]))
-                
 
-    def download_media(self, num):
-        url = self.dict[int(num)]
-        info = pafy.new(url)
-        audio = info.getbestaudio(preftype=PREF_AUDIO_TYPE)
-        song_name = self.dict_names[int(num)]
-        print("Downloading: {0}.".format(self.dict_names[int(num)]))
-        print(song_name)
-        song_name = input("Filename (Enter if as it is): ")
-        #file_name = song_name[:11] + '.mp3'
-        file_name = song_name + PREF_AUDIO_TYPE_EXT
-        if song_name == '':
-            audio.download(remux_audio=True)
+  if videos:
+    url = YOUTUBE_URL_VIDEO+videos[0]
+    print(url)
+    video = pafy.new(url)
+    best = video.getbestaudio()
+    print("Best Audio={0}bps".format(best.bitrate))
+    playurl = best.url
+    vlc_instance = vlc.Instance(['--no-video'])
+    player = vlc_instance.media_player_new()
+    media = vlc_instance.media_new(playurl)
+    media.get_mrl()
+    player.set_media(media)
+    player.play()
+    volume = 50
+    player.audio_set_volume(volume)
+    command = ''
+    while True:
+        command = raw_input('Type "u" to increase volume;"d" to decrease volume;"s" to stop; "p" to pause; "" to play; : ')
+        if command == 'u':
+           volume = change_playback_volume(volume, volume+10)
+           print("Volume={0}".format(volume))
+           player.audio_set_volume(volume)
+        elif command == 'd':
+           volume = change_playback_volume(volume, volume-10)
+           print("Volume={0}".format(volume))
+           player.audio_set_volume(volume)
+        elif command == 's':
+           player.pause()
+           break
+        elif command == 'p':
+           player.pause()
+        elif command == '':
+           player.play()
         else:
-            audio.download(filepath = filename, remux_audio=True)
+           print("Invalid Option")
 
-
-    def bulk_download(self, url):
-        info = pafy.new(url)
-        audio = info.getbestaudio(preftype=PREF_AUDIO_TYPE)
-        song_name = self.dict_names[int(num)]
-        print("Downloading: {0}.".format(self.dict_names[int(num)]))
-        print(song_name)
-        song_name = input("Filename (Enter if as it is): ")
- #       file_name = song_name[:11] + '.m4a'
-        file_name = song_name + PREF_AUDIO_TYPE_EXT
-        if song_name == '':
-            audio.download(remux_audio=True)
-        else:
-            audio.download(filepath = filename, remux_audio=True)
-
-    def add_playlist(self, search_query):
-        url = self.url_search(search_query, max_search=1)
-        self.playlist.append(url)
+def change_playback_volume(current_volume, new_volume):
+    if(new_volume > MAX_VOLUME or new_volume < MIN_VOLUME):
+        return current_volume
+    else:
+        return new_volume
 
 if __name__ == '__main__':
-    print('Welcome to the Youtube-Mp3 player.')
-    x = Youtube_mp3()
-    search = ''
-    while search != 'q':
-        search = input("Youtube Search: ")
-        old_search = search
-        max_search = 5
-        # if search == '':
-        #     print('\nFetching for: {0} on youtube.'.format(old_search.title()))
-        #     x.url_search(search, max_search)
-        #     x.get_search_items(max_search)
-        #     song_number = input('Input song number: ')
-        #     x.play_media(song_number)
-
-        x.dict = {}
-        x.dict_names = {}
-
-        if search == 'q':
-            print("Ending Youtube-Mp3 player.")
-            break
-
-        download = input('1. Play Live Music\n2. Download Mp3 from Youtube.\n')
-        if search != 'q' and (download == '1' or download == ''):
-            print('\nFetching for: {0} on youtube.'.format(search.title()))
-            x.url_search(search, max_search)
-            x.get_search_items(max_search)
-            song_number = input('Input song number: ')
-            x.play_media(song_number)
-        elif download == '2':
-            print('\nDownloading {0} (conveniently) from youtube servers.'.format(search.title()))
-            x.url_search(search, max_search)
-            x.get_search_items(max_search)
-            song_number = input('Input song number: ')
-            x.download_media(song_number)
+  parser = argparse.ArgumentParser()
+  parser.add_argument('--search', help='Search term', default='Music')
+  parser.add_argument('--max-results', help='Max results', default=1)
+  args = parser.parse_args()
+  youtube_search(args)

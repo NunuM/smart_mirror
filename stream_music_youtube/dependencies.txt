@@ -1,8 +1,0 @@
-python -m pip install pafy
-python -m pip install pyglet
-python -m pip install youtube-dl
-python -m pip install bs4
-python -m pip install lxml
-
-
-Instalar AVbin
