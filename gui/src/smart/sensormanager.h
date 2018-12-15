@@ -2,9 +2,7 @@
 #define SENSORMANAGER_H
 
 #include <QObject>
-#include <QVariantList>
-#include <QList>
-
+#include <QVector>
 namespace smart {
 
 class Sensor;
@@ -12,36 +10,38 @@ class Sensor;
 class SensorManager : public QObject
 {
     Q_OBJECT
-
     Q_CLASSINFO("D-Bus Interface", "io.smart.Sensor")
 
 public:
     explicit SensorManager(QObject *parent = nullptr);
 
-    QList<Sensor *> sensors() const;
-    void setSensors(const QList<Sensor *> &sensors);
-    QList<QObject *> * listOfSensors();
+    QVector<Sensor *> items() const;
 
+    bool setItemAt(int index, Sensor * sensor);
 
 signals:
-    void newSensor(const Sensor * sensor);
-    void removeSensor(const Sensor * sensor);
-
     void preItemAppended();
     void postItemAppended();
 
     void preItemRemoved(int index);
     void postItemRemoved();
 
+    void preItemUpdated(int index);
+    void postItemUpdated(int index);
+
 public slots:
-    bool addSensor(const QString &name, const QString &unit, QVariantList readings);
-    bool deleteSensor(const QString &name);
-    bool addSensorReading(const QString &name, qreal value);
+    bool appendSensor(QString name, QString unit, QVector<qreal> reading);
+    bool addReading(QString name, qreal value);
+
+    bool removeSensor(QString name);
+    int  numbersOfSensors();
 
 private:
-    QList<Sensor*> mSensors;
+    QVector<Sensor *> mItems;
+
+    int exists(QString name);
+
 };
 
 }
-
 #endif // SENSORMANAGER_H

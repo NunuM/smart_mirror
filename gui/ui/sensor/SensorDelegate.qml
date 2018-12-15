@@ -20,13 +20,13 @@ Item {
         spanAngle: 320
         minValue: 0
         maxValue: 100
-        value: model.lastReading
+        value: model.reading
         textFont {
             family: "Consolas"
             italic: false
             pointSize: 12
         }
-        suffixText: model.name
+        suffixText: model.unit
         textColor: "#FFFFFF"
     }
 

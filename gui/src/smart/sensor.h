@@ -3,9 +3,8 @@
 
 #include <QObject>
 #include <QString>
+#include <QVector>
 #include <QVariantList>
-#include <QJsonArray>
-#include <QJsonObject>
 
 namespace smart {
 
@@ -19,14 +18,20 @@ class Sensor : public QObject
 
 public:
     explicit Sensor(QObject *parent = nullptr);
-    Sensor(QString name, QString unit, QJsonArray readings, QObject *parent= nullptr);
+    Sensor(QString name, QString unit, QObject *parent= nullptr);
+    Sensor(QString name, QString unit, QVector<qreal> readings, QObject *parent= nullptr);
 
     QString name() const;
     void setName(const QString &name);
-    qreal lastReading();
+
+    qreal lastReading() const;
+
     QVariantList olderReadings();
 
-    void newReading(const QJsonObject &newReading);
+    void newReading(qreal value);
+
+    QString unit() const;
+    void setUnit(const QString &unit);
 
 signals:
     void nameChanged();
@@ -37,7 +42,7 @@ public slots:
 private:
     QString mName;
     QString mUnit;
-    QJsonArray mReadings;
+    QVector<qreal> mReadings;
 };
 
 }

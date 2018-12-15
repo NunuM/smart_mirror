@@ -1,4 +1,5 @@
 #include "sensor.h"
+#include <QVariant>
 
 namespace smart {
 /**
@@ -16,7 +17,19 @@ Sensor::Sensor(QObject *parent) : QObject(parent)
  * @param readings
  * @param parent
  */
-Sensor::Sensor(QString name, QString unit, QJsonArray readings, QObject *parent)
+Sensor::Sensor(QString name, QString unit, QObject *parent)
+    : QObject(parent), mName(name), mUnit(unit), mReadings(QVector<qreal>(10))
+{
+}
+
+/**
+ * @brief Sensor::Sensor
+ * @param name
+ * @param unit
+ * @param readings
+ * @param parent
+ */
+Sensor::Sensor(QString name, QString unit, QVector<qreal> readings, QObject *parent)
     : QObject(parent), mName(name), mUnit(unit), mReadings(readings)
 {
 }
@@ -44,7 +57,7 @@ void Sensor::setName(const QString &name)
  * @brief Sensor::lastReading
  * @return last reading value
  */
-qreal Sensor::lastReading()
+qreal Sensor::lastReading() const
 {
     qDebug("Reading");
 
@@ -52,8 +65,7 @@ qreal Sensor::lastReading()
         return 0;
     }
 
-    auto entry = mReadings.last();
-    return entry["value"].toDouble();
+    return  mReadings.last();
 }
 
 /**
@@ -62,19 +74,34 @@ qreal Sensor::lastReading()
  */
 QVariantList Sensor::olderReadings()
 {
-    return mReadings.toVariantList();
+    QVariantList list;
+
+    for (int i = 0; i < mReadings.size(); ++i) {
+        list.append(QVariant(mReadings.at(i)));
+    }
+
+    return list;
 }
 
 /**
  * @brief Sensor::newReading
  * @param newReading
  */
-void Sensor::newReading(const QJsonObject &newReading)
+void Sensor::newReading(qreal value)
 {
     qDebug("New reading");
-    auto value = newReading["value"].toDouble();
-    mReadings.append(newReading);
+    mReadings.append(value);
     emit readingChanged(value);
+}
+
+QString Sensor::unit() const
+{
+    return mUnit;
+}
+
+void Sensor::setUnit(const QString &unit)
+{
+    mUnit = unit;
 }
 
 }

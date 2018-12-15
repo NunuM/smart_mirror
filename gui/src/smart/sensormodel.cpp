@@ -1,85 +1,95 @@
 #include "sensormodel.h"
 
+#include "sensor.h"
+
+namespace smart {
+
 SensorModel::SensorModel(QObject *parent)
-    : QAbstractItemModel(parent)
+    : QAbstractListModel(parent), mList(nullptr)
 {
-}
 
-QModelIndex SensorModel::index(int row, int column, const QModelIndex &parent) const
-{
-    // FIXME: Implement me!
-}
-
-QModelIndex SensorModel::parent(const QModelIndex &index) const
-{
-    // FIXME: Implement me!
 }
 
 int SensorModel::rowCount(const QModelIndex &parent) const
 {
-    if (!parent.isValid())
+    if (parent.isValid() || !mList)
         return 0;
 
-    // FIXME: Implement me!
-}
-
-int SensorModel::columnCount(const QModelIndex &parent) const
-{
-    if (!parent.isValid())
-        return 0;
-
-    // FIXME: Implement me!
-}
-
-bool SensorModel::hasChildren(const QModelIndex &parent) const
-{
-    // FIXME: Implement me!
-}
-
-bool SensorModel::canFetchMore(const QModelIndex &parent) const
-{
-    // FIXME: Implement me!
-    return false;
-}
-
-void SensorModel::fetchMore(const QModelIndex &parent)
-{
-    // FIXME: Implement me!
+    return mList->numbersOfSensors();
 }
 
 QVariant SensorModel::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid())
+    if (!index.isValid() || !mList)
         return QVariant();
 
-    // FIXME: Implement me!
+    const Sensor * item = mList->items().at(index.row());
+    switch (role) {
+    case NameRole:
+        return QVariant(item->name());
+    case UnitRole:
+        return QVariant(item->unit());
+    case ReadingRole:
+        return QVariant(item->lastReading());
+    }
+
     return QVariant();
 }
 
-bool SensorModel::insertRows(int row, int count, const QModelIndex &parent)
+Qt::ItemFlags SensorModel::flags(const QModelIndex &index) const
 {
-    beginInsertRows(parent, row, row + count - 1);
-    // FIXME: Implement me!
-    endInsertRows();
+    if (!index.isValid())
+        return Qt::NoItemFlags;
+
+    return Qt::ItemIsSelectable;
 }
 
-bool SensorModel::insertColumns(int column, int count, const QModelIndex &parent)
+QHash<int, QByteArray> SensorModel::roleNames() const
 {
-    beginInsertColumns(parent, column, column + count - 1);
-    // FIXME: Implement me!
-    endInsertColumns();
+    QHash<int, QByteArray> names;
+    names[NameRole] = "name";
+    names[UnitRole] = "unit";
+    names[ReadingRole] = "reading";
+    return names;
 }
 
-bool SensorModel::removeRows(int row, int count, const QModelIndex &parent)
+SensorManager *SensorModel::manager() const
 {
-    beginRemoveRows(parent, row, row + count - 1);
-    // FIXME: Implement me!
-    endRemoveRows();
+    return mList;
 }
 
-bool SensorModel::removeColumns(int column, int count, const QModelIndex &parent)
+void SensorModel::setManager(SensorManager *manager)
 {
-    beginRemoveColumns(parent, column, column + count - 1);
-    // FIXME: Implement me!
-    endRemoveColumns();
+    beginResetModel();
+
+    if (mList)
+        mList->disconnect(this);
+
+    mList = manager;
+
+    if (mList) {
+        connect(mList, &SensorManager::preItemAppended, this, [=]() {
+            const int index = mList->items().size();
+            beginInsertRows(QModelIndex(), index, index);
+        });
+        connect(mList, &SensorManager::postItemAppended, this, [=]() {
+            endInsertRows();
+        });
+
+        connect(mList, &SensorManager::preItemRemoved, this, [=](int index) {
+            beginRemoveRows(QModelIndex(), index, index);
+        });
+        connect(mList, &SensorManager::postItemRemoved, this, [=]() {
+            endRemoveRows();
+        });
+
+        connect(mList, &SensorManager::postItemUpdated, this, [=](int index) {
+            emit dataChanged(this->index(index),this->index(index));
+        });
+    }
+
+    endResetModel();
+}
+
+
 }
