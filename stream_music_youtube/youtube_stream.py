@@ -1,6 +1,7 @@
 import argparse
 import pafy
 import vlc
+import sys
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
@@ -11,6 +12,9 @@ YOUTUBE_URL_VIDEO ='https://www.youtube.com/watch?v='
 MAX_VOLUME = 200
 MIN_VOLUME = 0
 
+def exit_program(cenas): 
+    quit()
+   
 def pafy_video(video_id):
     url = 'https://www.youtube.com/watch?v={0}'.format(video_id)
     vid = pafy.new(url)
@@ -43,16 +47,18 @@ def youtube_search(options):
     best = video.getbestaudio()
     print("Best Audio={0}bps".format(best.bitrate))
     playurl = best.url
-    vlc_instance = vlc.Instance(['--no-video'])
+    vlc_instance = vlc.Instance(['--no-video','--play-and-exit'])
     player = vlc_instance.media_player_new()
     media = vlc_instance.media_new(playurl)
+    event_manager=player.event_manager()
+    event_manager.event_attach(vlc.EventType().MediaPlayerEndReached, exit_program)
     media.get_mrl()
     player.set_media(media)
     player.play()
     volume = 50
     player.audio_set_volume(volume)
     command = ''
-    while True:
+    while player.get_state() != 6:
         command = raw_input('Type "u" to increase volume;"d" to decrease volume;"s" to stop; "p" to pause; "" to play; : ')
         if command == 'u':
            volume = change_playback_volume(volume, volume+10)
