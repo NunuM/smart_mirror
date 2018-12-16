@@ -18,7 +18,9 @@ SOURCES += \
     src/main.cpp \
     src/smart/radialbar.cpp \
     src/smart/sensormanager.cpp \
-    src/smart/sensormodel.cpp
+    src/smart/sensormodel.cpp \
+    src/smart/mediamanager.cpp \
+    src/smart/mediamodel.cpp
 
 RESOURCES += qml.qrc
 
@@ -38,11 +40,15 @@ DISTFILES += \
     ui/media/Media.ui.qml \
     ui/sensor/SensorDelegate.qml \
     ui/main.qml \
-    ui/application/Application.ui.qml
+    ui/application/Application.ui.qml \
+    ui/media/MediaDelegate.qml \
+    ui/media/MediaDetailForm.ui.qml
 
 HEADERS += \
     src/smart/sensor.h \
     src/smart/softwarecenter.h \
     src/smart/radialbar.h \
     src/smart/sensormanager.h \
-    src/smart/sensormodel.h
+    src/smart/sensormodel.h \
+    src/smart/mediamanager.h \
+    src/smart/mediamodel.h

@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QVector>
+
 namespace smart {
 
 class Sensor;
