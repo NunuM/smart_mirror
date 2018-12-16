@@ -6,7 +6,7 @@ Page {
     width: 800
     height: 600
 
-    title: qsTr("Home")
+    title: qsTr("Application")
 
     ListView {
         width: parent.width * 0.5

@@ -13,7 +13,7 @@ SensorManager::SensorManager(QObject *parent) : QObject(parent)
 
     connection.registerObject(QStringLiteral("/io/smart/OSensor"), this,  QDBusConnection::ExportAllSlots);
     connection.registerService(QStringLiteral("io.smart.SSensor"));
- }
+}
 
 QVector<Sensor *> smart::SensorManager::items() const
 {
