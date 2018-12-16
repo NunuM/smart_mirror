@@ -2,6 +2,7 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 
 Page {
+    property int modelSize: 1
     width: 800
     height: 600
 
@@ -15,7 +16,7 @@ Page {
         delegate: Rectangle {
             height: 25
             width: parent.width * 0.5
-            Text { text: modelData.title }
+            Text { text:  modelData.title }
         }
     }
 }

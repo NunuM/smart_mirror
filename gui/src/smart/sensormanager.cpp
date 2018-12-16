@@ -1,76 +1,94 @@
 #include "sensormanager.h"
-
-#include <QtDBus/QDBusConnection>
-#include <QJsonDocument>
 #include "sensor.h"
 
-namespace smart {
+#include <QtDBus/QDBusConnection>
+
+namespace  smart {
 
 SensorManager::SensorManager(QObject *parent) : QObject(parent)
 {
+    mItems = QVector<Sensor *>();
+
     QDBusConnection connection = QDBusConnection::sessionBus();
 
     connection.registerObject(QStringLiteral("/io/smart/OSensor"), this,  QDBusConnection::ExportAllSlots);
     connection.registerService(QStringLiteral("io.smart.SSensor"));
+ }
+
+QVector<Sensor *> smart::SensorManager::items() const
+{
+    return mItems;
 }
 
-bool SensorManager::addSensor(const QString &name,const QString &unit, QVariantList readings)
+bool SensorManager::setItemAt(int index, Sensor * sensor)
 {
-    emit preItemAppended();
+    if(index < 0  || index >= mItems.size()){
+        return false;
+    }
 
-    auto json =QJsonDocument::fromVariant(readings).array();
-    Sensor * sensor = new Sensor(name, unit, json);
-
-    mSensors.append(sensor);
-    emit newSensor(sensor);
-    emit postItemAppended();
+    mItems[index] = sensor;
 
     return true;
 }
 
-bool SensorManager::deleteSensor(const QString &name)
+bool SensorManager::appendSensor(QString name, QString unit, QVector<qreal> reading)
 {
-    bool wasFound = false;
+    Sensor * sensor = new Sensor(name, unit, reading);
 
-    for (int i = 0; i < mSensors.size(); ++i) {
-        if (mSensors.at(i)->name() == name){
+    if(exists(name) < 0){
+        emit preItemAppended();
+        mItems.append(sensor);
+        emit postItemAppended();
+        return true;
+    }
 
-            emit preItemRemoved(i);
+    return false;
+}
 
-            mSensors.removeAt(i);
+bool SensorManager::addReading(QString name, qreal value)
+{
+    int index =  exists(name);
 
-            emit postItemRemoved();
+    if(index < 0){
+        return false;
+    }
 
-            break;
+    emit preItemUpdated(index);
+    mItems.at(index)->newReading(value);
+    emit postItemUpdated(index);
+
+    return true;
+}
+
+bool SensorManager::removeSensor(QString name)
+{
+    int index =  exists(name);
+
+    if(index < 0){
+        return false;
+    }
+
+    emit preItemRemoved(index);
+    mItems.removeAt(index);
+    emit postItemRemoved();
+
+    return true;
+}
+
+int SensorManager::numbersOfSensors()
+{
+    return mItems.size();
+}
+
+int SensorManager::exists(QString name)
+{
+    for(int i=0; i< mItems.size(); i++){
+        if(mItems.at(i)->name() == name){
+            return i;
         }
     }
 
-    return wasFound;
+    return -1;
 }
 
-bool SensorManager::addSensorReading(const QString &name, qreal value)
-{
-    bool wasUpdated = false;
-
-    for (int i = 0; i < mSensors.size(); ++i) {
-        if (mSensors.at(i)->name() == name){
-            auto t  = QJsonDocument::fromJson(QString("{\"name\":\"outside\",\"value\":54}").toUtf8());
-            mSensors.at(i)->newReading(t.object());
-            wasUpdated = true;
-            break;
-        }
-    }
-
-    return wasUpdated;
-}
-
-QList<Sensor *> SensorManager::sensors() const
-{
-    return mSensors;
-}
-
-void SensorManager::setSensors(const QList<Sensor *> &sensors)
-{
-    mSensors = sensors;
-}
 }

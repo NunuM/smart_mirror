@@ -1,6 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import "../sensor"
+import Sensors 1.0
 
 Page {
     property int modelSize: 1
@@ -15,7 +16,10 @@ Page {
         width: parent.width * 0.3
         height: parent.height
 
-        model: sensorModel
+        model: SensorModel {
+            manager: sensorManager
+        }
+
         delegate: SensorDelegate {
 
         }
