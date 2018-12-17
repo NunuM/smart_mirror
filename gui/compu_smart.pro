@@ -22,7 +22,8 @@ SOURCES += \
     src/smart/mediamanager.cpp \
     src/smart/mediamodel.cpp \
     src/smart/newsmanager.cpp \
-    src/smart/newsmodel.cpp
+    src/smart/newsmodel.cpp \
+    src/smart/notesmanager.cpp
 
 RESOURCES += qml.qrc
 
@@ -57,4 +58,5 @@ HEADERS += \
     src/smart/mediamanager.h \
     src/smart/mediamodel.h \
     src/smart/newsmanager.h \
-    src/smart/newsmodel.h
+    src/smart/newsmodel.h \
+    src/smart/notesmanager.h
