@@ -8,6 +8,8 @@
 	<file>ui/media/Media.ui.qml</file>
 	<file>ui/media/MediaDelegate.qml</file>
 	<file>ui/media/MediaDetailForm.ui.qml</file>
+	<file>ui/news/News.ui.qml</file>
+	<file>ui/news/NewsDelegate.qml</file>
         <file>qtquickcontrols2.conf</file>
     </qresource>
 </RCC>

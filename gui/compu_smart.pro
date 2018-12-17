@@ -20,7 +20,9 @@ SOURCES += \
     src/smart/sensormanager.cpp \
     src/smart/sensormodel.cpp \
     src/smart/mediamanager.cpp \
-    src/smart/mediamodel.cpp
+    src/smart/mediamodel.cpp \
+    src/smart/newsmanager.cpp \
+    src/smart/newsmodel.cpp
 
 RESOURCES += qml.qrc
 
@@ -42,7 +44,9 @@ DISTFILES += \
     ui/main.qml \
     ui/application/Application.ui.qml \
     ui/media/MediaDelegate.qml \
-    ui/media/MediaDetailForm.ui.qml
+    ui/media/MediaDetailForm.ui.qml \
+    ui/news/News.ui.qml \
+    ui/news/NewsDelegate.qml
 
 HEADERS += \
     src/smart/sensor.h \
@@ -51,4 +55,6 @@ HEADERS += \
     src/smart/sensormanager.h \
     src/smart/sensormodel.h \
     src/smart/mediamanager.h \
-    src/smart/mediamodel.h
+    src/smart/mediamodel.h \
+    src/smart/newsmanager.h \
+    src/smart/newsmodel.h

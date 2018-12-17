@@ -3,6 +3,7 @@
 #include <QtDBus/QDBusConnection>
 #include <QStringLiteral>
 #include <QJsonDocument>
+#include <QDebug>
 
 namespace smart {
 
@@ -12,8 +13,8 @@ MediaManager::MediaManager(QObject *parent) : QObject(parent)
 
     QDBusConnection connection = QDBusConnection::sessionBus();
 
-    connection.registerObject(QStringLiteral("/io/smart/OMedia"), this,  QDBusConnection::ExportAllSlots);
-    connection.registerService(QStringLiteral("io.smart.SMedia"));
+    connection.registerObject(QStringLiteral("/io/smart/Media"), this,  QDBusConnection::ExportAllSlots);
+    connection.registerService(QStringLiteral("io.smart.Media"));
 }
 
 QJsonArray MediaManager::items() const
@@ -31,6 +32,9 @@ bool MediaManager::appendMovie(QString entry)
     emit preItemAppended();
 
     auto object = QJsonDocument::fromJson(entry.toUtf8()).object();
+
+    qDebug() << object["description"];
+
     mItems.append(object);
 
     emit postItemAppended();

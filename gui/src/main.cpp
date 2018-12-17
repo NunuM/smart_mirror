@@ -11,9 +11,9 @@
 #include "smart/sensor.h"
 #include "smart/mediamanager.h"
 #include "smart/mediamodel.h"
-#include <thread>
+#include "smart/newsmanager.h"
+#include "smart/newsmodel.h"
 #include <unistd.h>
-#include <chrono>
 #include <QDebug>
 
 
@@ -25,6 +25,7 @@ int main(int argc, char *argv[])
 
     smart::SensorManager sensorManager;
     smart::MediaManager mediaManager;
+    smart::NewsManager newsManager;
 
     auto g = QVector<qreal>();
     g.append(2.2);
@@ -44,12 +45,17 @@ int main(int argc, char *argv[])
     qmlRegisterUncreatableType<smart::MediaManager>("Smart", 1, 0, "MediaManager",
            QStringLiteral("MediaManager should not be created in QML"));
 
+    qmlRegisterType<smart::NewsModel>("Smart", 1, 0, "NewsModel");
+    qmlRegisterUncreatableType<smart::NewsManager>("Smart", 1, 0, "NewsManager",
+           QStringLiteral("MediaManager should not be created in QML"));
+
     QQmlApplicationEngine engine;
     QQmlContext *ctxt = engine.rootContext();
 
     ctxt->setContextProperty("programsModel", model);
     ctxt->setContextProperty("sensorManager",  &sensorManager);
     ctxt->setContextProperty("mediaManager",  &mediaManager);
+    ctxt->setContextProperty("newsManager",  &newsManager);
 
     engine.load(QUrl(QStringLiteral("qrc:/ui/main.qml")));
     if (engine.rootObjects().isEmpty())

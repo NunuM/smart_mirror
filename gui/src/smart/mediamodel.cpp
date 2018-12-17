@@ -5,7 +5,7 @@
 namespace smart {
 
 MediaModel::MediaModel(QObject *parent)
-    : QAbstractListModel(parent)
+    : QAbstractListModel(parent), mList(nullptr)
 {
 }
 
