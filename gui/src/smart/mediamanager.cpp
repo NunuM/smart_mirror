@@ -3,6 +3,7 @@
 #include <QtDBus/QDBusConnection>
 #include <QStringLiteral>
 #include <QJsonDocument>
+#include <QJsonParseError>
 #include <QDebug>
 
 namespace smart {
@@ -29,9 +30,36 @@ void MediaManager::setItems(const QJsonArray &items)
 
 bool MediaManager::appendMovie(QString entry)
 {
-    emit preItemAppended();
+    QJsonParseError error;
 
-    auto object = QJsonDocument::fromJson(entry.toUtf8()).object();
+    auto document = QJsonDocument::fromJson(entry.toUtf8(), &error);
+
+    if(error.error != QJsonParseError::NoError){
+        qDebug() << "Json document is invalid"
+                 << error.errorString();
+        return false;
+    }
+
+    if(!document.isObject()){
+        qDebug() << "Json document is not a object";
+        return false;
+    }
+
+    auto object = document.object();
+
+    if(!(object.contains(QStringLiteral("title"))
+         && object.contains(QStringLiteral("plot"))
+         && object.contains(QStringLiteral("poster"))
+         && object.contains(QStringLiteral("genre"))
+         && object.contains(QStringLiteral("actors"))
+         && object.contains(QStringLiteral("imdbrating")))){
+
+        qDebug() << "Json object with invalid keys";
+
+        return false;
+    }
+
+    emit preItemAppended();
 
     qDebug() << object["description"];
 

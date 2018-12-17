@@ -3,7 +3,9 @@
 #include <QtDBus/QDBusConnection>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QJsonParseError>
 #include <QVariant>
+#include <QDebug>
 
 namespace smart{
 
@@ -40,9 +42,39 @@ QVariantMap NewsManager::lastInsertedNews() const
 
 bool smart::NewsManager::appendNews(QString news)
 {
+    QJsonParseError error;
+
+    auto document = QJsonDocument::fromJson(news.toUtf8(), &error);
+
+    if(error.error != QJsonParseError::NoError){
+        qDebug() << "Error in JSON format"
+                 << error.errorString();
+
+        return false;
+    }
+
+    if(!document.isObject()){
+        qDebug() << "JSON passed in invalid.";
+
+        return false;
+    }
+
+    auto object = document.object();
+
+    if(!(object.contains(QStringLiteral("title"))
+         && object.contains(QStringLiteral("description"))
+         && object.contains(QStringLiteral("content"))
+         && object.contains(QStringLiteral("urlToImage"))
+         && object.contains(QStringLiteral("publishedAt"))
+         && object.contains(QStringLiteral("author")))){
+
+        qDebug() << "JSON object not contains required keys.";
+
+        return false;
+    }
+
     emit preItemAppended();
 
-    auto object = QJsonDocument::fromJson(news.toUtf8()).object();
     mItems.append(object);
 
     emit postItemAppended();

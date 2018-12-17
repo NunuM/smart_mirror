@@ -16,10 +16,8 @@
 #include <unistd.h>
 #include <QDebug>
 
-
 int main(int argc, char *argv[])
 {
-
     smart::SoftwareCenter center("/run/snapd.socket");
     auto model = center.loadInstalledPrograms();
 
@@ -34,6 +32,7 @@ int main(int argc, char *argv[])
 
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);
+
 
     qmlRegisterType<smart::RadialBar>("CustomControls", 1, 0, "RadialBar");
 
@@ -50,6 +49,7 @@ int main(int argc, char *argv[])
            QStringLiteral("MediaManager should not be created in QML"));
 
     QQmlApplicationEngine engine;
+
     QQmlContext *ctxt = engine.rootContext();
 
     ctxt->setContextProperty("programsModel", model);
