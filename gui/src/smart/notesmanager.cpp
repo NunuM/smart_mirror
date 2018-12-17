@@ -90,6 +90,16 @@ bool NotesManager::editNoteAlarm(const QString &title, const QString &alarm)
     return false;
 }
 
+QVector<Note> NotesManager::items() const
+{
+    return mItems;
+}
+
+void NotesManager::setItems(const QVector<Note> &items)
+{
+    mItems = items;
+}
+
 int NotesManager::exists(const QString &title)
 {
     int index = -1;

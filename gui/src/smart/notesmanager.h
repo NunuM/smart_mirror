@@ -21,6 +21,9 @@ public:
     explicit NotesManager(QObject *parent = nullptr);
 
 
+    QVector<Note> items() const;
+    void setItems(const QVector<Note> &items);
+
 signals:
     void preItemAppended();
     void postItemAppended();
