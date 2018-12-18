@@ -3,6 +3,8 @@
 #include <QtDBus/QDBusConnection>
 #include <QStringLiteral>
 #include <QJsonDocument>
+#include <QJsonParseError>
+#include <QDebug>
 
 namespace smart {
 
@@ -12,8 +14,8 @@ MediaManager::MediaManager(QObject *parent) : QObject(parent)
 
     QDBusConnection connection = QDBusConnection::sessionBus();
 
-    connection.registerObject(QStringLiteral("/io/smart/OMedia"), this,  QDBusConnection::ExportAllSlots);
-    connection.registerService(QStringLiteral("io.smart.SMedia"));
+    connection.registerObject(QStringLiteral("/io/smart/Media"), this,  QDBusConnection::ExportAllSlots);
+    connection.registerService(QStringLiteral("io.smart.Media"));
 }
 
 QJsonArray MediaManager::items() const
@@ -28,9 +30,39 @@ void MediaManager::setItems(const QJsonArray &items)
 
 bool MediaManager::appendMovie(QString entry)
 {
+    QJsonParseError error;
+
+    auto document = QJsonDocument::fromJson(entry.toUtf8(), &error);
+
+    if(error.error != QJsonParseError::NoError){
+        qDebug() << "Json document is invalid"
+                 << error.errorString();
+        return false;
+    }
+
+    if(!document.isObject()){
+        qDebug() << "Json document is not a object";
+        return false;
+    }
+
+    auto object = document.object();
+
+    if(!(object.contains(QStringLiteral("title"))
+         && object.contains(QStringLiteral("plot"))
+         && object.contains(QStringLiteral("poster"))
+         && object.contains(QStringLiteral("genre"))
+         && object.contains(QStringLiteral("actors"))
+         && object.contains(QStringLiteral("imdbrating")))){
+
+        qDebug() << "Json object with invalid keys";
+
+        return false;
+    }
+
     emit preItemAppended();
 
-    auto object = QJsonDocument::fromJson(entry.toUtf8()).object();
+    qDebug() << object["description"];
+
     mItems.append(object);
 
     emit postItemAppended();

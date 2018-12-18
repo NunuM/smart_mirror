@@ -54,6 +54,15 @@ ApplicationWindow {
                     drawer.close()
                 }
             }
+
+            ItemDelegate {
+                text: qsTr("News")
+                width: parent.width
+                onClicked: {
+                    stackView.push("news/News.ui.qml")
+                    drawer.close()
+                }
+            }
         }
     }
 

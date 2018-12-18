@@ -5,15 +5,14 @@ import QtQuick.Layouts 1.11
 import Smart 1.0
 
 Page {
-
     width: Screen.width
     height: Screen.height
 
-    title: qsTr("Media")
+    title: qsTr("News")
 
     GridLayout{
         anchors.fill: parent
-        columns: 2
+        columns: 1
 
         ListView {
             id: list
@@ -22,21 +21,15 @@ Page {
             spacing: 10
             maximumFlickVelocity: 2499
             antialiasing: true
-            model: MediaModel {
-                manager: mediaManager
+            model:  NewsModel {
+                manager: newsManager
             }
             focus: true
-            delegate: MediaDelegate {
+            delegate: NewsDelegate {
                 width: parent.width
                 height: 300
             }
         }
-
-        MediaDetailForm {
-            width: parent.width * 0.7;
-            height: parent.height
-        }
-
     }
 
 }

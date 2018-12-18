@@ -9,7 +9,7 @@ Page {
     width: 800
     height: 600
 
-    title: qsTr("Home")
+    title: qsTr("Home" + newsManager.last.title)
 
     ListView {
         id: sensorViews

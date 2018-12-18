@@ -46,6 +46,7 @@ Item {
         }
 
         Text {
+            id: rating
             width: content.width - img.width - 20
             anchors.top: plot.bottom
             anchors.left: img.right
@@ -54,14 +55,18 @@ Item {
             wrapMode: Text.Wrap
             text: "Rating: " + model.rating
         }
-    }
 
-    MouseArea {
-        anchors.fill: parent
-        onClicked: {
-            console.log("ola" + model.index)
+        Button {
+            anchors.left: img.right
+            anchors.leftMargin: 10
+            anchors.bottom: img.bottom
+            text: qsTr("Watch Trailer")
+            highlighted: true
+            Material.accent: Material.LightBlue
+            onClicked: {
+                console.log("");
+            }
         }
     }
-
 }
 
