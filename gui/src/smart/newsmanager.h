@@ -13,6 +13,8 @@ class NewsManager : public QObject
 
     Q_PROPERTY(QVariantMap last READ lastInsertedNews NOTIFY lastChanged)
 
+    Q_CLASSINFO("D-Bus Interface", "io.smart.News")
+
 public:
     explicit NewsManager(QObject *parent = nullptr);
 

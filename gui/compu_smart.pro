@@ -23,7 +23,11 @@ SOURCES += \
     src/smart/mediamodel.cpp \
     src/smart/newsmanager.cpp \
     src/smart/newsmodel.cpp \
-    src/smart/notesmanager.cpp
+    src/smart/notesmanager.cpp \
+    src/smart/notesmodel.cpp \
+    src/smart/weathermanager.cpp \
+    src/smart/weathermodel.cpp \
+    src/smart/navigationmanager.cpp
 
 RESOURCES += qml.qrc
 
@@ -47,7 +51,10 @@ DISTFILES += \
     ui/media/MediaDelegate.qml \
     ui/media/MediaDetailForm.ui.qml \
     ui/news/News.ui.qml \
-    ui/news/NewsDelegate.qml
+    ui/news/NewsDelegate.qml \
+    ui/notes/Notes.ui.qml \
+    ui/notes/NotesDelegate.qml \
+    ui/weather/Weather.ui.qml
 
 HEADERS += \
     src/smart/sensor.h \
@@ -59,4 +66,8 @@ HEADERS += \
     src/smart/mediamodel.h \
     src/smart/newsmanager.h \
     src/smart/newsmodel.h \
-    src/smart/notesmanager.h
+    src/smart/notesmanager.h \
+    src/smart/notesmodel.h \
+    src/smart/weathermanager.h \
+    src/smart/weathermodel.h \
+    src/smart/navigationmanager.h

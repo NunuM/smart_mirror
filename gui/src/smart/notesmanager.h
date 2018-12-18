@@ -17,12 +17,17 @@ struct Note
 class NotesManager : public QObject
 {
     Q_OBJECT
+
+    Q_CLASSINFO("D-Bus Interface", "io.smart.Notes")
+
 public:
     explicit NotesManager(QObject *parent = nullptr);
 
 
     QVector<Note> items() const;
     void setItems(const QVector<Note> &items);
+
+    bool setNoteAt(int index, const Note &note);
 
 signals:
     void preItemAppended();
@@ -40,6 +45,8 @@ public slots:
 
     bool editNoteTitle(const QString &oldTitle, const QString &newTitle);
     bool editNoteAlarm(const QString &title, const QString &alarm);
+
+    int numbersOfNotes();
 
 private:
     QVector<Note> mItems;

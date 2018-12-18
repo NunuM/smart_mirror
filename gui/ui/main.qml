@@ -63,6 +63,24 @@ ApplicationWindow {
                     drawer.close()
                 }
             }
+
+            ItemDelegate {
+                text: qsTr("Notes")
+                width: parent.width
+                onClicked: {
+                    stackView.push("notes/Notes.ui.qml")
+                    drawer.close()
+                }
+            }
+
+            ItemDelegate {
+                text: qsTr("Weather")
+                width: parent.width
+                onClicked: {
+                    stackView.push("weather/Weather.ui.qml")
+                    drawer.close()
+                }
+            }
         }
     }
 
@@ -70,5 +88,21 @@ ApplicationWindow {
         id: stackView
         initialItem: "home/HomeForm.ui.qml"
         anchors.fill: parent
+    }
+
+    Connections{
+        target: navigatorManager
+        onChangeViewTo: {
+            if(stackView.depth > 1){
+                stackView.pop();
+                if(view !== stackView.initialItem){
+                    stackView.push(view);
+                }
+            } else {
+                if(view !== stackView.initialItem){
+                    stackView.push(view);
+                }
+            }
+        }
     }
 }

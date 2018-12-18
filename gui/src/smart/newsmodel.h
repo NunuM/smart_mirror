@@ -12,8 +12,6 @@ class NewsModel : public QAbstractListModel
 
     Q_PROPERTY(NewsManager * manager READ getManager WRITE setManager)
 
-    Q_CLASSINFO("D-Bus Interface", "io.smart.Media")
-
 public:
     explicit NewsModel(QObject *parent = nullptr);
 

@@ -10,6 +10,9 @@
 	<file>ui/media/MediaDetailForm.ui.qml</file>
 	<file>ui/news/News.ui.qml</file>
 	<file>ui/news/NewsDelegate.qml</file>
+	<file>ui/notes/Notes.ui.qml</file>
+	<file>ui/notes/NotesDelegate.qml</file>
+	<file>ui/weather/Weather.ui.qml</file>
         <file>qtquickcontrols2.conf</file>
     </qresource>
 </RCC>

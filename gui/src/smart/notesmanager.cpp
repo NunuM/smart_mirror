@@ -1,11 +1,15 @@
 #include "notesmanager.h"
 #include <QDebug>
+#include <QtDBus/QDBusConnection>
 
 namespace smart {
 
 NotesManager::NotesManager(QObject *parent) : QObject(parent)
 {
+    QDBusConnection connection = QDBusConnection::sessionBus();
 
+    connection.registerObject(QStringLiteral("/io/smart/Notes"), this,  QDBusConnection::ExportAllSlots);
+    connection.registerService(QStringLiteral("io.smart.Notes"));
 }
 
 bool NotesManager::appendNote(const QString &title, bool notifiable, const QString alarm)
@@ -90,6 +94,11 @@ bool NotesManager::editNoteAlarm(const QString &title, const QString &alarm)
     return false;
 }
 
+int NotesManager::numbersOfNotes()
+{
+    return mItems.size();
+}
+
 QVector<Note> NotesManager::items() const
 {
     return mItems;
@@ -98,6 +107,19 @@ QVector<Note> NotesManager::items() const
 void NotesManager::setItems(const QVector<Note> &items)
 {
     mItems = items;
+}
+
+bool NotesManager::setNoteAt(int index, const Note &note)
+{
+    if (index < 0 || index >= mItems.size())
+            return false;
+
+        auto oldItem = mItems.at(index);
+        if (oldItem.notifiable == note.notifiable)
+            return false;
+
+        mItems[index] = note;
+        return true;
 }
 
 int NotesManager::exists(const QString &title)
