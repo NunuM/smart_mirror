@@ -42,7 +42,7 @@ ApplicationWindow {
                 text: qsTr("Applications")
                 width: parent.width
                 onClicked: {
-                    stackView.push("application/Application.ui.qml")
+                    stackView.push("application/Application.qml")
                     drawer.close()
                 }
             }

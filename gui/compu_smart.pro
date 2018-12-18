@@ -47,14 +47,14 @@ DISTFILES += \
     ui/media/Media.ui.qml \
     ui/sensor/SensorDelegate.qml \
     ui/main.qml \
-    ui/application/Application.ui.qml \
     ui/media/MediaDelegate.qml \
     ui/media/MediaDetailForm.ui.qml \
     ui/news/News.ui.qml \
     ui/news/NewsDelegate.qml \
     ui/notes/Notes.ui.qml \
     ui/notes/NotesDelegate.qml \
-    ui/weather/Weather.ui.qml
+    ui/weather/Weather.ui.qml \
+    ui/application/Application.qml
 
 HEADERS += \
     src/smart/sensor.h \
