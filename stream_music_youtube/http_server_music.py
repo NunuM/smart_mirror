@@ -7,6 +7,7 @@ import sys
 import argparse
 import psutil
 from subprocess import Popen, PIPE, STDOUT
+from urlparse import urlparse
 
 RETURN_CODE_SUCCESS = 200
 RETURN_CODE_ERROR = 500
@@ -28,8 +29,11 @@ class myHandler(BaseHTTPRequestHandler):
 			global process    # Needed to modify global copy of process
 			if hasattr(process, 'terminate'):
 				process.terminate()
-
-			process = Popen(["python", "youtube_stream.py", "--search", "'last christmas'"], stdout=PIPE, stdin=PIPE, stderr=STDOUT)
+			
+			query = urlparse(self.path).query
+			query_components = dict(qc.split("=") for qc in query.split("&"))
+			search_parameters = query_components["search"]
+			process = Popen(["python", "youtube_stream.py", "--search", "'"+search_parameters+"'"], stdout=PIPE, stdin=PIPE, stderr=STDOUT)
 			#time.sleep(10)   
 			#process.wait()
 			return RETURN_CODE_SUCCESS
