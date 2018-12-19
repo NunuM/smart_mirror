@@ -1,19 +1,37 @@
 package bus
 
 import (
-	"bytes"
 	"coordinator/structs"
-	"encoding/json"
+	"coordinator/system_exec"
 	"errors"
-	"log"
-	"os/exec"
 	"strings"
 )
+
+
+
+type Aggregator struct {
+	NNews NewsAPI
+}
+
+
+type NewsAPI struct {
+	FetchNews func(structs.Newsheadlines) string
+
+}
+
+
+var funcs = Aggregator{
+	NNews: NewsAPI{
+		FetchNews:system_exec.News_execute,
+	},
+}
+
 
 type _DbusCall struct {
 	_InterfacePath string
 	_ObjectPath string
 	Method string
+	Functions Aggregator
 }
 
 
@@ -24,6 +42,151 @@ var Calls = DbusCalls{
 		"io.smart.News",
 		"/io/smart/News",
 		".appendNews",
+		funcs,
+	},
+	{
+		"io.smart.News",
+		"/io/smart/News",
+		".numberOfNews",
+		funcs,
+	},
+	{
+	"io.smart.News",
+	"/io/smart/News",
+	".removeNews",
+	funcs,
+	},
+	{
+		"io.smart.Weather",
+		"/io/smart/Weather",
+		".appendWeather",
+		funcs,
+	},
+	{
+	"io.smart.Weather",
+	"/io/smart/Weather",
+	".removeWeather",
+	funcs,
+	},
+	{
+	"io.smart.Sensor",
+	"/io/smart/Sensor",
+	".addReading",
+	funcs,
+	},
+	{
+		"io.smart.Sensor",
+		"/io/smart/Sensor",
+		".appendSensor",
+		funcs,
+	},
+	{
+		"io.smart.Sensor",
+		"/io/smart/Sensor",
+		".numberOfSensors",
+		funcs,
+	},
+	{
+		"io.smart.Sensor",
+		"/io/smart/Sensor",
+		".removeSensor",
+		funcs,
+	},
+	{
+		"io.smart.Notes",
+		"/io/sensor/Notes",
+		".appendNote",
+		funcs,
+	},
+	{
+	"io.smart.Notes",
+	"/io/sensor/Notes",
+	".editNoteAlarm",
+	funcs,
+	},
+	{
+		"io.smart.Notes",
+		"/io/smart/Notes",
+		".numbersOfNotes",
+		funcs,
+	},
+	{
+	"io.smart.Notes",
+	"/io/smart/Nodes",
+	".removeNote",
+	funcs,
+	},
+	{
+		"io.smart.Navigation",
+		"/io/smart/Navigation",
+		".appendView",
+		funcs,
+	},
+	{
+		"io.smart.Navigation",
+		"/io/smart/Navigation",
+		".setApplicationsViewAsRoot",
+		funcs,
+	},
+	{
+	"io.smart.Navigation",
+	"/io/smart/Navigation",
+	".setHomeViewAsRoot",
+	funcs,
+	},
+	{
+	"io.smart.Navigation",
+	"/io/smart/Navigation",
+	".setMediaViewAsRoot",
+	funcs,
+	},
+	{
+	"io.smart.Navigation",
+	"/io/smart/Navigation",
+	".setNewsViewAsRoot",
+	funcs,
+	},
+	{
+	"io.smart.Navigation",
+	"/io/smart/Navigation",
+	".setNotesViewAsRoot",
+	funcs,
+	},
+	{
+	"io.smart.Navigation",
+	"/io/smart/Navigation",
+	".setSensorsViewAsRoot",
+	funcs,
+	},
+	{
+		"io.smart.Navigation",
+		"/io/smart/Navigation",
+		".setWeatherViewAsRoot",
+		funcs,
+	},
+	{
+		"io.smart.Media",
+		"/io/smart/Media",
+		".appendMedia",
+		funcs,
+	},
+	{
+		"io.smart.Media",
+		"/io/smart/Media",
+		".currentPlayingSong",
+		funcs,
+	},
+	{
+		"io.smart.Media",
+		"/io/smart/Media",
+		".numberOfMovies",
+		funcs,
+	},
+	{
+		"io.smart.Media",
+		"/io/smart/Media",
+		".songHasStopped",
+		funcs,
 	},
 }
 
@@ -39,40 +202,4 @@ func (d *DbusCalls) FindDbusCall(methodName string) (_DbusCall,error){
 }
 
 
-
-func (DbusCalls) News_execute(news structs.Newsheadlines) string{
-	var cmd exec.Cmd
-	if news.CountryISO == ""{
-		cmd = *exec.Command("newsheadlines")
-	} else{
-		cmd = *exec.Command("newsheadlines","-country "+news.CountryISO)
-	}
-	out := &bytes.Buffer{}
-	cmd.Stdout = out
-	err1 := cmd.Run()
-	str := parse_output(err1,"newsheadlines",*out)
-	log.Print("News Call Executed")
-	return str
-}
-
-
-func parse_output(err error,service_name string,buff bytes.Buffer) (string){
-	var str string
-	if err == nil {
-		str = string(buff.Bytes()[:])
-	} else{
-		btarr,_ := json.Marshal(
-			exec_error{
-				error:err.Error(),
-				service_name:service_name,
-			})
-		str = string(btarr[:])
-	}
-	return str
-}
-
-type exec_error struct {
-	error string `json:"error"`
-	service_name string `json:"service_name"`
-}
 

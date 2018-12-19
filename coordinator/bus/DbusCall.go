@@ -6,6 +6,9 @@ import (
 	"log"
 )
 
+
+
+
 func (d *_DbusCall) DbusStringCall(str string){
 	obj,err := d.openCall()
 	if err == nil {

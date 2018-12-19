@@ -20,7 +20,7 @@ func httpNewsHandler(w http.ResponseWriter,r * http.Request){
 	defer r.Body.Close()
 	call,err1 := bus.Calls.FindDbusCall(".appendNews")
 	if err1 == nil {
-		go call.DbusStringCall(bus.Calls.News_execute(news))
+		go call.DbusStringCall(call.Functions.NNews.FetchNews(news))
 	}
 	reply(w)
 }
