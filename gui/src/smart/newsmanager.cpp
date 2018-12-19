@@ -53,33 +53,39 @@ bool smart::NewsManager::appendNews(QString news)
         return false;
     }
 
-    if(!document.isObject()){
+
+    if(!document.isArray()){
         qDebug() << "JSON passed in invalid.";
 
         return false;
     }
 
-    auto object = document.object();
+    auto jsonArr = document.array();
+    bool retValue = true;
 
-    if(!(object.contains(QStringLiteral("title"))
-         && object.contains(QStringLiteral("description"))
-         && object.contains(QStringLiteral("content"))
-         && object.contains(QStringLiteral("urlToImage"))
-         && object.contains(QStringLiteral("publishedAt"))
-         && object.contains(QStringLiteral("author")))){
+    foreach (const QJsonValue & v, jsonArr)
+    {
+        auto object = v.toObject();
+        if(!(object.contains(QStringLiteral("title"))
+             && object.contains(QStringLiteral("description"))
+             && object.contains(QStringLiteral("content"))
+             && object.contains(QStringLiteral("urlToImage"))
+             && object.contains(QStringLiteral("publishedAt"))
+             && object.contains(QStringLiteral("author")))){
 
-        qDebug() << "JSON object not contains required keys.";
+            qDebug() << "JSON object not contains required keys.";
+            retValue = false;
+            break;
+        }
 
-        return false;
+        emit preItemAppended();
+
+        mItems.append(object);
+
+        emit postItemAppended();
     }
 
-    emit preItemAppended();
-
-    mItems.append(object);
-
-    emit postItemAppended();
-
-    return true;
+    return retValue;
 }
 
 bool NewsManager::removeNews(QString title)

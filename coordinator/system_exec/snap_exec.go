@@ -2,16 +2,15 @@ package system_exec
 
 import (
 	"bytes"
+	"coordinator/bus"
 	"coordinator/structs"
 	"encoding/json"
 	"fmt"
+	"log"
 	"os/exec"
 )
 
-type exec_error struct {
-	error string `json:"error"`
-	service_name string `json:"service_name"`
-}
+
 
 func Blockbuster_execute(){
 	cmd := exec.Command("blockbuster","-j")
@@ -21,21 +20,6 @@ func Blockbuster_execute(){
 	str := parse_output(err,"blockbuster",*out)
 	fmt.Println(str)
 }
-
-func News_execute(news structs.Newsheadlines){
-	var cmd exec.Cmd
-	if news.CountryISO == ""{
-		cmd = *exec.Command("newsheadlines")
-	} else{
-		cmd = *exec.Command("newsheadlines","-country "+news.CountryISO)
-	}
-	out := &bytes.Buffer{}
-	cmd.Stdout = out
-	err := cmd.Run()
-	str := parse_output(err,"newsheadlines",*out)
-	fmt.Println(str)
-
-	}
 
 
 func parse_output(err error,service_name string,buff bytes.Buffer) (string){
@@ -52,3 +36,17 @@ func parse_output(err error,service_name string,buff bytes.Buffer) (string){
 	}
 	return str
 }
+
+type exec_error struct {
+	error string `json:"error"`
+	service_name string `json:"service_name"`
+}
+
+
+
+
+//TODO Multiple return args vs single return interface
+func SensorRequest(i interface{}) interface{}{
+
+}
+
