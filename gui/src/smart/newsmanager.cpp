@@ -102,7 +102,7 @@ bool NewsManager::removeNews(QString title)
     return false;
 }
 
-bool NewsManager::numberOfNews()
+int NewsManager::numberOfNews()
 {
     return mItems.size();
 }

@@ -43,18 +43,18 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
-    ui/home/HomeForm.ui.qml \
-    ui/media/Media.ui.qml \
     ui/sensor/SensorDelegate.qml \
     ui/main.qml \
     ui/media/MediaDelegate.qml \
-    ui/media/MediaDetailForm.ui.qml \
-    ui/news/News.ui.qml \
+    ui/news/News.qml \
     ui/news/NewsDelegate.qml \
-    ui/notes/Notes.ui.qml \
     ui/notes/NotesDelegate.qml \
-    ui/weather/Weather.ui.qml \
-    ui/application/Application.qml
+    ui/application/Application.qml \
+    ui/home/HomeForm.qml \
+    ui/media/Media.qml \
+    ui/media/MediaDetailForm.qml \
+    ui/weather/Weather.qml \
+    ui/notes/Notes.qml \
 
 HEADERS += \
     src/smart/sensor.h \

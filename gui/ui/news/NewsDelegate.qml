@@ -6,43 +6,55 @@ import QtQuick.Controls.Material 2.4
 
 Item {
     id: item
+    property int aWidth: 0
+    property int aHeight: 0
 
-    Pane {
-        id: content
+    width: aWidth
+    height: aHeight
+
+    GridLayout {
         anchors.fill: parent
-        Material.elevation: 5
-        Column{
-            Image {
-                id: img
-                width: content.width
-                height: content.height - name.height - description.height - 20
-                fillMode: Image.PreserveAspectFit
-                source: model.image
-            }
+        anchors.margins: 20
+        rowSpacing: 20
+        columnSpacing: 20
 
-            Text {
-                id: name
-                width: content.width
-                text: model.title
-                font.pointSize: 12
-                font.family: "ubuntu"
-                color: "black"
-                wrapMode: Text.Wrap
-            }
+        Pane {
+            id: content
+            Layout.fillWidth: true
+            height: details.implicitHeight
+            Material.elevation: 5
 
-            Text {
-                id: description
-                width: content.width
-                wrapMode: Text.Wrap
-                text: model.description
-            }
-        }
-    }
+            GridLayout {
+                id: details
+                rows: 2
+                columns: 1
+                width: content.width - 20
 
-    MouseArea {
-        anchors.fill: parent
-        onClicked: {
-            console.log("ola" + model.index)
+                Text {
+                    id: name
+                    text: model.title
+                    font.pointSize: 16
+                    color: "white"
+                    wrapMode: Text.Wrap
+                    Layout.fillWidth: true
+                }
+
+                Image {
+                    id: image
+                    source: model.image
+                    width: details.width
+                    sourceSize.width: details.width
+                    fillMode: Image.PreserveAspectCrop
+                }
+
+                Text {
+                    id: description
+                    wrapMode: Text.Wrap
+                    text: model.description
+                    color: "grey"
+                    Layout.fillWidth: true
+                }
+            }
         }
     }
 }

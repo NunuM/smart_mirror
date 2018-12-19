@@ -5,8 +5,7 @@ import QtQuick.Controls.Material 2.4
 import QtQuick.Layouts 1.3
 
 Page {
-    width: Screen.virtualX
-    height: Screen.virtualY
+    id: page
 
     title: qsTr("Application")
 
@@ -37,7 +36,7 @@ Page {
                         Text {
                             id: title
                             width: parent.width
-                            color: "white"
+                            color: model.index === list.currentIndex ? "grey" : "white"
                             font.pointSize: 20
                             text:  modelData.title
                             MouseArea {
@@ -74,6 +73,7 @@ Page {
                         text: qsTr("Summary:")
                         color: "Grey"
                         font.pointSize: 12
+                        font.bold: true
                     }
 
                     Text {
@@ -93,6 +93,7 @@ Page {
                         font.pointSize: 12
                         wrapMode: Text.NoWrap
                         Layout.fillHeight: true
+                        font.bold: true
                     }
                     ScrollView {
                         id: scroll

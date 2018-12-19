@@ -40,7 +40,7 @@ public slots:
 
     bool removeNews(QString title);
 
-    bool numberOfNews();
+    int numberOfNews();
 
 private:
     QJsonArray mItems;

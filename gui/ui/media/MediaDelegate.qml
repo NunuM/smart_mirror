@@ -7,6 +7,8 @@ import QtQuick.Controls.Material 2.4
 
 Item {
     id: media
+    width: parent.width
+    height: content.implicitHeight
 
     Pane {
         id: content
@@ -18,7 +20,7 @@ Item {
             anchors.left: parent.left
             height: parent.height
             fillMode: Image.PreserveAspectFit
-            source: model.poster
+            source: model.poster.length === 0 ? "" : model.poster
         }
 
         Text {

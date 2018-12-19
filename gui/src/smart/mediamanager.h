@@ -32,6 +32,7 @@ signals:
     void notifiy(int action, QString name);
 
 public slots:
+    bool bulkMoviesInsertion(QString entry);
     bool appendMovie(QString entry);
     int  numbersOfMovies();
 

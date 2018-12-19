@@ -5,29 +5,46 @@ import QtQuick.Layouts 1.11
 import QtQuick.Controls.Material 2.4
 Item {
 
-    Pane{
-        anchors.fill: parent
+    Pane {
+        id: content
+        width: 290
+        height: 290
         Material.elevation: 5
+        Layout.fillWidth: true
+        Layout.fillHeight: true
 
-        Column {
+        ColumnLayout {
+            anchors.fill: parent
+            anchors.margins: 20
 
-            Row{
-                Text {
-                    id: year
-                    color: "white"
-                    text: model.alarm
-                    font.pointSize: 28
-                }
+            Component.onCompleted: {
+                console.log(width);
             }
 
             Text {
-                text: qsTr(model.title)
+                id: year
+                color: "white"
+                text: {
+                    var date = new Date(model.alarm)
+                    return date.getFullYear();
+                }
+                font.pointSize: 28
+                wrapMode: Text.WrapAnywhere
+                Layout.fillWidth: true
+            }
+
+            Text {
+                text: "model.title"
+                color: "grey"
+                wrapMode: Text.WordWrap
+                Layout.fillWidth: true
             }
 
             CheckBox {
                 checked: model.notifiable
                 onClicked: model.notifiable = checked
                 text: "Notify"
+                Layout.fillWidth: true
             }
         }
     }

@@ -50,7 +50,7 @@ ApplicationWindow {
                 text: qsTr("Media")
                 width: parent.width
                 onClicked: {
-                    stackView.push("media/Media.ui.qml")
+                    stackView.push("media/Media.qml")
                     drawer.close()
                 }
             }
@@ -59,7 +59,7 @@ ApplicationWindow {
                 text: qsTr("News")
                 width: parent.width
                 onClicked: {
-                    stackView.push("news/News.ui.qml")
+                    stackView.push("news/News.qml")
                     drawer.close()
                 }
             }
@@ -68,7 +68,7 @@ ApplicationWindow {
                 text: qsTr("Notes")
                 width: parent.width
                 onClicked: {
-                    stackView.push("notes/Notes.ui.qml")
+                    stackView.push("notes/Notes.qml")
                     drawer.close()
                 }
             }
@@ -77,7 +77,7 @@ ApplicationWindow {
                 text: qsTr("Weather")
                 width: parent.width
                 onClicked: {
-                    stackView.push("weather/Weather.ui.qml")
+                    stackView.push("weather/Weather.qml")
                     drawer.close()
                 }
             }
@@ -86,7 +86,7 @@ ApplicationWindow {
 
     StackView {
         id: stackView
-        initialItem: "home/HomeForm.ui.qml"
+        initialItem: "home/HomeForm.qml"
         anchors.fill: parent
     }
 

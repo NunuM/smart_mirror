@@ -33,17 +33,29 @@ int main(int argc, char *argv[])
     smart::WeatherManager weatherManager;
     smart::NavigationManager navigatorManager;
 
+    mediaManager.appendMovie(QStringLiteral("{\"type\": \"movie\", \"genre\": \"Action, Adventure, Fantasy\", \"actors\": \"Johnny Depp, Javier Bardem, Geoffrey Rush, Brenton Thwaites\", \"inserted\": \"2018-12-17 16:18:27.949416\", \"imdbid\": \"tt1790809\", \"country\": \"USA\", \"released\": \"26 May 2017\", \"title\": \"Pirates of the Caribbean Dead Men Tell No Tales\", \"quality\": \"HDRip XviD\", \"boxoffice\": \"$172,537,139\", \"plot\": \"Captain Jack Sparrow searches for the trident of Poseidon while being pursued by an undead sea captain and his crew.\", \"year\": 2017, \"imdbvotes\": \"211,949\", \"language\": \"English, Spanish\", \"metascore\": \"39\", \"writer\": \"Jeff Nathanson (screenplay by), Jeff Nathanson (story by), Terry Rossio (story by), Ted Elliott (based on characters created by), Terry Rossio (based on characters created by), Stuart Beattie (based on characters created by), Jay Wolpert (based on characters created by)\", \"dvd\": \"03 Oct 2017\", \"runtime\": \"129 min\", \"production\": \"Walt Disney Pictures\", \"imdbrating\": 6.6, \"website\": \"http://pirates.disney.com/pirates-of-the-caribbean-dead-men-tell-no-tales\", \"awards\": \"9 nominations.\", \"magnet\": \"magnet:?xt=urn:btih:CA548AA95DEADD1681C4826E61AD122A5E57B0D7&dn=Pirates.of.the.Caribbean.Dead.Men.Tell.No.Tales.2017.HDRip.XviD.\", \"poster\": \"https://m.media-amazon.com/images/M/MV5BMTYyMTcxNzc5M15BMl5BanBnXkFtZTgwOTg2ODE2MTI@._V1_SX300.jpg\", \"originaltitle\": \"Pirates.of.the.Caribbean.Dead.Men.Tell.No.Tales.2017.HDRip.XviD.\", \"rated\": \"PG-13\", \"director\": \"Joachim R\u00f8nning, Espen Sandberg\"}"));
+
+    newsManager.appendNews(QStringLiteral("[{\"author\": \"\",\"title\": \"Antigo edíficio dos CTT vai ser o  - Sol\",\"description\": \"'Lisboa é um dos destinos mais badalados do mundo e mal podemos esperar para que a Clink esteja presente', disse Niall O’Hanlon, diretor de aquisições da Clink Hostels.\",\"url\": \"https://sol.sapo.pt/artigo/638843/antigo-edificio-dos-ctt-vai-ser-o-maior-hostel-de-portugal\",\"urlToImage\": \"https://cdn1.newsplex.pt/fotos/2018/12/17/670495.png?type=Artigo\",\"publishedAt\": \"2018-12-17T14:23:43Z\",\"content\": \"A antiga loja dos CTT - Correios de Portugal na Rua da Palma, um edíficio com cerca de 4.500 metros quadrados, vai agora tornar-se no “maior hostel de Portugal”, segundo afirmou a Worx Real Estate Consultants, empresa que representou a Clink Hostels, comprado… [+823 chars]\"}]"));
+
+    newsManager.appendNews(QStringLiteral("[{\"author\": \"\",\"title\": \"1 milhão de vacinas contra a gripe administradas desde início da campanha - SIC Notícias\",\"description\": \"Desde o início da campanha de vacinação contra a gripe, já foram administradas mais de um milhão de vacinas. No entanto, a Direção Geral de Saúde reforça, e recomenda, a necessidade de mais portugueses serem vacinados até ao final do ano, especialmente pessoa…\",\"url\": \"https://sicnoticias.sapo.pt/pais/2018-12-19-1-milhao-de-vacinas-contra-a-gripe-administradas-desde-inicio-da-campanha\",\"urlToImage\": \"https://images.impresa.pt/sicnot/2018-12-19-gripe.BMP/fb/wm\",\"publishedAt\": \"2018-12-19T08:14:00Z\",\"content\": \"Chinelos são vistos perto de uma escola em Dapchi, na Nigéria, de onde dezenas de alunas desapareceram após um ataque do Boko Haram. Afolabi Sotunde\"}]"));
+
+    newsManager.appendNews(QStringLiteral("[{\"author\": \"\",\"title\": \"1 milhão de vacinas contra a gripe administradas desde início da campanha - SIC Notícias\",\"description\": \"Desde o início da campanha de vacinação contra a gripe, já foram administradas mais de um milhão de vacinas. No entanto, a Direção Geral de Saúde reforça, e recomenda, a necessidade de mais portugueses serem vacinados até ao final do ano, especialmente pessoa…\",\"url\": \"https://sicnoticias.sapo.pt/pais/2018-12-19-1-milhao-de-vacinas-contra-a-gripe-administradas-desde-inicio-da-campanha\",\"urlToImage\": \"https://images.impresa.pt/sicnot/2018-12-19-gripe.BMP/fb/wm\",\"publishedAt\": \"2018-12-19T08:14:00Z\",\"content\": \"Chinelos são vistos perto de uma escola em Dapchi, na Nigéria, de onde dezenas de alunas desapareceram após um ataque do Boko Haram. Afolabi Sotunde\"}]"));
+
     // Init default navigation routes
     navigatorManager.init();
-    navigatorManager.appendView(QStringLiteral("notes"),QStringLiteral("notes/Notes.ui.qml"));
-    navigatorManager.appendView(QStringLiteral("applications"),QStringLiteral("application/Application.ui.qml"));
-    navigatorManager.appendView(QStringLiteral("home"),QStringLiteral("home/HomeForm.ui.qml"));
-    navigatorManager.appendView(QStringLiteral("media"),QStringLiteral("media/Media.ui.qml"));
-    navigatorManager.appendView(QStringLiteral("news"),QStringLiteral("news/News.ui.qml"));
-    navigatorManager.appendView(QStringLiteral("notes"),QStringLiteral("notes/Notes.ui.qml"));
-    navigatorManager.appendView(QStringLiteral("weather"),QStringLiteral("weather/Weather.ui.qml"));
+    navigatorManager.appendView(QStringLiteral("notes"),QStringLiteral("notes/Notes.qml"));
+    navigatorManager.appendView(QStringLiteral("applications"),QStringLiteral("application/Application.qml"));
+    navigatorManager.appendView(QStringLiteral("home"),QStringLiteral("home/HomeForm.qml"));
+    navigatorManager.appendView(QStringLiteral("media"),QStringLiteral("media/Media.qml"));
+    navigatorManager.appendView(QStringLiteral("news"),QStringLiteral("news/News.qml"));
+    navigatorManager.appendView(QStringLiteral("notes"),QStringLiteral("notes/Notes.qml"));
+    navigatorManager.appendView(QStringLiteral("weather"),QStringLiteral("weather/Weather.qml"));
 
     notesManager.appendNote(QStringLiteral("Nova"), false, QStringLiteral("2019-08-08 11:15"));
+
+    notesManager.appendNote(QStringLiteral("Nova 2"), false, QStringLiteral("2011-08-08 11:15"));
+
+   notesManager.appendNote(QStringLiteral("Nasdva 2"), false, QStringLiteral("2015-08-08 11:15"));
 
     sensorManager.appendSensor("name", "º", QVector<qreal>() << 2.2);
 

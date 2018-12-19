@@ -10,16 +10,19 @@ Page {
 
     title: qsTr("Notes")
 
-    ListView {
-        width: parent.width
+    GridView {
+        width: parent.width * 0.9
         height: parent.height
+        anchors.horizontalCenter: parent.horizontalCenter
+        cellWidth: 300;
+        cellHeight : 300;
+
         model: NotesModel {
             manager: notesManager
         }
 
         delegate: NotesDelegate {
-            width: 300
-            height: 300
+
         }
     }
 }
