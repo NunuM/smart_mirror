@@ -139,6 +139,16 @@ Weather WeatherManager::getWeatherForDate(const QDate &day) const
 
     weather.description = "Not avaliable";
     weather.isSet = false;
+    weather.humidity = 0;
+    weather.pressure = 0;
+    weather.temp = 0;
+    weather.tempMax = 0;
+    weather.tempMin = 0;
+    weather.description = QStringLiteral("");
+    weather.windDeg = 0;
+    weather.icon = QStringLiteral("");
+    weather.windSpeed = 0;
+    weather.isSet = true;
 
     return weather;
 }

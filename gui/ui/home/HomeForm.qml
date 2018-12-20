@@ -12,6 +12,7 @@ Page {
 
     RowLayout {
         anchors.fill: parent
+        anchors.margins: 20
         spacing: 3
 
         Rectangle {
@@ -58,7 +59,6 @@ Page {
                     }
                 }
             }
-
         }
 
         Rectangle {
@@ -69,7 +69,7 @@ Page {
             Layout.preferredWidth: 200
             Layout.preferredHeight: 100
 
-            Column{
+            Column {
                 anchors.centerIn: parent
 
                 Text {
@@ -203,6 +203,4 @@ Page {
             notificationModel.append({notification:name, inserted: Date.now()});
         }
     }
-
-
 }

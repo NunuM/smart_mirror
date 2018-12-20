@@ -17,10 +17,6 @@ Item {
             anchors.fill: parent
             anchors.margins: 20
 
-            Component.onCompleted: {
-                console.log(width);
-            }
-
             Text {
                 id: year
                 color: "white"

@@ -6,7 +6,7 @@ ApplicationWindow {
     visible: true
     width: 640
     height: 480
-    title: qsTr("Stack")
+    title: qsTr("SmartMirror")
 
     header: ToolBar {
         contentHeight: toolButton.implicitHeight

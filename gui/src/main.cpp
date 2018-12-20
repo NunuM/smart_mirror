@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
                                           qreal windDeg,
                                           qreal windSpeed
                                           */
-    weatherManager.appendWeather("2018-12-20", 2.2,20.0,12.0,22.0,10.0,"broken clouds","04d",10,20);
+    weatherManager.appendWeather("2018-12-20", 2.2,20.0,12.0,22.0,10.0,"broken clouds","09d",10,20);
 
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);

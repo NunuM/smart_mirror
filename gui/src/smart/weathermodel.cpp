@@ -49,6 +49,8 @@ QVariant WeatherModel::data(const QModelIndex &index, int role) const
         return QVariant(theWeather.windSpeed);
     case IsSetRole:
         return QVariant(theWeather.isSet);
+    case DateRole:
+        return QVariant(date);
     }
 
     return QVariant();
@@ -67,6 +69,7 @@ QHash<int, QByteArray> WeatherModel::roleNames() const
     names[WindDegRole] = "windDeg";
     names[WindSpeedRole] = "winSpeed";
     names[IsSetRole] = "isSet";
+    names[DateRole] = "date";
     return names;
 }
 
