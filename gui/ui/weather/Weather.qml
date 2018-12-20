@@ -7,6 +7,9 @@ import Smart 1.0
 
 Page {
 
+    property var model: WeatherModel {
+        manager: weatherManager
+    }
 
     title: qsTr("Weather")
 
@@ -17,8 +20,8 @@ Page {
         cellWidth: 300;
         cellHeight : 300;
 
-        model: WeatherModel {
-            manager: weatherManager
+        model: WeatherSortProxyModel {
+            sourceModel: model
         }
 
         delegate: Item {

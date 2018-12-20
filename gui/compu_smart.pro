@@ -27,7 +27,8 @@ SOURCES += \
     src/smart/notesmodel.cpp \
     src/smart/weathermanager.cpp \
     src/smart/weathermodel.cpp \
-    src/smart/navigationmanager.cpp
+    src/smart/navigationmanager.cpp \
+    src/smart/weathersortproxymodel.cpp
 
 RESOURCES += qml.qrc
 
@@ -74,4 +75,5 @@ HEADERS += \
     src/smart/notesmodel.h \
     src/smart/weathermanager.h \
     src/smart/weathermodel.h \
-    src/smart/navigationmanager.h
+    src/smart/navigationmanager.h \
+    src/smart/weathersortproxymodel.h

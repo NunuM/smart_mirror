@@ -18,6 +18,7 @@
 #include "smart/weathermanager.h"
 #include "smart/weathermodel.h"
 #include "smart/navigationmanager.h"
+#include "smart/weathersortproxymodel.h"
 #include <unistd.h>
 #include <QDebug>
 
@@ -59,18 +60,9 @@ int main(int argc, char *argv[])
 
     sensorManager.appendSensor("name", "º", QVector<qreal>() << 52);
 
-    /**
-                                          qreal humidity,
-                                          qreal pressure,
-                                          qreal temp,
-                                          qreal tempMax,
-                                          qreal tempMin,
-                                          QString description,
-                                          QString icon,
-                                          qreal windDeg,
-                                          qreal windSpeed
-                                          */
     weatherManager.appendWeather("2018-12-20", 2.2,20.0,12.0,22.0,10.0,"broken clouds","09d",10,20);
+    weatherManager.appendWeather("2018-12-19", 22,22.0,22.0,22.0,22.0,"broken clouds","09d",22,22);
+    weatherManager.appendWeather("2018-12-21", 33,33.0,33.0,33.0,33.0,"broken clouds","09d",33,33);
 
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);
@@ -96,6 +88,8 @@ int main(int argc, char *argv[])
     qmlRegisterType<smart::WeatherModel>("Smart", 1, 0, "WeatherModel");
     qmlRegisterUncreatableType<smart::WeatherManager>("Smart", 1, 0, "WeatherManager",
                                                       QStringLiteral("NotesManager should not be created in QML"));
+
+    qmlRegisterType<smart::WeatherSortProxyModel>("Smart", 1, 0, "WeatherSortProxyModel");
 
     QQmlApplicationEngine engine;
 
