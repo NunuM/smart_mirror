@@ -55,6 +55,10 @@ DISTFILES += \
     ui/media/MediaDetailForm.qml \
     ui/weather/Weather.qml \
     ui/notes/Notes.qml \
+    js/weather.js \
+    ui/sensor/Sensor.qml \
+    ui/sensor/SensorComponent.qml \
+    js/ago.js
 
 HEADERS += \
     src/smart/sensor.h \

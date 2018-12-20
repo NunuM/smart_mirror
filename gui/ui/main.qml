@@ -81,6 +81,15 @@ ApplicationWindow {
                     drawer.close()
                 }
             }
+
+            ItemDelegate {
+                text: qsTr("Sensor")
+                width: parent.width
+                onClicked: {
+                    stackView.push("sensor/Sensor.qml")
+                    drawer.close()
+                }
+            }
         }
     }
 

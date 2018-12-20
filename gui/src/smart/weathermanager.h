@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QDate>
 #include <QMap>
+#include <QVariantMap>
 
 namespace smart {
 
@@ -24,8 +25,8 @@ class WeatherManager : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(Weather today READ todayWeather)
-    Q_PROPERTY(Weather tomorrow READ tomorrowWeather)
+    Q_PROPERTY(QVariantMap today READ todayWeather NOTIFY todayWasChanged)
+    Q_PROPERTY(QVariantMap tomorrow READ tomorrowWeather NOTIFY tomorrowWasChanged)
 
     Q_CLASSINFO("D-Bus Interface", "io.smart.Weather")
 
@@ -35,8 +36,8 @@ public:
     QMap<QDate, Weather> getItems() const;
     void setItems(const QMap<QDate, Weather> &items);
 
-    Weather todayWeather() const;
-    Weather tomorrowWeather() const;
+    QVariantMap todayWeather() const;
+    QVariantMap tomorrowWeather() const;
 
 signals:
     void preItemAppended();
@@ -44,6 +45,9 @@ signals:
 
     void preItemRemoved(int index);
     void postItemRemoved();
+
+    void todayWasChanged();
+    void tomorrowWasChanged();
 
 public slots:
     bool appendWeather(QString date,

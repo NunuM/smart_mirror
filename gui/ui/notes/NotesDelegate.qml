@@ -34,7 +34,7 @@ Item {
             }
 
             Text {
-                text: "model.title"
+                text: model.title
                 color: "grey"
                 wrapMode: Text.WordWrap
                 Layout.fillWidth: true

@@ -55,11 +55,22 @@ int main(int argc, char *argv[])
 
     notesManager.appendNote(QStringLiteral("Nova 2"), false, QStringLiteral("2011-08-08 11:15"));
 
-   notesManager.appendNote(QStringLiteral("Nasdva 2"), false, QStringLiteral("2015-08-08 11:15"));
+    notesManager.appendNote(QStringLiteral("Nasdva 2"), false, QStringLiteral("2015-08-08 11:15"));
 
-    sensorManager.appendSensor("name", "º", QVector<qreal>() << 2.2);
+    sensorManager.appendSensor("name", "º", QVector<qreal>() << 52);
 
-    weatherManager.appendWeather("2019-09-09", 0,0,0,0,0,"ola","",0,0);
+    /**
+                                          qreal humidity,
+                                          qreal pressure,
+                                          qreal temp,
+                                          qreal tempMax,
+                                          qreal tempMin,
+                                          QString description,
+                                          QString icon,
+                                          qreal windDeg,
+                                          qreal windSpeed
+                                          */
+    weatherManager.appendWeather("2018-12-20", 2.2,20.0,12.0,22.0,10.0,"broken clouds","04d",10,20);
 
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);

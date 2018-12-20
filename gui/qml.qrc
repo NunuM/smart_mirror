@@ -3,6 +3,8 @@
         <file>ui/main.qml</file>
         <file>ui/application/Application.qml</file>
         <file>ui/home/HomeForm.qml</file>
+	<file>ui/sensor/Sensor.qml</file>
+	<file>ui/sensor/SensorComponent.qml</file>
         <file>ui/sensor/SensorDelegate.qml</file>
         <file>ui/media/Media.qml</file>
         <file>ui/media/MediaDelegate.qml</file>
@@ -13,5 +15,7 @@
         <file>ui/notes/NotesDelegate.qml</file>
         <file>ui/weather/Weather.qml</file>
         <file>qtquickcontrols2.conf</file>
+	<file>js/weather.js</file>
+	<file>js/ago.js</file>
     </qresource>
 </RCC>

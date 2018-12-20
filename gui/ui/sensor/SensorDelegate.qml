@@ -4,8 +4,8 @@ import CustomControls 1.0
 
 Item {
     id: container
+    width: parent.width
     height: 110
-    width: container.ListView.view ? container.ListView.view.width : 0
 
     RadialBar {
         width: parent.width - 10
@@ -13,21 +13,20 @@ Item {
         anchors.centerIn: parent
         penStyle: Qt.FlatCap
         dialType: model.index % 2 == 0 ? RadialBar.MinToMax : RadialBar.NoDial
-        progressColor: "#e2801d"
-        backgroundColor: "#34495e"
-        dialWidth: 2
+        progressColor: "white"
+        backgroundColor: "black"
+        dialWidth: 10
         startAngle: 0
         spanAngle: 320
         minValue: 0
         maxValue: 100
         value: model.reading
         textFont {
-            family: "Consolas"
             italic: false
             pointSize: 12
         }
         suffixText: model.unit
-        textColor: "#FFFFFF"
+        textColor: "grey"
     }
 
     MouseArea {

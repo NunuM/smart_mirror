@@ -1,6 +1,7 @@
 #include "weathermanager.h"
 #include <QDebug>
 #include <QtDBus/QDBusConnection>
+#include <QVariant>
 
 namespace smart {
 
@@ -75,16 +76,47 @@ bool WeatherManager::removeWeather(QString date)
     return false;
 }
 
-Weather WeatherManager::todayWeather() const
+QVariantMap WeatherManager::todayWeather() const
 {
     QDate d = QDate::currentDate();
-    return getWeatherForDate(d);
+
+    auto weather = getWeatherForDate(d);
+
+    QVariantMap map;
+
+    map["humidity"] = QVariant(weather.humidity);
+    map["pressure"] = QVariant(weather.pressure);
+    map["temp"] = QVariant(weather.temp);
+    map["tempMax"] = QVariant(weather.tempMax);
+    map["tempMin"] = QVariant(weather.tempMin);
+    map["description"] = QVariant(weather.description);
+    map["windDeg"] = QVariant(weather.windDeg);
+    map["icon"] = QVariant(weather.icon);
+    map["windSpeed"] = QVariant(weather.windSpeed);
+    map["isSet"] = QVariant(weather.isSet);
+
+    return map;
 }
 
-Weather WeatherManager::tomorrowWeather() const
+QVariantMap WeatherManager::tomorrowWeather() const
 {
     QDate d = QDate::currentDate();
-    return getWeatherForDate(d.addDays(1));
+    auto weather = getWeatherForDate(d.addDays(1));
+
+    QVariantMap map;
+
+    map["humidity"] = QVariant(weather.humidity);
+    map["pressure"] = QVariant(weather.pressure);
+    map["temp"] = QVariant(weather.temp);
+    map["tempMax"] = QVariant(weather.tempMax);
+    map["tempMin"] = QVariant(weather.tempMin);
+    map["description"] = QVariant(weather.description);
+    map["windDeg"] = QVariant(weather.windDeg);
+    map["icon"] = QVariant(weather.icon);
+    map["windSpeed"] = QVariant(weather.windSpeed);
+    map["isSet"] = QVariant(weather.isSet);
+
+    return map;
 }
 
 QMap<QDate, Weather> WeatherManager::getItems() const
