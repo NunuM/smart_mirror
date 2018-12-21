@@ -17,10 +17,6 @@ Item {
             anchors.fill: parent
             anchors.margins: 20
 
-            Component.onCompleted: {
-                console.log(width);
-            }
-
             Text {
                 id: year
                 color: "white"
@@ -34,7 +30,7 @@ Item {
             }
 
             Text {
-                text: "model.title"
+                text: model.title
                 color: "grey"
                 wrapMode: Text.WordWrap
                 Layout.fillWidth: true

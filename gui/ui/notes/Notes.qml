@@ -4,9 +4,6 @@ import QtQuick.Window 2.12
 import Smart 1.0
 
 Page {
-    property int modelSize: 1
-    width: Screen.width
-    height: Screen.height
 
     title: qsTr("Notes")
 

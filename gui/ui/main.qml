@@ -6,7 +6,7 @@ ApplicationWindow {
     visible: true
     width: 640
     height: 480
-    title: qsTr("Stack")
+    title: qsTr("SmartMirror")
 
     header: ToolBar {
         contentHeight: toolButton.implicitHeight
@@ -78,6 +78,15 @@ ApplicationWindow {
                 width: parent.width
                 onClicked: {
                     stackView.push("weather/Weather.qml")
+                    drawer.close()
+                }
+            }
+
+            ItemDelegate {
+                text: qsTr("Sensor")
+                width: parent.width
+                onClicked: {
+                    stackView.push("sensor/Sensor.qml")
                     drawer.close()
                 }
             }

@@ -27,7 +27,8 @@ public:
         IconRole,
         WindDegRole,
         WindSpeedRole,
-        IsSetRole
+        IsSetRole,
+        DateRole
     };
 
     // Basic functionality:
