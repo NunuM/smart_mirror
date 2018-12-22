@@ -23,11 +23,8 @@ def main():
 
   response = urlopen(weather_url).read().decode('utf-8')
   parsed = json.loads(response)
-
   current_day = 0;
 
-
-  
   if args.forecast:
    output = '[\n'
    for val in parsed["list"]:
