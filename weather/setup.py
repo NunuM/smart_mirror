@@ -9,11 +9,9 @@ setup(name="weather",
       author_email='',
       packages=find_packages(),
       python_requires='~=3.4',
-      install_requires=[
-          'configparser', 'requests'
-      ],
+      install_requires=['requests'],
       entry_points={
         'console_scripts': [
-            'weather = weather:main'
+            'weather = command.weather:main'
         ]
     })
