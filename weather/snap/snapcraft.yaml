@@ -1,0 +1,19 @@
+name: weather
+base: core18 # the base snap is the execution environment for this snap
+version: '0.1'
+summary: Fetches Weather Information From OpenWeather
+description: Weather Information From OpenWeather
+
+grade: devel
+
+parts:
+  weather-part:
+    plugin: python
+    source: .
+
+apps:
+ weather:
+      command: weather
+      plugs:
+       - home
+       - network 

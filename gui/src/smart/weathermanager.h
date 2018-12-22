@@ -60,7 +60,7 @@ public slots:
                        QString icon,
                        qreal windDeg,
                        qreal windSpeed);
-
+    bool appendWeatherAsJson(QString weather);
     bool removeWeather(QString date);
 
 private:

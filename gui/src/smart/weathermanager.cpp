@@ -2,6 +2,10 @@
 #include <QDebug>
 #include <QtDBus/QDBusConnection>
 #include <QVariant>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QDate>
 
 namespace smart {
 
@@ -54,6 +58,65 @@ bool smart::WeatherManager::appendWeather(QString date,
     emit postItemAppended();
 
     return true;
+}
+
+bool WeatherManager::appendWeatherAsJson(QString weather)
+{
+    QJsonParseError error;
+
+    auto document = QJsonDocument::fromJson(weather.toUtf8(), &error);
+
+    if(error.error != QJsonParseError::NoError){
+        qDebug() << "Error in JSON format"
+                 << error.errorString();
+
+        return false;
+    }
+
+    if(!document.isArray()){
+        qDebug() << "JSON passed in invalid.";
+
+        return false;
+    }
+
+    auto jsonArray = document.array();
+    bool ret = true;
+
+    foreach (const QJsonValue & v, jsonArray)
+    {
+        auto object = v.toObject();
+
+        if(!(object.contains(QStringLiteral("date"))
+             && object.contains(QStringLiteral("humidity"))
+             && object.contains(QStringLiteral("pressure"))
+             && object.contains(QStringLiteral("temp"))
+             && object.contains(QStringLiteral("tempMax"))
+             && object.contains(QStringLiteral("tempMin"))
+             && object.contains(QStringLiteral("description"))
+             && object.contains(QStringLiteral("icon"))
+             && object.contains(QStringLiteral("winDeg"))
+             && object.contains(QStringLiteral("windSpeed")))){
+
+            qDebug() << "JSON object not contains required keys.";
+            ret &=  false;
+
+        } else {
+
+            ret &= appendWeather(
+                        object["date"].toString(),
+                    object["humidity"].toDouble(),
+                    object["pressure"].toDouble(),
+                    object["temp"].toDouble(),
+                    object["tempMax"].toDouble(),
+                    object["tempMin"].toDouble(),
+                    object["description"].toString(),
+                    object["icon"].toString(),
+                    object["WindDeg"].toDouble(),
+                    object["WindSpeed"].toDouble());
+        }
+    }
+
+    return ret;
 }
 
 bool WeatherManager::removeWeather(QString date)
