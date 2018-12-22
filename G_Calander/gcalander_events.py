@@ -32,6 +32,8 @@ def main():
                                         orderBy='startTime').execute()
     events = events_result.get('items', [])
 
+    print(events)
+
     if not events:
         print('No upcoming events found.')
     for event in events:
