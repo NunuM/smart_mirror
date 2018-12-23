@@ -6,6 +6,8 @@ import datetime
 from googleapiclient.discovery import build
 from httplib2 import Http
 from oauth2client import file, client, tools
+import json
+import datetime
 
 # If modifying these scopes, delete the file token.json.
 SCOPES = 'https://www.googleapis.com/auth/calendar.readonly'
@@ -26,17 +28,30 @@ def main():
 
     # Call the Calendar API
     now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-    print('Getting the upcoming 10 events')
+
     events_result = service.events().list(calendarId='primary', timeMin=now,
                                         maxResults=10, singleEvents=True,
                                         orderBy='startTime').execute()
     events = events_result.get('items', [])
 
+    output = []
+    # example output {"title":"ola", "notifiable":true, "alarm":"2018-06-07 22:22"}
+
     if not events:
         print('No upcoming events found.')
     for event in events:
+
         start = event['start'].get('dateTime', event['start'].get('date'))
-        print(start, event['summary'])
+        d = datetime.datetime.strptime(start , "%Y-%m-%dT%H:%M:%SZ")
+
+        day = {
+        "title": event['summary'],
+        "notifiable": "true",
+        "alarm": d.isoformat()
+        }
+        output.append(day)
+
+    print(json.dumps(output, indent=4, sort_keys=True))
 
 if __name__ == '__main__':
     main()

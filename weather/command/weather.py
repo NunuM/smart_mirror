@@ -24,9 +24,12 @@ def main():
   response = urlopen(weather_url).read().decode('utf-8')
   parsed = json.loads(response)
   current_day = 0;
+  output = []
 
   if args.forecast:
-   output = '[\n'
+
+
+
    for val in parsed["list"]:
       # print(val)
       d = datetime.datetime.strptime(val["dt_txt"] , "%Y-%m-%d %H:%M:%S")
@@ -40,20 +43,21 @@ def main():
           del val['main']['temp_kf']
           del val['main']['grnd_level']
           del val['main']['sea_level']
-          output += json.dumps(val['main'], indent=4, sort_keys=True) + '\n'
+
+          output.append(val['main'])
+
           current_day = d.day
-   output += ']'
+
   else:
       parsed['main']['date'] = datetime.datetime.now().isoformat()
       parsed['main']['description'] = parsed['weather'][0]['description']
       parsed['main']['icon'] = parsed['weather'][0]['icon']
       parsed['main']['wind_deg'] = parsed['wind']['deg']
       parsed['main']['wind_speed'] = parsed['wind']['speed']
-      output = '[\n'
-      output += json.dumps(parsed['main'], indent=4, sort_keys=True) + '\n]'
-   
 
-  print(output)
+      output.append(parsed['main'])
+
+  print(json.dumps(output, indent=4, sort_keys=True))
 
 if __name__ == "__main__":
    main()
