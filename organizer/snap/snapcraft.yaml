@@ -1,0 +1,45 @@
+name: organizer # app name'
+version: '0.1' # git tag version'
+summary: Organize you life, create notes and be notified # 79 char long summary
+description: |
+  Create notes is easy now
+
+icon: icon.png
+
+grade: devel # must be 'stable' to release into candidate/stable channels
+confinement: devmode # use 'strict' once you have the right plugs and slots
+
+apps:
+  organizer:
+    command: organizer
+    plugs:
+      - home
+      - network
+  organizerd:
+    command: organizerd
+    daemon: simple
+    restart-condition: always
+    plugs:
+      - network-bind
+      - network
+
+parts:
+  organizer-part:
+    # See 'snapcraft plugins'
+    plugin: python
+    source: .
+  config-part:
+    after: [organizer-part]
+    plugin: dump
+    organize:
+      'config.cfg' : etc/organizer/config.cfg
+    stage:
+      - etc/organizer/config.cfg
+    prime:
+      - etc/organizer/config.cfg
+
+slots:
+  content:
+    content: socket-directory
+    write:
+      - $SNAP_DATA
