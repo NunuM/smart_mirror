@@ -19,6 +19,9 @@
 #include "smart/weathermodel.h"
 #include "smart/navigationmanager.h"
 #include "smart/weathersortproxymodel.h"
+#include "smart/trafficmanager.h"
+#include "smart/trafficmodel.h"
+#include "smart/notificationmanager.h"
 #include <unistd.h>
 #include <QDebug>
 
@@ -33,6 +36,8 @@ int main(int argc, char *argv[])
     smart::NotesManager notesManager;
     smart::WeatherManager weatherManager;
     smart::NavigationManager navigatorManager;
+    smart::TrafficManager trafficManager;
+    smart::NotificationManager notificationManager;
 
     mediaManager.appendMovie(QStringLiteral("{\"type\": \"movie\", \"genre\": \"Action, Adventure, Fantasy\", \"actors\": \"Johnny Depp, Javier Bardem, Geoffrey Rush, Brenton Thwaites\", \"inserted\": \"2018-12-17 16:18:27.949416\", \"imdbid\": \"tt1790809\", \"country\": \"USA\", \"released\": \"26 May 2017\", \"title\": \"Pirates of the Caribbean Dead Men Tell No Tales\", \"quality\": \"HDRip XviD\", \"boxoffice\": \"$172,537,139\", \"plot\": \"Captain Jack Sparrow searches for the trident of Poseidon while being pursued by an undead sea captain and his crew.\", \"year\": 2017, \"imdbvotes\": \"211,949\", \"language\": \"English, Spanish\", \"metascore\": \"39\", \"writer\": \"Jeff Nathanson (screenplay by), Jeff Nathanson (story by), Terry Rossio (story by), Ted Elliott (based on characters created by), Terry Rossio (based on characters created by), Stuart Beattie (based on characters created by), Jay Wolpert (based on characters created by)\", \"dvd\": \"03 Oct 2017\", \"runtime\": \"129 min\", \"production\": \"Walt Disney Pictures\", \"imdbrating\": 6.6, \"website\": \"http://pirates.disney.com/pirates-of-the-caribbean-dead-men-tell-no-tales\", \"awards\": \"9 nominations.\", \"magnet\": \"magnet:?xt=urn:btih:CA548AA95DEADD1681C4826E61AD122A5E57B0D7&dn=Pirates.of.the.Caribbean.Dead.Men.Tell.No.Tales.2017.HDRip.XviD.\", \"poster\": \"https://m.media-amazon.com/images/M/MV5BMTYyMTcxNzc5M15BMl5BanBnXkFtZTgwOTg2ODE2MTI@._V1_SX300.jpg\", \"originaltitle\": \"Pirates.of.the.Caribbean.Dead.Men.Tell.No.Tales.2017.HDRip.XviD.\", \"rated\": \"PG-13\", \"director\": \"Joachim R\u00f8nning, Espen Sandberg\"}"));
 
@@ -51,6 +56,7 @@ int main(int argc, char *argv[])
     navigatorManager.appendView(QStringLiteral("news"),QStringLiteral("news/News.qml"));
     navigatorManager.appendView(QStringLiteral("notes"),QStringLiteral("notes/Notes.qml"));
     navigatorManager.appendView(QStringLiteral("weather"),QStringLiteral("weather/Weather.qml"));
+    navigatorManager.appendView(QStringLiteral("traffic"),QStringLiteral("traffic/Traffic.qml"));
 
     notesManager.appendNote(QStringLiteral("Nova"), false, QStringLiteral("2019-08-08 11:15"));
 
@@ -92,6 +98,10 @@ int main(int argc, char *argv[])
 
     qmlRegisterType<smart::WeatherSortProxyModel>("Smart", 1, 0, "WeatherSortProxyModel");
 
+    qmlRegisterType<smart::TrafficModel>("Smart", 1, 0, "TrafficModel");
+    qmlRegisterUncreatableType<smart::TrafficManager>("Smart", 1, 0, "TrafficManager",
+                                                      QStringLiteral("TrafficManager should not be created in QML"));
+
     QQmlApplicationEngine engine;
 
     QQmlContext *ctxt = engine.rootContext();
@@ -103,6 +113,8 @@ int main(int argc, char *argv[])
     ctxt->setContextProperty("notesManager",  &notesManager);
     ctxt->setContextProperty("weatherManager",  &weatherManager);
     ctxt->setContextProperty("navigatorManager",  &navigatorManager);
+    ctxt->setContextProperty("trafficManager",  &trafficManager);
+    ctxt->setContextProperty("notificationManager",  &notificationManager);
 
     engine.load(QUrl(QStringLiteral("qrc:/ui/main.qml")));
     if (engine.rootObjects().isEmpty())

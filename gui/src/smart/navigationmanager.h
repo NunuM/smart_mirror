@@ -33,6 +33,7 @@ public slots:
     bool setNotesViewAsRoot();
     bool setWeatherViewAsRoot();
     bool setHomeViewAsRoot();
+    bool setTrafficViewAsRoot();
 
 private:
     QHash<QString,QString> availableViews;

@@ -91,6 +91,16 @@ ApplicationWindow {
                     drawer.close()
                 }
             }
+
+            ItemDelegate {
+                text: qsTr("Traffic")
+                width: parent.width
+                onClicked: {
+                    stackView.push("traffic/Traffic.qml")
+                    drawer.close()
+                }
+            }
+
         }
     }
 

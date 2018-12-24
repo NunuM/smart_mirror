@@ -14,6 +14,7 @@
         <file>ui/notes/Notes.qml</file>
         <file>ui/notes/NotesDelegate.qml</file>
         <file>ui/weather/Weather.qml</file>
+	<file>ui/traffic/Traffic.qml</file>
         <file>qtquickcontrols2.conf</file>
 	<file>js/weather.js</file>
 	<file>js/ago.js</file>

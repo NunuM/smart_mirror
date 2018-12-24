@@ -34,10 +34,6 @@ Page {
                     id: notificationModel
                 }
 
-                Component.onCompleted: {
-                    notificationModel.append({notification:"Just Go Paid", inserted:new Date()});
-                }
-
                 model: notificationModel
                 delegate: Pane {
                     width: parent.width
@@ -201,6 +197,13 @@ Page {
         target: mediaManager
         onNotifiy: {
             notificationModel.append({notification:name, inserted: Date.now()});
+        }
+    }
+
+    Connections {
+        target: notificationManager
+        onNotify : {
+            notificationModel.append({notification:message, inserted: Date.now()});
         }
     }
 }

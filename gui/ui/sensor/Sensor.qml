@@ -5,7 +5,7 @@ import Smart 1.0
 
 Page {
     id: page
-    title: qsTr("Notes")
+    title: qsTr("Sensor")
 
 
     SensorComponent {

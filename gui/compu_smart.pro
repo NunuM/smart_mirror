@@ -28,7 +28,10 @@ SOURCES += \
     src/smart/weathermanager.cpp \
     src/smart/weathermodel.cpp \
     src/smart/navigationmanager.cpp \
-    src/smart/weathersortproxymodel.cpp
+    src/smart/weathersortproxymodel.cpp \
+    src/smart/trafficmanager.cpp \
+    src/smart/trafficmodel.cpp \
+    src/smart/notificationmanager.cpp
 
 RESOURCES += qml.qrc
 
@@ -59,7 +62,8 @@ DISTFILES += \
     js/weather.js \
     ui/sensor/Sensor.qml \
     ui/sensor/SensorComponent.qml \
-    js/ago.js
+    js/ago.js \
+    ui/traffic/Traffic.qml
 
 HEADERS += \
     src/smart/sensor.h \
@@ -76,4 +80,7 @@ HEADERS += \
     src/smart/weathermanager.h \
     src/smart/weathermodel.h \
     src/smart/navigationmanager.h \
-    src/smart/weathersortproxymodel.h
+    src/smart/weathersortproxymodel.h \
+    src/smart/trafficmanager.h \
+    src/smart/trafficmodel.h \
+    src/smart/notificationmanager.h

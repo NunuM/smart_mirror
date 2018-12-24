@@ -12,8 +12,6 @@ class WeatherModel : public QAbstractListModel
 
     Q_PROPERTY(WeatherManager * manager READ getManager WRITE setManager)
 
-    Q_CLASSINFO("D-Bus Interface", "io.smart.Weather")
-
 public:
     explicit WeatherModel(QObject *parent = nullptr);
 

@@ -43,6 +43,11 @@ bool NavigationManager::setHomeViewAsRoot()
     return tryToSetView(QStringLiteral("home"));
 }
 
+bool NavigationManager::setTrafficViewAsRoot()
+{
+    return tryToSetView(QStringLiteral("traffic"));
+}
+
 QHash<QString, QString> NavigationManager::getAvailableViews() const
 {
     return availableViews;
