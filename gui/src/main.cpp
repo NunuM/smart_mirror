@@ -60,12 +60,13 @@ int main(int argc, char *argv[])
 
     sensorManager.appendSensor("name", "º", QVector<qreal>() << 52);
 
-    weatherManager.appendWeather("2018-12-20", 2.2,20.0,12.0,22.0,10.0,"broken clouds","09d",10,20);
+    weatherManager.appendWeather("2018-12-22", 2.2,20.0,12.0,22.0,10.0,"broken clouds","09d",10,20);
     weatherManager.appendWeather("2018-12-19", 22,22.0,22.0,22.0,22.0,"broken clouds","09d",22,22);
-    weatherManager.appendWeather("2018-12-21", 33,33.0,33.0,33.0,33.0,"broken clouds","09d",33,33);
+    weatherManager.appendWeather("2018-12-23", 33,33.0,33.0,33.0,33.0,"broken clouds","09d",33,33);
 
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);
+
 
     qmlRegisterType<smart::RadialBar>("CustomControls", 1, 0, "RadialBar");
 
