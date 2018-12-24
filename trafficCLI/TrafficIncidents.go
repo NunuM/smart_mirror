@@ -1,13 +1,15 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
-	"math"
+	"log"
 	"net/http"
 	"strconv"
 	"strings"
+	"googlemaps.github.io/maps"
 )
 
 const KEY  = "AnsHzFWFWSnoH8pyuRepCX4qvr9TeOfLDWnBnbt2jtfX8t8lmMRjbvuULPwRlqRq"
@@ -16,36 +18,6 @@ const URL_NO_LOC = "http://dev.virtualearth.net/REST/v1/Traffic/Incidents/%f,%f,
 
 
 
-func (p *pointSlice) String() string {
-	return fmt.Sprint("%f",*p);
-}
-
-func (p *pointSlice) Set(value string) error {
-	strs := strings.Split(value,",")
-	if len(strs)!=2{
-		return errors.New("invalid number of parameters.Must be 2")
-	}
-	for i:=0;i<2;i++  {
-		n,err := strconv.ParseFloat(strs[i],64)
-		if err != nil {
-			return err
-		}
-		if(i == 0 && n< -90.0 || n> 90.0) {
-			return errors.New("Value for Latitude must be between -90 and 90")
-		}
-		if i== 1  && n< - 180.0 || n>180.0{
-			return errors.New("Value for Longitude must be between -180 and 180")
-		}
-		if(i==0){
-			*p = append(*p,n)
-		}  else{
-			*p = append(*p,n)
-		}
-	}
-	return nil
-}
-
-type pointSlice []float64
 type typeSlice []int
 type severitySlice []int
 
@@ -110,14 +82,6 @@ type BoundingBox struct {
 	WestLongitude float64
 	NorthLatitude float64
 	EastLongitude float64
-}
-
-
-
-func getBoundsFromLatLng(p pointSlice,dist *int) BoundingBox{
-	var latChange = float64(*dist)/111.2
-	var lonChange = math.Abs(math.Cos(p[0]*(math.Pi/180)))
-	return BoundingBox{p[0]-latChange,p[1]-lonChange,p[0]+latChange,p[1]+lonChange}
 }
 
 
@@ -230,3 +194,29 @@ type TrafficResponse struct {
 }
 
 
+
+
+const API_KEY = "AIzaSyBGzcRmbQKxDd_6isY8qkVF8v1fgTusxdo"
+
+
+func GetBBox(local string) (BoundingBox,error){
+	client,err := maps.NewClient(maps.WithAPIKey(API_KEY))
+
+	if err != nil{
+		log.Print(err)
+	}
+
+	r := &maps.GeocodingRequest{
+		Address:local,
+	}
+
+	resp,err2 := client.Geocode(context.Background(),r)
+	if err2 != nil{
+		log.Print(err2)
+	}
+	if len(resp) == 0{
+		return BoundingBox{},errors.New("Empty Reply")
+	}
+	return BoundingBox{resp[0].Geometry.Bounds.SouthWest.Lat,resp[0].Geometry.Bounds.SouthWest.Lng,
+		resp[0].Geometry.Bounds.NorthEast.Lat,resp[0].Geometry.Bounds.NorthEast.Lng},nil
+}

@@ -1,27 +1,39 @@
 import RPi.GPIO as GPIO
-import time
 import datetime
+import os, subprocess, time
+
+
+os.environ['DISPLAY'] = ":0"
+displayison = False
+maxidle = 0.25*60 # 15 seconds
+lastsignaled = 0
 
 pin_sensor = 14
-pin_relay = 15
 
 GPIO.setmode(GPIO.BCM)
 
 GPIO.setup(pin_sensor, GPIO.IN) #PIR
-GPIO.setup(pin_relay, GPIO.OUT) #RELAY
-GPIO.setup(pin_relay, GPIO.LOW) #RELAY off
+
 
 try:
     time.sleep(2) # to stabilize sensor
     while True:
         current_time=datetime.datetime.now()
+        now = time.time()
+
         print(current_time)
         if GPIO.input(pin_sensor):
             print("Motion Detected...")
-            GPIO.setup(pin_relay, GPIO.LOW) #RELAY off            
+            if not displayison:
+                subprocess.call('xset dpms force on', shell=True)
+                displayison = True
+            lastsignaled = now
         else:
             print("nothing...")
-            GPIO.setup(pin_relay, GPIO.HIGH) #RELAY on
+            if now-lastsignaled > maxidle:
+                if displayison:
+                    subprocess.call('xset dpms force off', shell=True)
+                    displayison = False
         time.sleep(1) #to avoid multiple detection
 
 except:

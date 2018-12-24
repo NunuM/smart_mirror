@@ -17,3 +17,8 @@ type Music struct {
 	Song_name string `json:"song_name"`
 }
 
+
+type Weather struct {
+	Location string `json:"location"`
+	Forecast string `json:"forecast"`
+}
