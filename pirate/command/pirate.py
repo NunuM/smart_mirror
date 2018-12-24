@@ -44,6 +44,7 @@ def usage():
     -i, --interactive   search for films in interactive mode.
     -c, --config        use this config over the default.
     -r, --recent        check and persist new movies.
+    -l, --list          list N recently added movies
     -j, --json          print as json.
     -h, --help          print this message and exits.
 
@@ -73,7 +74,7 @@ def usage():
 def init_database(config):
     """
     Create database connection, and required tables
-    :param config:
+    :param configparser.ConfigParser config:
     :return: sqlite connection
     """
     db_name = config.get('sqlite', 'name')
@@ -112,14 +113,16 @@ def init_database(config):
                           website       TEXT,
                           inserted      DATETIME)""")
 
+    conn.execute("CREATE INDEX IF NOT EXISTS idx_inserted on movies(inserted)")
+
     return conn
 
 
 def search_movies_by_genre(conn, genre):
     """
     Perform a search by movie genre
-    :param conn: sqlite connection instance
-    :param genre: string
+    :param sqlite3.Connection conn: instance
+    :param str genre: string
     :return: list of matched movies
     """
     query = """SELECT * FROM movies WHERE LOWER(genre) LIKE '%{}%'""".format(genre.lower())
@@ -129,10 +132,24 @@ def search_movies_by_genre(conn, genre):
                  for i, value in enumerate(row)) for row in cur.fetchall()]
 
 
+def recent_movies(conn, number):
+    """
+
+    :param sqlite3.Connection conn:
+    :param int number:
+    :return:
+    """
+
+    cur = conn.execute("SELECT * FROM movies ORDER BY inserted DESC LIMIT {}".format(number))
+
+    return [dict((cur.description[i][0], value) \
+                 for i, value in enumerate(row)) for row in cur.fetchall()]
+
+
 def search_movies_by_tittle(conn, movie_title):
     """
     Perform a search by movie title
-    :param conn: sqlite connection instance
+    :param sqlite3.Connection conn: instance
     :param movie_title: string
     :return: list of matched movies
     """
@@ -146,8 +163,8 @@ def search_movies_by_tittle(conn, movie_title):
 def does_movie_exists(conn, movie_title):
     """
     Verify if movies exists given a name
-    :param conn: sqlite connection
-    :param movie_title: string
+    :param sqlite3.Connection conn: instance
+    :param str movie_title:
     :return: boolean
     """
     query = """SELECT COUNT(*) AS counter FROM movies WHERE LOWER(title) LIKE '{}'""".format(movie_title.lower())
@@ -158,8 +175,8 @@ def does_movie_exists(conn, movie_title):
 def insert_into_database(conn, movies, in_batch=True, is_verbose=False):
     """
     Insert into database a given list of movies
-    :param conn: database connection
-    :param movies: list of tuples
+    :param sqlite3.Connection conn: database connection
+    :param list movies: list of tuples
     :param in_batch: boolean
     :param is_verbose: boolean
     :return: boolean
@@ -220,7 +237,7 @@ def insert_into_database(conn, movies, in_batch=True, is_verbose=False):
 def make_http_get_request(url):
     """
     Performs a HTTP GET request.
-    :param url: string
+    :param str url: string
     :return: body as string
     """
     response = requests.get(url)
@@ -234,7 +251,7 @@ def make_http_get_request(url):
 def parse_tpb_xml_feed(feed):
     """
     Iterates over a xml containing the movies xml feed
-    :param feed: string
+    :param str feed:
     :return: tuple containing the title, quality and magnet of the movie
     """
     container = []
@@ -266,8 +283,8 @@ def prepare_movie_db_tuple(movie, metadata):
     """
     Merges tuple and json information resulting in a tuple with
     filed required to be inserted into the database
-    :param movie: tuple
-    :param metadata: json
+    :param tuple movie: tuple
+    :param dict metadata: json
     :return: tuple
     """
     json_object = metadata
@@ -312,8 +329,8 @@ def download_recent(db_connection, configs, is_verbose=False):
     Download xml feed, asking to the db if each movie
     entry already exists into database, if not,
     insert it.
-    :param db_connection: database connection
-    :param configs: configurationParser
+    :param sqlite3.Connection db_connection: instance
+    :param configparser.ConfigParser configs:
     :param is_verbose: boolean
     :return: json of inserted movies
     """
@@ -358,21 +375,24 @@ def download_recent(db_connection, configs, is_verbose=False):
 def print_in_json(movies, is_brief=False, config=None):
     """
     Prints json string to stdout
-    :param movies: array of movies
-    :param is_brief: boolean
-    :param config
+    :param list list movies:
+    :param is_brief
+    :param configparser.ConfigParser config
     :return: True
     """
+    to_print = []
     valid_fields = []
 
     if config is not None:
         valid_fields = config.get('pirate', 'brief_fields').split(',')
 
-    for movie in movies:
-        if is_brief and len(valid_fields) > 0:
-            print(json.dumps({k: movie[k] for k in set(valid_fields) & set(movie.keys())}))
-        else:
-            print(json.dumps(movie))
+    if is_brief and len(valid_fields) > 0:
+        for movie in movies:
+            to_print.append({k: movie[k] for k in set(valid_fields) & set(movie.keys())})
+    else:
+        to_print = movies
+
+    print(json.dumps(to_print))
 
     return True
 
@@ -380,9 +400,9 @@ def print_in_json(movies, is_brief=False, config=None):
 def petty_print(movies, is_brief=False, config=None):
     """
     Column movie print
-    :param movies: array of movies
+    :param list movies: array of movies
     :param is_brief: boolean
-    :param config
+    :param configparser.ConfigParser config:
     :return: True
     """
     valid_fields = []
@@ -405,10 +425,10 @@ def petty_print(movies, is_brief=False, config=None):
 def paginate(movies, query, is_brief=False, config=None):
     """
     Paginate movies
-    :param movies: list 
-    :param query: string
+    :param list movies:
+    :param str query:
     :param is_brief: boolean
-    :param config: 
+    :param configparser.ConfigParser config:
     :return: True
     """
     current = 0
@@ -429,8 +449,15 @@ def paginate(movies, query, is_brief=False, config=None):
 def main():
     try:
         try:
-            opts, args = getopt.getopt(sys.argv[1:], "hjbric:g:",
-                                       ["brief", "genre", "interactive", "json", "help", "recent", "config="])
+            opts, args = getopt.getopt(sys.argv[1:], "hjbril:c:g:",
+                                       ["brief",
+                                        "genre",
+                                        "interactive",
+                                        "json",
+                                        "help",
+                                        "recent",
+                                        "list"
+                                        "config="])
         except getopt.GetoptError as err:
             print(str(err))
             sys.exit(0)
@@ -440,6 +467,8 @@ def main():
         is_interactive = False
         is_genre = False
         is_brief = False
+        is_to_list = False
+        number_to_list = 20
         genre = None
         config_filename = os.path.join(os.environ['SNAP_DATA'], "config.cfg")
 
@@ -463,6 +492,14 @@ def main():
             elif o in ("-g", "--genre"):
                 is_genre = True
                 genre = a
+            elif o in ("-l", "--list"):
+                is_to_list = True
+
+                try:
+                    number_to_list = int(a)
+                except ValueError as e:
+                    pass
+
             else:
                 print("Option {} is unknown".format(o))
 
@@ -505,11 +542,17 @@ def main():
                 search_token = input("title:")
                 if search_token.lower() != "q":
                     matched_movies = search_movies_by_tittle(db_connection, search_token)
-                    paginate(matched_movies, search_token , is_brief, config)
+                    paginate(matched_movies, search_token, is_brief, config)
                 else:
                     break
         elif is_genre:
             matched_movies = search_movies_by_genre(db_connection, genre)
+            if is_json:
+                print_in_json(matched_movies, is_brief, config)
+            else:
+                paginate(matched_movies, genre, is_brief, config)
+        elif is_to_list:
+            matched_movies = recent_movies(db_connection, number_to_list)
             if is_json:
                 print_in_json(matched_movies, is_brief, config)
             else:

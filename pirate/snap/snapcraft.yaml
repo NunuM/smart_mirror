@@ -1,5 +1,5 @@
 name: blockbuster # app name'
-version: '0.2' # git tag version'
+version: '0.3' # git tag version'
 summary: Search for your favourite movies # 79 char long summary
 description: |
   Update your movie database:-
