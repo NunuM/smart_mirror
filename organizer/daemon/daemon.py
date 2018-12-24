@@ -13,6 +13,19 @@ import smtplib
 import configparser
 from email.mime.text import MIMEText
 import heapq
+import syslog
+
+
+def log(message, error=None) -> bool:
+    """
+
+    :param str message:
+    :param object error:
+    :return:
+    """
+    syslog.syslog(syslog.LOG_DAEMON, "{}  {}".format(message, '' if error is None else str(error)))
+
+    return True
 
 
 class BreakableScheduler(sched.scheduler):
@@ -22,9 +35,9 @@ class BreakableScheduler(sched.scheduler):
         self.sleeper = None
 
     def evaluate_next_event(self):
-        print("Try to call sleeper")
+        log("Try to call sleeper")
         if self.sleeper is not None:
-            print("Calling sleeper to wake")
+            log("Calling sleeper to wake")
             self.sleeper.wake()
 
     def run(self, blocking=True):
@@ -48,14 +61,14 @@ class BreakableScheduler(sched.scheduler):
                 if not blocking:
                     return time - now
                 delta = time - now
-                print("Sleeping " + str(time))
+                log("Sleeping " + str(time))
                 self.sleeper = Sleep(delta, False)
                 self.sleeper.sleep()
                 future_now = timefunc()
                 new_delta = future_now - now
-                print("old delta" + str(delta) + ", new delta" + str(new_delta))
+                log("old delta" + str(delta) + ", new delta" + str(new_delta))
                 if new_delta <= delta:
-                    print("Get new list.............")
+                    log("Get new list.............")
                     q = self._queue
             else:
                 action(*argument, **kwargs)
@@ -121,7 +134,7 @@ class EventManager:
             email_from = self.config.get('email', 'user')
             email_to = self.config.get('organizer', 'recipients')
 
-            msg = MIMEText("Thank you for using organizer.")
+            msg = MIMEText("Thanks you for using organizer.")
             msg['Subject'] = message
             msg['From'] = email_from
             msg['To'] = email_to
@@ -131,20 +144,20 @@ class EventManager:
 
             email_server.close()
         except Exception as e:
-            print(str(e))
+            log("Could not send notification", e)
 
     def run(self):
-        print("Running...")
+        log("Running...")
 
         while not self._stop:
             self._semaphore.acquire()
-            print("Unlocked")
+            log("Unlocked")
             if not self._stop:
-                print("Awaiting")
+                log("Awaiting")
                 self.scheduler.run(blocking=True)
-                print("Alarm")
+                log("Alarm")
 
-        print("Leaving")
+        log("Leaving")
         return True
 
     def evaluate_next_event(self):
@@ -154,7 +167,7 @@ class EventManager:
         self._stop = True
         self._semaphore.release()
 
-    def queue_notification_event(self, on, message):
+    def queue_notification_event(self, on, message) -> str:
         """
 
         :param str on:
@@ -182,6 +195,7 @@ class EventManager:
                 self.scheduler.cancel(event)
                 return True
             except ValueError:
+                log("Received cancel request that not was in queue")
                 return False
         return False
 
@@ -204,8 +218,9 @@ class CommunicationManager:
     def check_server_address(self):
         try:
             os.unlink(self.server_address)
-        except OSError:
+        except OSError as e:
             if os.path.exists(self.server_address):
+                log("Could not create a new socket", e)
                 raise ValueError('Please provide a valid socket address')
 
     def run(self, event_manager):
@@ -223,7 +238,10 @@ class CommunicationManager:
 
         while True:
             try:
+
+                log("Accepting connections")
                 connection, client_address = self.sock.accept()
+                log("Received new connection")
 
                 connection.settimeout(2)
                 try:
@@ -238,8 +256,8 @@ class CommunicationManager:
                 if msg_size > 2:
                     message = connection.recv(msg_size)
                     try:
-                        decoded_message = json.loads(message, encoding='utf-8')
-                    except:
+                        decoded_message = json.loads(message.decode(), encoding='utf-8')
+                    except Exception as e:
                         connection.close()
                         continue
                 else:
@@ -250,7 +268,7 @@ class CommunicationManager:
                     event_id = event_manager.queue_notification_event(decoded_message.get('alarm'),
                                                                       decoded_message.get('message'))
 
-                    print("Received new event")
+                    log("Queue new event {}".format(event_id))
 
                     response = json.dumps(
                         {
@@ -262,6 +280,9 @@ class CommunicationManager:
                 elif action == self.DELETE:
 
                     str_uid = decoded_message.get('id')
+
+                    log("Remove event {}".format(str_uid))
+
                     if str_uid:
                         result = event_manager.cancel_event(uuid.UUID(str_uid))
                     else:
@@ -286,7 +307,7 @@ class CommunicationManager:
 
                 connection.close()
             except Exception as e:
-                print(str(e))
+                log("Some error occurred", e)
                 if connection is not None:
                     connection.close()
 
@@ -297,18 +318,26 @@ class CommunicationManager:
 
 
 def main():
+
+    log("Started organizer daemon")
+
     config = configparser.ConfigParser(os.environ)
-    config.read("../config.cfg")
+    config.read(os.path.join(os.environ['SNAP_DATA'], "config.cfg"))
+    #config.read("../config.cfg")
 
     event_manger = EventManager(config)
 
     t1 = threading.Thread(target=event_manger.run)
     t1.start()
 
-    communication_manager = CommunicationManager("./test")
+    log("Started queue thread")
+
+    communication_manager = CommunicationManager(config.get('daemon', 'socket'))
     communication_manager.run(event_manger)
 
     event_manger.stop_and_exit()
+
+    log("Daemon stopped successfully ")
 
 
 if __name__ == '__main__':

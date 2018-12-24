@@ -1,0 +1,57 @@
+#!/bin/bash
+
+recipients="$(snapctl get recipients)"
+email_host="$(snapctl get emailhost)"
+email_port="$(snapctl get emailport)"
+email_account="$(snapctl get emailaccount)"
+email_password="$(snapctl get emailpassword)"
+in_date_format="$(snapctl get indateformate)"
+out_date_format="$(snapctl get outdateformate)"
+user_timezone="$(snapctl get usertimezone)"
+
+if [ -z "$recipients" \
+        -a -z "$email_host"      \
+        -a -z "$email_port"      \
+        -a -z "$email_account"   \
+        -a -z "$email_password"  \
+        -a -z "$in_date_format"  \
+        -a -z "$out_date_format" \
+        -a -z "$user_timezone"   \
+    ]; then
+
+    cp -rf "$SNAP/etc/organizer/config.cfg" "$SNAP_DATA/"
+    exit 0
+
+fi
+
+if [ ! -z "$recipients" -a "$recipients" != " " ]; then
+    sed -i "s@recipients=.*@recipients=${recipients}@g" "$SNAP_DATA/config.cfg"
+fi
+
+if [ ! -z "$email_host" -a "$email_host" != " " ]; then
+    sed -i "s@host=.*@host=${email_host}@g" "$SNAP_DATA/config.cfg"
+fi
+
+if [ ! -z "$email_port" -a "$email_port" != " " ]; then
+    sed -i "s@port=.*@port=${email_port}@g" "$SNAP_DATA/config.cfg"
+fi
+
+if [ ! -z "$email_account" -a "$email_account" != " " ]; then
+    sed -i "s@user=.*@user=${email_account}@g" "$SNAP_DATA/config.cfg"
+fi
+
+if [ ! -z "$email_password" -a "$email_password" != " " ]; then
+    sed -i "s@password=.*@password=${email_password}@g" "$SNAP_DATA/config.cfg"
+fi
+
+if [ ! -z "$out_date_format" -a "$out_date_format" != " " ]; then
+    sed -i "s@outdateformat=.*@outdateformat=${out_date_format}@g" "$SNAP_DATA/config.cfg"
+fi
+
+if [ ! -z "$in_date_format" -a "$in_date_format" != " " ]; then
+    sed -i "s@indateformat=.*@indateformat=${in_date_format}@g" "$SNAP_DATA/config.cfg"
+fi
+
+if [ ! -z "$user_timezone" -a "$user_timezone" != " " ]; then
+    sed -i "s@timezone=.*@timezone=${user_timezone}@g" "$SNAP_DATA/config.cfg"
+fi

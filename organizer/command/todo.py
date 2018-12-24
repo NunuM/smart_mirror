@@ -29,6 +29,16 @@ def usage():
 
         To see your snap configuration, you can query:
         $ snap get organizer recipients
+        
+        You can set the following settings
+        $ snap set organizer recipients=""      # csv format
+        $ snap set organizer emailhost=""       # host of the SMTP server
+        $ snap set organizer emailport=port     # port of the SMTP server
+        $ snap set organizer emailaccount=""    # account on SMTP server
+        $ snap set organizer emailpassword=""   # password of account on SMTP server
+        $ snap set organizer indateformate=""   # date reading format
+        $ snap set organizer outdateformate=""  # output date format
+        $ snap set organizer usertimezone=""    # define user timezone
 
     \033[1mOPTIONS:\033[0m
         -c, --create        create new entry.
@@ -56,8 +66,7 @@ def usage():
 
         Override current configuration by this configuration:
         $ organizer -g /home/my.cfg 
-
-
+    
     \033[1mPROJECT:\033[0m
 
         		Made with love by nunum
@@ -99,7 +108,7 @@ def init_database(config) -> sqlite3.Connection:
     return conn
 
 
-def find_all(conn):
+def find_all(conn) -> list:
     """
     Load all entries
     :param conn:
@@ -113,7 +122,7 @@ def find_all(conn):
                  for i, value in enumerate(row)) for row in cur.fetchall()]
 
 
-def create_todo(conn, config, title, alarm=None, is_verbose=True):
+def create_todo(conn, config, title, alarm=None, is_verbose=True) -> dict:
     """
     New database entry
     :param sqlite3.Connection conn:
@@ -144,7 +153,7 @@ def create_todo(conn, config, title, alarm=None, is_verbose=True):
         conn.commit()
 
         if row[2]:
-            with_notification(conn, config, cursor.lastrowid, title, alarm_utc)
+            with_notification(conn, config, cursor.lastrowid, title, alarm_utc, is_verbose)
 
         return {'title': title, 'alarm': row[1], 'notifiable': row[2], 'created': row[3]}
 
@@ -154,7 +163,7 @@ def create_todo(conn, config, title, alarm=None, is_verbose=True):
         return {'error': str(e)}
 
 
-def find_todo_by_title(conn, config, title, alarm=None):
+def find_todo_by_title(conn, config, title, alarm=None) -> list:
     """
     Find by title
     :param sqlite3.Connection conn:
@@ -176,7 +185,7 @@ def find_todo_by_title(conn, config, title, alarm=None):
                  for i, value in enumerate(row)) for row in cur.fetchall()]
 
 
-def find_newest_todo(conn):
+def find_newest_todo(conn) -> list:
     """
 
     :param sqlite3.Connection conn:
@@ -191,7 +200,7 @@ def find_newest_todo(conn):
                  for i, value in enumerate(row)) for row in cur.fetchall()]
 
 
-def find_oldest_todo(conn):
+def find_oldest_todo(conn) -> list:
     """
     List all entries older than now UTC
     :param sqlite3.Connection conn:
@@ -206,7 +215,7 @@ def find_oldest_todo(conn):
                  for i, value in enumerate(row)) for row in cur.fetchall()]
 
 
-def update_todo(conn, config, original_title, new_title, affected_rows, alarm=None, is_verbose=False):
+def update_todo(conn, config, original_title, new_title, affected_rows, alarm=None, is_verbose=False) -> dict:
     """
     Update entry
     :param sqlite3.Connection conn:
@@ -242,7 +251,7 @@ def update_todo(conn, config, original_title, new_title, affected_rows, alarm=No
         cursor.close()
 
         if affected_rows is not None:
-            calculate_event_changes(conn, config, new_title, affected_rows, notifiable)
+            calculate_event_changes(conn, config, new_title, affected_rows, notifiable, is_verbose)
 
         return {'updated': cursor.rowcount}
     except Exception as e:
@@ -252,7 +261,7 @@ def update_todo(conn, config, original_title, new_title, affected_rows, alarm=No
     return {'updated': 0}
 
 
-def delete_todo(conn, config, title, alarm=None, is_verbose=False):
+def delete_todo(conn, config, title, alarm=None, is_verbose=False) -> dict:
     """
     Delete entry
     :param sqlite3.Connection conn:
@@ -281,7 +290,7 @@ def delete_todo(conn, config, title, alarm=None, is_verbose=False):
     return {'deleted': 0}
 
 
-def normalize_date(config, date):
+def normalize_date(config, date) -> datetime:
     """
     Parse input date, interpreted as local timezone and then
     returns it as UTC date.
@@ -297,7 +306,7 @@ def normalize_date(config, date):
     return local_dt.astimezone(tz=pytz.utc)
 
 
-def date_to_local(config, date):
+def date_to_local(config, date) -> datetime:
     """
     Convert date to local time
     :param config:
@@ -312,20 +321,20 @@ def date_to_local(config, date):
     return local_dt.astimezone(tz=pytz.timezone(timezone))
 
 
-def print_in_json(container):
+def print_in_json(container) -> bool:
     """
     Output as JSON format
-    :param dict container:
+    :param list container:
     :return:
     """
     print(json.dumps(container))
     return True
 
 
-def pretty_print(container, config):
+def pretty_print(container, config) -> bool:
     """
     Column entry print
-    :param container:
+    :param list container:
     :return:
     """
     date_format = config.get('organizer', 'outdateformat')
@@ -348,7 +357,7 @@ def pretty_print(container, config):
     return True
 
 
-def paginate(todos, config):
+def paginate(todos, config) -> bool:
     """
     Paginate entries
     :param list todos:
@@ -370,13 +379,14 @@ def paginate(todos, config):
     return True
 
 
-def calculate_event_changes(conn, config, new_title, affected_todos, notifiable):
+def calculate_event_changes(conn, config, new_title, affected_todos, notifiable, is_verbose=False) -> bool:
     """
 
     :param sqlite3.Connection conn:
     :param config:
     :param list affected_todos:
     :param notifiable
+    :param is_verbose
     :return:
     """
     ids = []
@@ -391,7 +401,7 @@ def calculate_event_changes(conn, config, new_title, affected_todos, notifiable)
             data = [(k['title'], k['alarm']) for k in affected_todos if k['rowid'] == row[2]]
             if len(data) == 1:
                 alarm = datetime.strptime(data[0][1], config.get('sqlite', 'dateformat'))
-                with_notification(conn, config, row[0], new_title, alarm)
+                with_notification(conn, config, row[0], new_title, alarm, is_verbose)
         else:
             message = json.dumps({'id': row[1]})
             action = 1
@@ -415,12 +425,12 @@ def calculate_event_changes(conn, config, new_title, affected_todos, notifiable)
             data = [(k['title'], k['alarm']) for k in affected_todos if k['rowid'] == todo_id]
             if len(data) == 1:
                 alarm = datetime.strptime(data[0][1], config.get('sqlite', 'dateformat'))
-                with_notification(conn, config, todo_id, new_title, alarm)
+                with_notification(conn, config, todo_id, new_title, alarm, is_verbose)
 
     return True
 
 
-def with_notification(conn, config, row_id, title, alarm):
+def with_notification(conn, config, row_id, title, alarm, is_verbose=False) -> bool:
     """
 
     :param sqlite3.Connection conn:
@@ -442,13 +452,15 @@ def with_notification(conn, config, row_id, title, alarm):
 
         try:
             size = int(size)
-            response = json.loads(s.recv(size), encoding='utf-8')
+            response = json.loads(s.recv(size).decode(), encoding='utf-8')
 
             if response.get('success'):
                 uid = response.get('id')
                 conn.execute("""INSERT INTO events (uid,todo_id) VALUES (?,?)""", (uid, row_id))
                 conn.commit()
-        except Exception:
+        except Exception as e:
+            if is_verbose:
+                print("Error: " + str(e))
             pass
 
     return True
@@ -482,7 +494,7 @@ def main():
         is_to_print_json = False
         is_verbose = True
 
-        config_filename = "../config.cfg"  # os.path.join(os.environ['SNAP_DATA'], "config.cfg")
+        config_filename = os.path.join(os.environ['SNAP_DATA'], "config.cfg")
 
         for o, a in opts:
             if o in ("-h", "--help"):
@@ -589,7 +601,10 @@ def main():
                 paginate(matched_todo, config)
         else:
             matched_todo = find_all(db_connection)
-            paginate(matched_todo, config)
+            if is_to_print_json:
+                print_in_json(matched_todo)
+            else:
+                paginate(matched_todo, config)
 
         db_connection.close()
 
