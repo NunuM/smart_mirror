@@ -36,7 +36,7 @@ var DbusNewsAPIImpl = DbusNewsAPI{
 	},
 }
 
-func (d *DbusNews) AppendNews(str string){
+func (d *DbusNews) AppendNews(str string) bool{
 	obj,err := OpenDbusCall(d._InterfacePath,d._ObjectPath)
 	if strings.Contains(str,"error"){
 		DbusNotififyError(str)
@@ -46,9 +46,10 @@ func (d *DbusNews) AppendNews(str string){
 		if call.Err != nil {
 			log.Printf("Invocation on interface %s method %s failed with error %v", d._InterfacePath, d.Method, call.Err)
 		} else{
-			EndDbusCall(call,d.Method)
+			return EndDbusCall(call,d.Method)
 		}
 	}
+	return false
 }
 
 
@@ -69,17 +70,17 @@ func (d *DbusNews) NumberOfNews() (int32){
 }
 
 
-func (d *DbusNews) RemoveNews(title string){
+func (d *DbusNews) RemoveNews(title string) bool{
 	obj,err := OpenDbusCall(d._InterfacePath,d._ObjectPath)
 	if err == nil {
 		call := obj.Call(d._InterfacePath+d.Method, 0, title)
 		if call.Err != nil {
 			log.Printf("Invocation on interface %s method %s failed with error %v", d._InterfacePath, d.Method, call.Err)
 		} else{
-			EndDbusCall(call,d.Method)
+			return EndDbusCall(call,d.Method)
 		}
 	}
-
+	return false
 }
 
 

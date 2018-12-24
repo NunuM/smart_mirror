@@ -37,7 +37,7 @@ var DbusWeatherAPIImp = DbusWeatherAPI{
 }
 
 
-func (d *DbusWeather) AppendWeather(weather structs.OutWeather){
+func (d *DbusWeather) AppendWeather(weather structs.OutWeather) bool{
 	obj,err := OpenDbusCall(d._InterfacePath,d._ObjectPath)
 	if err == nil {
 		call := obj.Call(d._InterfacePath+d.Method, 0, weather.Date,weather.Humidity,weather.Pressure,weather.Temp,weather.TempMax,weather.TempMin,
@@ -45,12 +45,13 @@ func (d *DbusWeather) AppendWeather(weather structs.OutWeather){
 		if call.Err != nil {
 			log.Printf("Invocation on interface %s method %s failed with error %v", d._InterfacePath, d.Method, call.Err)
 		} else{
-			EndDbusCall(call,d.Method)
+			return EndDbusCall(call,d.Method)
 		}
 	}
+	return false
 }
 
-func (d *DbusWeather) AppendWeatherAsJson(json string){
+func (d *DbusWeather) AppendWeatherAsJson(json string) bool{
 	obj,err := OpenDbusCall(d._InterfacePath,d._ObjectPath)
 	if strings.Contains(json,"error"){
 		DbusNotififyError(json)
@@ -60,22 +61,24 @@ func (d *DbusWeather) AppendWeatherAsJson(json string){
 		if call.Err != nil {
 			log.Printf("Invocation on interface %s method %s failed with error %v", d._InterfacePath, d.Method, call.Err)
 		} else{
-			EndDbusCall(call,d.Method)
+			return EndDbusCall(call,d.Method)
 		}
 	}
+	return false
 }
 
 
-func (d *DbusWeather) RemoveWeather(date string){
+func (d *DbusWeather) RemoveWeather(date string) bool{
 	obj,err := OpenDbusCall(d._InterfacePath,d._ObjectPath)
 	if err == nil {
 		call := obj.Call(d._InterfacePath+d.Method, 0, date)
 		if call.Err != nil {
 			log.Printf("Invocation on interface %s method %s failed with error %v", d._InterfacePath, d.Method, call.Err)
 		} else{
-			EndDbusCall(call,d.Method)
+			return EndDbusCall(call,d.Method)
 		}
 	}
+	return false
 }
 
 

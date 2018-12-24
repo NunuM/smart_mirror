@@ -41,41 +41,44 @@ var DbusNotesAPIImpl = DbusNotesAPI{
 }
 
 
-func (d *DbusNotes) AppendNote(title string,notifiable bool,alarm string){
+func (d *DbusNotes) AppendNote(title string,notifiable bool,alarm string) bool{
 	obj,err := OpenDbusCall(d._InterfacePath,d._ObjectPath)
 	if err == nil {
 		call := obj.Call(d._InterfacePath+d.Method, 0, title,notifiable,alarm)
 		if call.Err != nil {
 			log.Printf("Invocation on interface %s method %s failed with error %v", d._InterfacePath, d.Method, call.Err)
 		} else{
-			EndDbusCall(call,d.Method)
+			return EndDbusCall(call,d.Method)
 		}
 	}
+	return false
 }
 
 
-func (d *DbusNotes) EditNoteAlarm(title string,alarm string){
+func (d *DbusNotes) EditNoteAlarm(title string,alarm string) bool{
 	obj,err := OpenDbusCall(d._InterfacePath,d._ObjectPath)
 	if err == nil {
 		call := obj.Call(d._InterfacePath+d.Method, 0, title,alarm)
 		if call.Err != nil {
 			log.Printf("Invocation on interface %s method %s failed with error %v", d._InterfacePath, d.Method, call.Err)
 		} else{
-			EndDbusCall(call,d.Method)
+			return EndDbusCall(call,d.Method)
 		}
 	}
+	return false
 }
 
-func (d *DbusNotes) EditNoteTitle(oldTitle string,newTitle string){
+func (d *DbusNotes) EditNoteTitle(oldTitle string,newTitle string) bool{
 	obj,err := OpenDbusCall(d._InterfacePath,d._ObjectPath)
 	if err == nil {
 		call := obj.Call(d._InterfacePath+d.Method, 0, oldTitle,newTitle)
 		if call.Err != nil {
 			log.Printf("Invocation on interface %s method %s failed with error %v", d._InterfacePath, d.Method, call.Err)
 		} else{
-			EndDbusCall(call,d.Method)
+			return EndDbusCall(call,d.Method)
 		}
 	}
+	return false
 }
 
 func (d *DbusNotes) NumberOfNotes() int32{
@@ -94,16 +97,17 @@ func (d *DbusNotes) NumberOfNotes() int32{
 	return -1
 }
 
-func (d *DbusNotes) RemoveNote(title string){
+func (d *DbusNotes) RemoveNote(title string) bool{
 	obj,err := OpenDbusCall(d._InterfacePath,d._ObjectPath)
 	if err == nil {
 		call := obj.Call(d._InterfacePath+d.Method, 0, title)
 		if call.Err != nil {
 			log.Printf("Invocation on interface %s method %s failed with error %v", d._InterfacePath, d.Method, call.Err)
 		} else{
-			EndDbusCall(call,d.Method)
+			return EndDbusCall(call,d.Method)
 		}
 	}
+	return false
 }
 
 

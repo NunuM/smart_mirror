@@ -23,9 +23,10 @@ func OpenDbusCall(interfacePath string,objectPath string) (dbus.BusObject,error)
 }
 
 
-func EndDbusCall(call *dbus.Call,method string){
+func EndDbusCall(call *dbus.Call,method string) bool{
 	var reply bool
 	call.Store(&reply)
 	log.Printf("method %s invoked. reply %t",method,reply)
+	return reply
 }
 
