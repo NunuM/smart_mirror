@@ -6,50 +6,26 @@ import (
 	"log"
 )
 
-
-
-
-func (d *_DbusCall) DbusStringCall(str string){
-	obj,err := d.openCall()
-	if err == nil {
-		call := obj.Call(d._InterfacePath+d.Method, 0, str)
-		if call.Err != nil {
-			log.Printf("Invocation on interface %s method %s failed with error %v", d._InterfacePath, d.Method, call.Err)
-		} else{
-			d.endCall(call)
-		}
-	}
+func DbusNotififyError(str string){
+	//TODO Notify Gui on error - must be hardcoded path
 }
 
-func (d *_DbusCall) DbusEmptyCall(str string){
-	obj,err := d.openCall()
-	if err == nil {
-		call := obj.Call(d._InterfacePath+d.Method, 0, str)
-		if call.Err != nil {
-			log.Printf("Invocation on interface %s method %s failed with error %v", d._InterfacePath, d.Method, call.Err)
-		} else{
-			d.endCall(call)
-		}
-	}
-}
-
-
-func (d *_DbusCall) openCall() (dbus.BusObject,error){
+func OpenDbusCall(interfacePath string,objectPath string) (dbus.BusObject,error){
 	var bus dbus.BusObject
 	conn,err := dbus.SessionBus()
 	if err != nil {
 		log.Printf("Unable to open session bus")
 	} else{
-		bus = conn.Object(d._InterfacePath,dbus.ObjectPath(d._ObjectPath))
+		bus = conn.Object(interfacePath,dbus.ObjectPath(objectPath))
 		return bus,nil
 	}
 	return bus,errors.New("session bus failed to open")
 }
 
 
-func (d *_DbusCall) endCall(call *dbus.Call){
+func EndDbusCall(call *dbus.Call,method string){
 	var reply bool
 	call.Store(&reply)
-	log.Printf("method %s invoked. reply %t",d.Method,reply)
+	log.Printf("method %s invoked. reply %t",method,reply)
 }
 

@@ -11,6 +11,8 @@ import (
 
 
 
+//TODO Rework this entire file
+
 func parse_output(err error,service_name string,buff bytes.Buffer) (string){
 	var str string
 	if err == nil {
@@ -33,7 +35,7 @@ type exec_error struct {
 
 
 func Blockbuster_execute(){
-	cmd := exec.Command("blockbuster","-j")
+	cmd := exec.Command("blockbuster","-j -l 10")
 	out := &bytes.Buffer{}
 	cmd.Stdout = out
 	err := cmd.Run()
@@ -55,6 +57,31 @@ func News_execute(news structs.Newsheadlines) string{
 	str := parse_output(err1,"newsheadlines",*out)
 	log.Print("News Call Executed")
 	return str
+}
+
+
+func CallWeather(weather structs.Weather) structs.OutWeather{
+	var cmd exec.Cmd
+	if weather.Forecast != ""{
+		cmd = *exec.Command("weather "+weather.Location+" --forecast")
+	} else {
+		cmd = *exec.Command("weather "+weather.Location)
+	}
+	out := &bytes.Buffer{}
+	cmd.Stdout = out
+	err := cmd.Run()
+	log.Print("Weather Call Executed")
+
+	var w structs.OutWeather
+	err1 := json.Unmarshal(out.Bytes()[:],&w)
+
+	if err != nil {
+		return structs.OutWeather{}
+	} else if err1 != nil {
+		return structs.OutWeather{}
+	}
+
+	return w
 }
 
 

@@ -3,6 +3,7 @@ package http_service
 import (
 	"coordinator/bus"
 	"coordinator/structs"
+	"coordinator/system_exec"
 	"encoding/json"
 	"net/http"
 )
@@ -18,9 +19,9 @@ func httpNewsHandler(w http.ResponseWriter,r * http.Request){
 		respondWithError(w,http.StatusBadRequest,"Invalid request payload")
 	}
 	defer r.Body.Close()
-	call,err1 := bus.Calls.FindDbusCall(".appendNews")
+	call,err1 := bus.DbusNewsAPIImpl.FindDbusCall(".appendNews")
 	if err1 == nil {
-		go call.DbusStringCall(call.Functions.NNews.FetchNews(news))
+		go call.AppendNews(system_exec.News_execute(news))
 	}
 	reply(w)
 }
@@ -42,7 +43,17 @@ func httpBlockbusterHandler(w http.ResponseWriter,r * http.Request){
 }
 
 func httpWeatherHandler(w http.ResponseWriter,r * http.Request){
-
+	var weather structs.Weather
+	decoder := json.NewDecoder(r.Body)
+	if err:= decoder.Decode(&weather); err != nil || weather.Location == "" {
+		respondWithError(w,http.StatusBadRequest,"Invalid request payload")
+	}
+	defer r.Body.Close()
+	call,err1 := bus.DbusWeatherAPIImp.FindDbusCall(".appendWeather")
+	if err1 == nil {
+		go call.AppendWeather(system_exec.CallWeather(weather))
+	}
+	reply(w)
 }
 
 func httpOrganizerCreateHandler(w http.ResponseWriter,r * http.Request){
