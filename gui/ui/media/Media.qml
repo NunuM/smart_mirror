@@ -12,132 +12,69 @@ Page {
     id: page
     title: qsTr("Media")
 
-    GridLayout{
+    GridLayout {
         anchors.fill: parent
         anchors.margins: 20
         rowSpacing: 20
         columnSpacing: 20
         flow:  width > height ? GridLayout.LeftToRight : GridLayout.TopToBottom
 
-        ListView {
+        GridView {
             id: list
             Layout.fillWidth: true
             Layout.fillHeight: true
-            spacing: 10
+            cellWidth: 210
+            cellHeight: 352
+
             model: MediaModel {
                 manager: mediaManager
             }
-            delegate: Component {
-                Item {
-                    id: rawItem
-                    width: parent.width
-                    height: content.implicitHeight
+            delegate: Item {
 
-                    Pane {
-                        id: content
+                id: rawItem
+                width: 210
+                height: 352
+
+
+                Pane {
+                    id: content
+                    width: rawItem.width - 10
+                    height: rawItem.height - 10
+                    Material.elevation: 5
+
+                    Column {
                         anchors.fill: parent
-                        Material.elevation: 5
-                        height: page.height * 0.4
-
-                        GridLayout {
-                            id: details
-                            columns: 2
-                            rows: 1
-                            width: content.width
-
-                            Image {
-                                id: poster
-                                fillMode: Image.PreserveAspectFit
-                                source: model.poster.length === 0 ? "" : model.poster
-                                onStatusChanged: {
-                                    console.log(poster.implicitWidth)
-                                }
+                        Layout.fillHeight: true
+                        Image {
+                            id: poster
+                            width: parent.width
+                            sourceSize.width: parent.width
+                            fillMode: Image.PreserveAspectFit
+                            source: model.poster.length === 0 ? "" : model.poster
+                            onStatusChanged: {
+                                console.log(poster.implicitWidth)
                             }
+                            asynchronous:true
+                        }
 
-                            GridLayout {
-                                columns: 1
-                                rowSpacing: 5
-                                columnSpacing: 5
-                                width: details.width
-                                anchors.margins: 5
+                        Text {
+                            id: genre
+                            text: model.genre
+                            font.pointSize: 9
+                            wrapMode: Text.WordWrap
+                        }
 
-                                Text {
-                                    id: title
-                                    text: model.title
-                                    font.pixelSize: 20
-                                    color: "white"
-                                    Layout.fillWidth: true
-                                    wrapMode: Text.WordWrap
-                                }
-
-                                GridLayout {
-                                    columnSpacing: 5
-                                    columns: 2
-                                    rows: 5
-
-                                    Text {
-                                        id: ratingLabel
-                                        text: qsTr("Imdb:");
-                                        font.bold: true;
-                                        color: "grey"
-                                    }
-
-                                    Text {
-                                        id: rating
-                                        text: model.rating
-                                        color: "grey"
-                                        wrapMode: Text.WordWrap
-                                        Layout.fillWidth: true
-                                    }
-
-                                    Text {
-                                        id: actorLabel
-                                        text: qsTr("Actors:");
-                                        font.bold: true;
-                                        color: "grey"
-                                    }
-
-                                    Text {
-                                        id: actor
-                                        text: model.actors
-                                        color: "grey"
-                                        wrapMode: Text.WordWrap
-                                        Layout.fillWidth: true
-                                    }
-
-                                    Text {
-                                        id: plotLabel
-                                        text: qsTr("Plot:");
-                                        font.bold: true;
-                                        color: "grey"
-                                        Layout.fillHeight: true
-                                    }
-
-                                    Text {
-                                        id: plot
-                                        text: model.plot
-                                        color: "grey"
-                                        wrapMode: Text.WordWrap
-                                        Layout.fillWidth: true
-                                        Layout.fillHeight: true
-                                    }
-                                }
-                                Text {}
-                                Button {
-                                    text: qsTr("Play Trailer")
-                                    highlighted: true
-                                    Material.accent: Material.LightBlue
-                                }
-                            }
+                        Text {
+                            width: parent.width
+                            id: title
+                            text: model.title
+                            wrapMode: Text.WordWrap
+                            color: "white"
                         }
                     }
                 }
             }
         }
-
-        MediaDetailForm {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-        }
     }
 }
+

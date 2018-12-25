@@ -1,4 +1,4 @@
-QT += quick dbus
+QT += quick dbus positioning location
 CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
@@ -63,7 +63,9 @@ DISTFILES += \
     ui/sensor/Sensor.qml \
     ui/sensor/SensorComponent.qml \
     js/ago.js \
-    ui/traffic/Traffic.qml
+    ui/traffic/Traffic.qml \
+    ui/traffic/Marker.qml \
+    ui/traffic/MarkerDescription.qml
 
 HEADERS += \
     src/smart/sensor.h \

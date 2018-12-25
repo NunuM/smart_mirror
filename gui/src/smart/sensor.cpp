@@ -99,6 +99,10 @@ QString Sensor::unit() const
     return mUnit;
 }
 
+/**
+ * @brief Sensor::setUnit
+ * @param unit
+ */
 void Sensor::setUnit(const QString &unit)
 {
     mUnit = unit;
