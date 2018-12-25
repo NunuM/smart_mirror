@@ -1,30 +1,99 @@
 package http_service
 
 import (
-	"coordinator/bus"
+	"coordinator/dispatcher"
 	"coordinator/structs"
-	"coordinator/system_exec"
 	"encoding/json"
 	"net/http"
+	"strings"
 )
+
+//TODO Fill missing methods
+
+
+func httpAppendNewsHandler(w http.ResponseWriter,r * http.Request){
+	var news structs.Newsheadlines
+	decoder := json.NewDecoder(r.Body)
+	if err:= decoder.Decode(&news); err != nil {
+		respondWithError(w,http.StatusBadRequest,"Invalid request payload")
+	} else {
+		defer r.Body.Close()
+		dispatcher.AppendNews(news)
+		reply(w)
+	}
+}
+
+func httpRemoveNewsHandler(w http.ResponseWriter,r * http.Request){
+	var news structs.News
+	decoder := json.NewDecoder(r.Body)
+	if err:= decoder.Decode(&news); err != nil {
+		respondWithError(w,http.StatusBadRequest,"Invalid request payload")
+	} else{
+		defer r.Body.Close()
+		dispatcher.RemoveNews(news.Title)
+		reply(w)
+	}
+}
+
+func httpNumberOfNewsHandler(w http.ResponseWriter,r * http.Request){
+	var response = dispatcher.NumberOfNews()
+	if response == -1 {
+		respondWithError(w,http.StatusInternalServerError,"Invalid number of News detected -1")
+	} else{
+		respondWithJson(w,http.StatusOK,response)
+	}
+}
+
+func httpAppendWeatherHandler(w http.ResponseWriter,r * http.Request){
+	var weather structs.Weather
+	decoder := json.NewDecoder(r.Body)
+	if err:= decoder.Decode(&weather); err != nil || "" == strings.TrimSpace(weather.Location) {
+		respondWithError(w,http.StatusBadRequest,"Invalid request payload")
+	} else{
+		defer r.Body.Close()
+		dispatcher.AppendWeather(weather)
+		reply(w)
+	}
+}
+
+func httpRemoveWeather(w http.ResponseWriter,r *http.Request){
+  var weatherDate structs.WeatherDate
+	decoder := json.NewDecoder(r.Body)
+	if err:= decoder.Decode(&weatherDate); err != nil || "" == strings.TrimSpace(weatherDate.Date) {
+		respondWithError(w,http.StatusBadRequest,"Invalid request payload")
+	} else{
+		defer r.Body.Close()
+		dispatcher.RemoveWeather(weatherDate.Date)
+		reply(w)
+	}
+}
+
+func httpAppendMovies(w http.ResponseWriter,r *http.Request){
+	var movie structs.Movies
+	decoder := json.NewDecoder(r.Body)
+	if err:= decoder.Decode(&movie); err != nil  {
+		respondWithError(w,http.StatusBadRequest,"Invalid request payload")
+	} else {
+		defer r.Body.Close()
+		dispatcher.AppendMovie(movie.NumberOfMovies)
+		reply(w)
+	}
+}
+
+func httpNumberOfMoviesHandler(w http.ResponseWriter,r * http.Request){
+	var response = dispatcher.NumberOfMovies()
+	if response == -1 {
+		respondWithError(w,http.StatusInternalServerError,"Invalid number of News detected -1")
+	} else{
+		respondWithJson(w,http.StatusOK,response)
+	}
+}
+
 
 func httpTrafficHandler(w http.ResponseWriter,r *http.Request){
 
 }
 
-func httpNewsHandler(w http.ResponseWriter,r * http.Request){
-	var news structs.Newsheadlines
-	decoder := json.NewDecoder(r.Body)
-	if err:= decoder.Decode(&news); err != nil {
-		respondWithError(w,http.StatusBadRequest,"Invalid request payload")
-	}
-	defer r.Body.Close()
-	call,err1 := bus.DbusNewsAPIImpl.FindDbusCall(".appendNews")
-	if err1 == nil {
-		go call.AppendNews(system_exec.News_execute(news))
-	}
-	reply(w)
-}
 
 func httpMusicPlayHandler(w http.ResponseWriter,r * http.Request){
 
@@ -38,23 +107,6 @@ func httpMusicStopHandler(w http.ResponseWriter,r * http.Request){
 
 }
 
-func httpBlockbusterHandler(w http.ResponseWriter,r * http.Request){
-
-}
-
-func httpWeatherHandler(w http.ResponseWriter,r * http.Request){
-	var weather structs.Weather
-	decoder := json.NewDecoder(r.Body)
-	if err:= decoder.Decode(&weather); err != nil || weather.Location == "" {
-		respondWithError(w,http.StatusBadRequest,"Invalid request payload")
-	}
-	defer r.Body.Close()
-	call,err1 := bus.DbusWeatherAPIImp.FindDbusCall(".appendWeather")
-	if err1 == nil {
-		go call.AppendWeather(system_exec.CallWeather(weather))
-	}
-	reply(w)
-}
 
 func httpOrganizerCreateHandler(w http.ResponseWriter,r * http.Request){
 

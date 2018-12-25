@@ -12,17 +12,49 @@ type Route struct {
 type Routes []Route
 
 var routes = Routes{
+
 	Route{
-		"Traffic",
-		"POST",
-		"/traffic",
-		httpTrafficHandler,
+	"AppendNews",
+	"POST",
+	"/news/append",
+		httpAppendNewsHandler,
 	},
 	Route{
-	"NewsHeadlines",
+		"NumberOfNews",
+		"GET",
+		"/news/numberofnews",
+		httpNumberOfNewsHandler,
+	},
+	Route{
+		"RemoveNews",
+		"POST",
+		"/news/remove",
+		httpRemoveNewsHandler,
+
+	},
+	Route{
+		"AppendWeather",
+		"POST",
+		"/weather/append",
+		httpAppendWeatherHandler,
+	},
+	Route{
+	"RemoveWeather",
 	"POST",
-	"/news",
-		httpNewsHandler,
+	"/weather/remove",
+	httpRemoveWeather,
+	},
+	Route{
+		"AppendMovies",
+		"POST",
+		"/movies/append",
+		httpAppendMovies,
+	},
+	Route{
+		"NumberOfMovies",
+		"GET",
+		"/movies/numberofmovies",
+		httpNumberOfMoviesHandler,
 	},
 	Route{
 		"Play Music",
@@ -42,17 +74,12 @@ var routes = Routes{
 		"/music/stop",
 		httpMusicStopHandler,
 	},
+
 	Route{
-	"Blockbuster",
-	"GET",
-	"/blockbuster",
-		httpBlockbusterHandler,
-	},
-	Route{
-		"Weather",
+		"Traffic",
 		"POST",
-		"/weather",
-		httpWeatherHandler,
+		"/traffic",
+		httpTrafficHandler,
 	},
 	Route{
 		"Organizer Create",

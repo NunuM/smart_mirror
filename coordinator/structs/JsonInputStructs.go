@@ -5,6 +5,10 @@ type Newsheadlines struct {
 	CountryISO string `json:"country_iso"`
 }
 
+type News struct {
+	Title string `json:"title"`
+}
+
 type Traffic struct {
 	Distance int `json:"distance"`
 	LocationCodes bool `json:"location_codes"`
@@ -20,5 +24,20 @@ type Music struct {
 
 type Weather struct {
 	Location string `json:"location"`
-	Forecast string `json:"forecast"`
+	Forecast bool `json:"forecast"`
+}
+
+type WeatherDate struct {
+	Date string `json:"date"`
+}
+
+type Movies struct {
+	NumberOfMovies int32 `json:"number_of_movies"`
+}
+
+
+type Note struct {
+	Title string `json:"title"`
+	Notifiable bool `json:"notifiable"`
+	Alarm string `json:"alarm"`
 }

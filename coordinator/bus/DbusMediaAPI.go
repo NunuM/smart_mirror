@@ -23,7 +23,7 @@ var DbusMediaAPIImpl = DbusMediaAPI{
 	{
 		_InterfacePath:_MEDIA_INTERFACE_PATH,
 		_ObjectPath:_MEDIA_OBJECT_PATH,
-		Method:".appendMedia",
+		Method:".appendMovie",
 	},
 	{
 		_InterfacePath:_MEDIA_INTERFACE_PATH,
@@ -33,7 +33,7 @@ var DbusMediaAPIImpl = DbusMediaAPI{
 	{
 		_InterfacePath:_MEDIA_INTERFACE_PATH,
 		_ObjectPath:_MEDIA_OBJECT_PATH,
-		Method:".numberOfMovies",
+		Method:".numbersOfMovies",
 	},
 	{
 		_InterfacePath:_MEDIA_INTERFACE_PATH,
@@ -42,7 +42,7 @@ var DbusMediaAPIImpl = DbusMediaAPI{
 	},
 }
 
-func (d *DbusMedia) AppendMovie(entry string){
+func (d *DbusMedia) AppendMovie(entry string) bool{
 	obj,err := OpenDbusCall(d._InterfacePath,d._ObjectPath)
 	if strings.Contains(entry,"error"){
 		DbusNotififyError(entry)
@@ -52,13 +52,14 @@ func (d *DbusMedia) AppendMovie(entry string){
 		if call.Err != nil {
 			log.Printf("Invocation on interface %s method %s failed with error %v", d._InterfacePath, d.Method, call.Err)
 		} else{
-			EndDbusCall(call,d.Method)
+			return EndDbusCall(call,d.Method)
 		}
 	}
+	return false
 }
 
 
-func (d *DbusMedia) BulkMovieInsert(entry string){
+func (d *DbusMedia) BulkMovieInsert(entry string) bool{
 	obj,err := OpenDbusCall(d._InterfacePath,d._ObjectPath)
 	if strings.Contains(entry,"error"){
 		DbusNotififyError(entry)
@@ -68,12 +69,13 @@ func (d *DbusMedia) BulkMovieInsert(entry string){
 		if call.Err != nil {
 			log.Printf("Invocation on interface %s method %s failed with error %v", d._InterfacePath, d.Method, call.Err)
 		} else{
-			EndDbusCall(call,d.Method)
+			return EndDbusCall(call,d.Method)
 		}
 	}
+	return false
 }
 
-func (d *DbusMedia) CurrentPlayingSong(songName string){
+func (d *DbusMedia) CurrentPlayingSong(songName string) bool{
 	obj,err := OpenDbusCall(d._InterfacePath,d._ObjectPath)
 	if strings.Contains(songName,"error"){
 		DbusNotififyError(songName)
@@ -83,9 +85,10 @@ func (d *DbusMedia) CurrentPlayingSong(songName string){
 		if call.Err != nil {
 			log.Printf("Invocation on interface %s method %s failed with error %v", d._InterfacePath, d.Method, call.Err)
 		} else{
-			EndDbusCall(call,d.Method)
+			return EndDbusCall(call,d.Method)
 		}
 	}
+	return false
 }
 
 func (d *DbusMedia) NumberOfMovies() (int32){
@@ -104,16 +107,17 @@ func (d *DbusMedia) NumberOfMovies() (int32){
 	return -1
 }
 
-func (d *DbusMedia) SonghasStopped(){
+func (d *DbusMedia) SonghasStopped() bool {
 	obj,err := OpenDbusCall(d._InterfacePath,d._ObjectPath)
 	if err == nil {
 		call := obj.Call(d._InterfacePath+d.Method, 0)
 		if call.Err != nil {
 			log.Printf("Invocation on interface %s method %s failed with error %v", d._InterfacePath, d.Method, call.Err)
 		} else{
-			EndDbusCall(call,d.Method)
+			return EndDbusCall(call,d.Method)
 		}
 	}
+	return false
 }
 
 
