@@ -46,7 +46,9 @@ def getValues():
 	print("Light Level : " + format(lightLevel,'.2f') + " lx")
 	json_to_print = {}
 	current_time=datetime.datetime.now()
-	json_to_print["light"] = lightLevel
-	json_to_print["time"] = current_time
-	return json.dumps(json_to_print, indent=4, sort_keys=True)	      
+	json_to_print["name"] = "Luminosity Sensor"
+	json_to_print["unit"] = "lx"
+	json_to_print["reading"] = [lightLevel]
+	#json_to_print["time"] = current_time.strftime("%Y-%m-%d %H:%M")
+	return json.dumps([json_to_print], indent=4, sort_keys=True)	      
 

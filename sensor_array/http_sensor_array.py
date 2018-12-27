@@ -9,7 +9,7 @@ import psutil
 from subprocess import Popen, PIPE, STDOUT
 from urlparse import urlparse
 
-import gas_sensor as Gas, temperature_sensor as Temperature #, luminosity_sensor as Luminosity
+import gas_sensor as Gas, temperature_sensor as Temperature, luminosity_sensor as Luminosity
 
 DEFAULT_ERROR = {"error":"command failed to execute"}
 RETURN_CODE_SUCCESS = 200
@@ -41,8 +41,7 @@ class myHandler(BaseHTTPRequestHandler):
 
 	def invoke_luminosity_script(self):
                 try:
-			return 0
-			#return Luminosity.getValues()
+			return Luminosity.getValues()
 		except Exception as e:
 			print(e)			
 			return e		
