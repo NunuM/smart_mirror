@@ -232,7 +232,7 @@ class CommunicationManager:
 
         self.sock.bind(self.server_address)
         self.sock.listen(1)
-
+        os.chmod(self.server_address, 0o777)
         stop = False
         connection = None
 
