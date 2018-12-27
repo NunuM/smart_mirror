@@ -9,7 +9,7 @@ def main():
   parser = argparse.ArgumentParser(description='Weather CLI Param Options')
   parser.add_argument('location')
   parser.add_argument('--forecast',action='store_true')
-  
+
   args = parser.parse_args()
   key = '0b7eddd87a43720fb9cfb6faf26758af'
   _location = args.location
@@ -35,7 +35,7 @@ def main():
       d = datetime.datetime.strptime(val["dt_txt"] , "%Y-%m-%d %H:%M:%S")
       #print(d.day)
       if d.day != current_day :
-          val['main']['date']=d.isoformat()
+          val['main']['date'] = d.date()
           val['main']['description'] = val['weather'][0]['description']
           val['main']['icon'] = val['weather'][0]['icon']
           val['main']['wind_deg'] = val['wind']['deg']
@@ -49,7 +49,7 @@ def main():
           current_day = d.day
 
   else:
-      parsed['main']['date'] = datetime.datetime.now().isoformat()
+      parsed['main']['date'] = str(datetime.datetime.now().date())
       parsed['main']['description'] = parsed['weather'][0]['description']
       parsed['main']['icon'] = parsed['weather'][0]['icon']
       parsed['main']['wind_deg'] = parsed['wind']['deg']

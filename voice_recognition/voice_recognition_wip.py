@@ -3,12 +3,33 @@
 # NOTE: this example requires PyAudio because it uses the Microphone class
 
 import speech_recognition as sr
+import requests
+import json
 import datefinder
 import re
 
 key_word = "mirror"
 
 
+#example payload
+"""
+payload = {"number": 12524,
+           "type": "issue",
+           "action": "show"}
+"""
+
+
+def call_coordinator_api(endpoint, payload):
+
+     url = "http://localhost:8080/" + endpoint
+
+     header = {"Content-type": "application/x-www-form-urlencoded",
+               "Accept": "text/plain"}
+
+     response_decoded_json = requests.post(url, data=payload, headers=header)
+     response_json = response_decoded_json.json()
+
+     print(response_json)
 
 
 def check_command_reminder( str ):
@@ -26,6 +47,7 @@ def check_command_reminder( str ):
          # date returned will be a datetime.datetime object. here we are only using the first match.
          date = date_matches[0]
          print("reminder command detected: " + date.isoformat() + " - " + name_text)
+         call_coordinator_api("", {})
      else:
          print("invalid reminder comand: " + str)
 
@@ -41,33 +63,43 @@ def check_command( str ):
 
    if str == "stop music":
        print("stop music command detected: " + str)
+       call_coordinator_api("", {})
 
    elif str == "volume up":
        print("volume up command detected: " + str)
+       call_coordinator_api("", {})
 
    elif str == "volume down":
        print("volume down command detected: " + str)
+       call_coordinator_api("", {})
 
    elif str == "house sensors":
        print("house sensors command detected: " + str)
+       call_coordinator_api("", {})
 
    elif firstWord == "weather":
        print("weather command detected: " + str)
+       call_coordinator_api("", {})
 
    elif firstWord == "movies":
        print("movies command detected: " + str)
+       call_coordinator_api("/movies/append", {})
 
    elif firstWord == "calendar":
        print("calender command detected: " + str)
+       call_coordinator_api("news/append", {})
 
    elif firstWord == "news":
        print("news command detected: " + str)
+       call_coordinator_api("news/append", {})
 
    elif firstWord == "play":
        print("play command detected: " + firstWord + " - " + rest)
+       call_coordinator_api("", {})
 
    elif firstWord == "traffic":
        print("trafic command detected: " + firstWord + " - " + rest)
+       call_coordinator_api("", {})
 
    elif firstWord == "reminder":
         check_command_reminder(rest)

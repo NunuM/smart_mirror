@@ -47,7 +47,7 @@ def main():
         day = {
         "title": event['summary'],
         "notifiable": "true",
-        "alarm": d.isoformat()
+        "alarm": d.strftime( "%Y-%m-%d %H:%M")
         }
         output.append(day)
 
