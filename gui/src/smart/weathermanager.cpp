@@ -90,12 +90,12 @@ bool WeatherManager::appendWeatherAsJson(QString weather)
              && object.contains(QStringLiteral("humidity"))
              && object.contains(QStringLiteral("pressure"))
              && object.contains(QStringLiteral("temp"))
-             && object.contains(QStringLiteral("tempMax"))
-             && object.contains(QStringLiteral("tempMin"))
+             && object.contains(QStringLiteral("temp_max"))
+             && object.contains(QStringLiteral("temp_min"))
              && object.contains(QStringLiteral("description"))
              && object.contains(QStringLiteral("icon"))
-             && object.contains(QStringLiteral("winDeg"))
-             && object.contains(QStringLiteral("windSpeed")))){
+             && object.contains(QStringLiteral("wind_deg"))
+             && object.contains(QStringLiteral("wind_speed")))){
 
             qDebug() << "JSON object not contains required keys.";
             ret &=  false;

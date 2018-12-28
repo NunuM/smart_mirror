@@ -20,11 +20,11 @@ payload = {"number": 12524,
 
 
 def call_coordinator_api(endpoint, payload):
+     print(payload)
+     url = "http://localhost:8080" + endpoint
 
-     url = "http://localhost:8080/" + endpoint
-
-     header = {"Content-type": "application/x-www-form-urlencoded",
-               "Accept": "text/plain"}
+     header = {"Content-type": "application/json",
+               "Accept": "application/json"}
 
      response_decoded_json = requests.post(url, data=payload, headers=header)
      response_json = response_decoded_json.json()
@@ -95,7 +95,7 @@ def check_command( str ):
 
    elif firstWord == "play":
        print("play command detected: " + firstWord + " - " + rest)
-       call_coordinator_api("", {})
+       call_coordinator_api("/music/play", "{\"song_name\":\""+rest+"\"}")
 
    elif firstWord == "traffic":
        print("trafic command detected: " + firstWord + " - " + rest)
@@ -116,9 +116,11 @@ r = sr.Recognizer()
 
 for index, name in enumerate(sr.Microphone.list_microphone_names()):
     print("Microphone with name \"{1}\" found for `Microphone(device_index={0})`".format(index, name))
-with sr.Microphone(device_index = 2) as source:
+#with sr.Microphone(device_index=2) as source:
+with sr.Microphone(device_index=6) as source:
+    r.adjust_for_ambient_noise(source,2)
     print("Say something!")
-    audio = r.listen(source)
+    audio = r.listen(source, 2)
 
 # recognize speech using Google Speech Recognition
 try:
