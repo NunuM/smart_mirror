@@ -65,8 +65,8 @@ bool TrafficManager::appendTrafficIncidentsAsJsonArray(QString traffic)
             ret &=  false;
 
         } else {
-
-            ret &= appendTraffic(object["incidentId"].toString(),
+            QString id = QString::number(object["incidentId"].toDouble());
+            ret &= appendTraffic(id,
                     object["latitude"].toDouble(),
                     object["longitude"].toDouble(),
                     object["description"].toString(),
