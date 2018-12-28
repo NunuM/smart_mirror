@@ -31,7 +31,9 @@ SOURCES += \
     src/smart/weathersortproxymodel.cpp \
     src/smart/trafficmanager.cpp \
     src/smart/trafficmodel.cpp \
-    src/smart/notificationmanager.cpp
+    src/smart/notificationmanager.cpp \
+    src/smart/redditmodel.cpp \
+    src/smart/redditmanager.cpp
 
 RESOURCES += qml.qrc
 
@@ -65,7 +67,9 @@ DISTFILES += \
     js/ago.js \
     ui/traffic/Traffic.qml \
     ui/traffic/Marker.qml \
-    ui/traffic/MarkerDescription.qml
+    ui/traffic/MarkerDescription.qml \
+    ui/reddit/Reddit.qml \
+    ui/reddit/RedditDelegate.qml
 
 HEADERS += \
     src/smart/sensor.h \
@@ -85,4 +89,6 @@ HEADERS += \
     src/smart/weathersortproxymodel.h \
     src/smart/trafficmanager.h \
     src/smart/trafficmodel.h \
-    src/smart/notificationmanager.h
+    src/smart/notificationmanager.h \
+    src/smart/redditmodel.h \
+    src/smart/redditmanager.h

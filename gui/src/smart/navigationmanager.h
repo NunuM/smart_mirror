@@ -34,6 +34,7 @@ public slots:
     bool setWeatherViewAsRoot();
     bool setHomeViewAsRoot();
     bool setTrafficViewAsRoot();
+    bool setRedditViewAsRoot();
     bool setDinamicViewAsRoot(QString viewName);
 
 private:

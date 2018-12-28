@@ -48,6 +48,10 @@ bool NavigationManager::setTrafficViewAsRoot()
     return tryToSetView(QStringLiteral("traffic"));
 }
 
+bool NavigationManager::setRedditViewAsRoot(){
+    return tryToSetView("reddit");
+}
+
 bool NavigationManager::setDinamicViewAsRoot(QString viewName){
     return tryToSetView(viewName);
 }

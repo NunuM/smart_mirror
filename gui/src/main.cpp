@@ -22,6 +22,8 @@
 #include "smart/trafficmanager.h"
 #include "smart/trafficmodel.h"
 #include "smart/notificationmanager.h"
+#include "smart/redditmanager.h"
+#include "smart/redditmodel.h"
 #include <unistd.h>
 #include <QDebug>
 
@@ -38,6 +40,7 @@ int main(int argc, char *argv[])
     smart::NavigationManager navigatorManager;
     smart::TrafficManager trafficManager;
     smart::NotificationManager notificationManager;
+    smart::RedditManager redditManager;
 
     mediaManager.appendMovie(QStringLiteral("{\"type\": \"movie\", \"genre\": \"Action, Adventure, Fantasy\", \"actors\": \"Johnny Depp, Javier Bardem, Geoffrey Rush, Brenton Thwaites\", \"inserted\": \"2018-12-17 16:18:27.949416\", \"imdbid\": \"tt1790809\", \"country\": \"USA\", \"released\": \"26 May 2017\", \"title\": \"Pirates of the Caribbean Dead Men Tell No Tales\", \"quality\": \"HDRip XviD\", \"boxoffice\": \"$172,537,139\", \"plot\": \"Captain Jack Sparrow searches for the trident of Poseidon while being pursued by an undead sea captain and his crew.\", \"year\": 2017, \"imdbvotes\": \"211,949\", \"language\": \"English, Spanish\", \"metascore\": \"39\", \"writer\": \"Jeff Nathanson (screenplay by), Jeff Nathanson (story by), Terry Rossio (story by), Ted Elliott (based on characters created by), Terry Rossio (based on characters created by), Stuart Beattie (based on characters created by), Jay Wolpert (based on characters created by)\", \"dvd\": \"03 Oct 2017\", \"runtime\": \"129 min\", \"production\": \"Walt Disney Pictures\", \"imdbrating\": 6.6, \"website\": \"http://pirates.disney.com/pirates-of-the-caribbean-dead-men-tell-no-tales\", \"awards\": \"9 nominations.\", \"magnet\": \"magnet:?xt=urn:btih:CA548AA95DEADD1681C4826E61AD122A5E57B0D7&dn=Pirates.of.the.Caribbean.Dead.Men.Tell.No.Tales.2017.HDRip.XviD.\", \"poster\": \"https://m.media-amazon.com/images/M/MV5BMTYyMTcxNzc5M15BMl5BanBnXkFtZTgwOTg2ODE2MTI@._V1_SX300.jpg\", \"originaltitle\": \"Pirates.of.the.Caribbean.Dead.Men.Tell.No.Tales.2017.HDRip.XviD.\", \"rated\": \"PG-13\", \"director\": \"Joachim R\u00f8nning, Espen Sandberg\"}"));
 
@@ -47,6 +50,9 @@ int main(int argc, char *argv[])
     newsManager.appendNews(QStringLiteral("[{\"author\": \"\",\"title\": \"1 milhão de vacinas contra a gripe administradas desde início da campanha - SIC Notícias\",\"description\": \"Desde o início da campanha de vacinação contra a gripe, já foram administradas mais de um milhão de vacinas. No entanto, a Direção Geral de Saúde reforça, e recomenda, a necessidade de mais portugueses serem vacinados até ao final do ano, especialmente pessoa…\",\"url\": \"https://sicnoticias.sapo.pt/pais/2018-12-19-1-milhao-de-vacinas-contra-a-gripe-administradas-desde-inicio-da-campanha\",\"urlToImage\": \"https://images.impresa.pt/sicnot/2018-12-19-gripe.BMP/fb/wm\",\"publishedAt\": \"2018-12-19T08:14:00Z\",\"content\": \"Chinelos são vistos perto de uma escola em Dapchi, na Nigéria, de onde dezenas de alunas desapareceram após um ataque do Boko Haram. Afolabi Sotunde\"}]"));
 
     newsManager.appendNews(QStringLiteral("[{\"author\": \"\",\"title\": \"1 milhão de vacinas contra a gripe administradas desde início da campanha - SIC Notícias\",\"description\": \"Desde o início da campanha de vacinação contra a gripe, já foram administradas mais de um milhão de vacinas. No entanto, a Direção Geral de Saúde reforça, e recomenda, a necessidade de mais portugueses serem vacinados até ao final do ano, especialmente pessoa…\",\"url\": \"https://sicnoticias.sapo.pt/pais/2018-12-19-1-milhao-de-vacinas-contra-a-gripe-administradas-desde-inicio-da-campanha\",\"urlToImage\": \"https://images.impresa.pt/sicnot/2018-12-19-gripe.BMP/fb/wm\",\"publishedAt\": \"2018-12-19T08:14:00Z\",\"content\": \"Chinelos são vistos perto de uma escola em Dapchi, na Nigéria, de onde dezenas de alunas desapareceram após um ataque do Boko Haram. Afolabi Sotunde\"}]"));
+
+    redditManager.appendRedditPosts(QStringLiteral("[{\"author\": \"t2_iqsg6\",\"title\": \"Saying goodbye to a species, the very last male Northern White Rhino. A powerful photo of 2018.\",\"description\": \"\",\"subreddit\":\"interestingasfuck\",\"urlToImage\": \"https://b.thumbs.redditmedia.com/h8-ty6Zf1h-esrk4U1zFpCuKFAZ9GJkxPsG41-DYAGo.jpg\",\"numberOfUpvotes\": \"Upvotes: 32648\"} ]"));
+
 
     // Init default navigation routes
     navigatorManager.init();
@@ -105,6 +111,10 @@ int main(int argc, char *argv[])
     qmlRegisterUncreatableType<smart::TrafficManager>("Smart", 1, 0, "TrafficManager",
                                                       QStringLiteral("TrafficManager should not be created in QML"));
 
+    qmlRegisterType<smart::RedditModel>("Smart",1,0,"RedditModel");
+    qmlRegisterUncreatableType<smart::RedditManager>("Smart",1,0,"RedditManager", QStringLiteral("RedditManager should not be created in QML"));
+
+
     QQmlApplicationEngine engine;
 
     QQmlContext *ctxt = engine.rootContext();
@@ -118,6 +128,7 @@ int main(int argc, char *argv[])
     ctxt->setContextProperty("navigatorManager",  &navigatorManager);
     ctxt->setContextProperty("trafficManager",  &trafficManager);
     ctxt->setContextProperty("notificationManager",  &notificationManager);
+    ctxt->setContextProperty("redditManager", &redditManager);
 
     engine.load(QUrl(QStringLiteral("qrc:/ui/main.qml")));
     if (engine.rootObjects().isEmpty())

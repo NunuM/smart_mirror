@@ -1,0 +1,17 @@
+name: reddithotposts
+version: '0.1'
+summary: Reddit Hot Posts
+description: |
+  Fetches the Hot Posts From Reddit
+
+grade: devel
+confinement: devmode
+
+parts:
+ reddithotposts:
+         source: .
+         plugin: go
+
+apps:
+ reddithotposts:
+         command: redditCLI

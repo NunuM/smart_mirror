@@ -101,6 +101,15 @@ ApplicationWindow {
                 }
             }
 
+            ItemDelegate{
+                text:  qsTr("Reddit")
+                width: parent.width
+                onClicked: {
+                    stackView.push("reddit/Reddit.qml")
+                    drawer.close()
+                }
+            }
+
         }
     }
 
