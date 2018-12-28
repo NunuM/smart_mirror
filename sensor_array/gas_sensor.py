@@ -12,11 +12,14 @@ def getValues():
 		GPIO.setmode(GPIO.BCM)
 		GPIO.setup(pino_sensor, GPIO.IN)
 		result = GPIO.input(pino_sensor)
-		detected_flag = (result==0) #detected gas
+		#detected_flag = (result==0) #detected gas
 		
 		data = {}
-		data['gas_detected'] = detected_flag
-		return json.dumps(data, indent=4, sort_keys=True)
+		#data['gas_detected'] = detected_flag
+		data["name"] = "Gas Sensor"
+		data["unit"] = "boolean"
+		data["values"] = [int(result==0)] 
+		return json.dumps([data], indent=4, sort_keys=True)
        
 	except KeyboardInterrupt as e:
 		print("Interrompido pelo utilizador!!!")

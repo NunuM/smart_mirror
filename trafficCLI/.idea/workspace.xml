@@ -1,7 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d807e4dd-a437-4151-ad4a-1aa9658c35a6" name="Default Changelist" comment="" />
+    <list default="true" id="d807e4dd-a437-4151-ad4a-1aa9658c35a6" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../coordinator/.idea/encodings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/CoordinatorRequests.postman_collection.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/bus/DbusCall.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/bus/DbusMediaAPI.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/bus/DbusNavigationAPI.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/bus/DbusNewsAPI.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/bus/DbusNotesAPI.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/bus/DbusRoutes.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/bus/DbusSensorAPI.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/bus/DbusWeatherAPI.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/coordinator.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/dbus/sensor_dbus.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/dispatcher/MediaDispatcher.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/dispatcher/NewsDispatcher.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/dispatcher/NotesDispatcher.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/dispatcher/SnapCalls.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/dispatcher/WeatherDispatcher.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/http_service/HttpHandlers.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/http_service/HttpRoutes.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/http_service/Router.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/http_service/http_handlers.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/http_service/http_routes.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/http_service/router.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/main.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/structs/JsonInputStructs.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/structs/JsonOutputStructs.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/structs/json_http_request_structs.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/system_exec/Dispatcher.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/system_exec/SnapCalls.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/system_exec/snap_exec.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gui/src/smart/navigationmanager.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../gui/src/smart/navigationmanager.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gui/src/smart/navigationmanager.h" beforeDir="false" afterPath="$PROJECT_DIR$/../gui/src/smart/navigationmanager.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gui/src/smart/trafficmanager.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../gui/src/smart/trafficmanager.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../stream_music_youtube/http_server_music.py" beforeDir="false" afterPath="$PROJECT_DIR$/../stream_music_youtube/http_server_music.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TrafficIncidents.go" beforeDir="false" afterPath="$PROJECT_DIR$/TrafficIncidents.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../weather/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../weather/.idea/workspace.xml" afterDir="false" />
+    </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -9,40 +52,44 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="DockManager">
+    <window id="1">
+      <content type="file-editors">
+        <state>
+          <leaf>
+            <file pinned="false" current-in-tab="true">
+              <entry file="file://$PROJECT_DIR$/TrafficIncidents.go">
+                <provider selected="true" editor-type-id="text-editor">
+                  <state relative-caret-position="129">
+                    <caret line="153" column="38" selection-start-line="153" selection-start-column="38" selection-end-line="153" selection-end-column="38" />
+                  </state>
+                </provider>
+              </entry>
+            </file>
+          </leaf>
+        </state>
+      </content>
+    </window>
+  </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/TrafficIncidents.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3225">
-              <caret line="215" column="5" selection-start-line="215" selection-start-column="5" selection-end-line="215" selection-end-column="5" />
-              <folding>
-                <element signature="e#14#140#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="210">
-                <caret line="14" column="29" selection-start-line="14" selection-start-column="29" selection-end-line="14" selection-end-column="29" />
+              <first_editor relative-caret-position="180">
+                <caret line="12" column="29" selection-start-line="12" selection-start-column="29" selection-end-line="12" selection-end-column="29" />
               </first_editor>
               <second_editor />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="450">
-              <caret line="45" selection-start-line="45" selection-end-line="45" />
-              <folding>
-                <element signature="e#14#45#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="900">
+              <caret line="65" column="57" selection-start-line="65" selection-start-column="57" selection-end-line="65" selection-end-column="57" />
             </state>
           </provider>
         </entry>
@@ -57,23 +104,27 @@
     </option>
   </component>
   <component name="GOROOT" path="/usr/local/go" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/ideaTest.go" />
         <option value="$PROJECT_DIR$/routes.go" />
+        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/TrafficIncidents.go" />
         <option value="$PROJECT_DIR$/main.go" />
-        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="213" />
-    <option name="y" value="317" />
+    <option name="x" value="326" />
+    <option name="y" value="152" />
     <option name="width" value="1400" />
     <option name="height" value="1000" />
   </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
@@ -176,11 +227,12 @@
       <workItem from="1544219494681" duration="815000" />
       <workItem from="1544894841559" duration="9000" />
       <workItem from="1545609807316" duration="3133000" />
+      <workItem from="1545953637926" duration="831000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="28517000" />
+    <option name="totallyTimeSpent" value="29348000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -192,9 +244,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="213" y="317" width="1400" height="1000" extended-state="0" />
+    <frame x="326" y="152" width="1400" height="1000" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.21565731" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.21861152" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -203,8 +256,8 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.34937" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.39862543" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.32829374" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.42365098" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="Terminal" order="6" weight="0.3298969" />
@@ -273,21 +326,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="45" selection-start-line="45" selection-end-line="45" />
-          <folding>
-            <element signature="e#14#45#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="210">
-            <caret line="14" column="29" selection-start-line="14" selection-start-column="29" selection-end-line="14" selection-end-column="29" />
+          <first_editor relative-caret-position="180">
+            <caret line="12" column="29" selection-start-line="12" selection-start-column="29" selection-end-line="12" selection-end-column="29" />
           </first_editor>
           <second_editor />
         </state>
@@ -295,11 +338,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/TrafficIncidents.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3225">
-          <caret line="215" column="5" selection-start-line="215" selection-start-column="5" selection-end-line="215" selection-end-column="5" />
-          <folding>
-            <element signature="e#14#140#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="129">
+          <caret line="153" column="38" selection-start-line="153" selection-start-column="38" selection-end-line="153" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="900">
+          <caret line="65" column="57" selection-start-line="65" selection-start-column="57" selection-end-line="65" selection-end-column="57" />
         </state>
       </provider>
     </entry>

@@ -84,7 +84,6 @@ class myHandler(BaseHTTPRequestHandler):
 				response_code = self.try_change_volume('d')
 			else:
 				response_code = 404
-
 			# Send the html message
 			self.send_response(response_code)
 			self.send_header('Content-type','application/json')
@@ -94,6 +93,7 @@ class myHandler(BaseHTTPRequestHandler):
 				self.wfile.write('{"message":"command failed to execute"}')
 			else:
 				self.wfile.write('{"message":"command executed"}')
+
 			
 			return
 		except socket.error:

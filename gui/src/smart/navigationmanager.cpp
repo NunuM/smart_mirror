@@ -48,6 +48,10 @@ bool NavigationManager::setTrafficViewAsRoot()
     return tryToSetView(QStringLiteral("traffic"));
 }
 
+bool NavigationManager::setDinamicViewAsRoot(QString viewName){
+    return tryToSetView(viewName);
+}
+
 QHash<QString, QString> NavigationManager::getAvailableViews() const
 {
     return availableViews;
