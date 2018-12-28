@@ -57,7 +57,7 @@ def check_command( str ):
    firstWord = str
    rest = ""
    try:
-       (firstWord, rest) = str.split(maxsplit=1)
+       (firstWord, rest) = str.split(" ",1)
    except ValueError:
        print("Only one word")
 
@@ -113,7 +113,10 @@ def check_command( str ):
 
 # obtain audio from the microphone
 r = sr.Recognizer()
-with sr.Microphone() as source:
+
+for index, name in enumerate(sr.Microphone.list_microphone_names()):
+    print("Microphone with name \"{1}\" found for `Microphone(device_index={0})`".format(index, name))
+with sr.Microphone(device_index = 2) as source:
     print("Say something!")
     audio = r.listen(source)
 
@@ -130,7 +133,7 @@ try:
     firstWord = text
     rest = ""
     try:
-        (firstWord, rest) = text.split(maxsplit=1)
+        (firstWord, rest) = text.split(' ',1)
     except ValueError:
         print("Only one word")
 
