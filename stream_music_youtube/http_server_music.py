@@ -65,35 +65,39 @@ class myHandler(BaseHTTPRequestHandler):
 
 	#Handler for the GET requests
 	def do_GET(self):
-		response_code = RETURN_CODE_SUCCESS		
-		#play
-		if ROUTES[0] in self.path:
-			response_code = self.try_play_music()
-		#pause
-		elif ROUTES[1] in self.path:
-			response_code = self.try_pause_music()
-		#stop
-		elif ROUTES[2] in self.path:
-			response_code = self.try_stop_music()
-		#increase volume
-		elif ROUTES[3] in self.path:
-			response_code = self.try_change_volume('u')
-		#decrease volume
-		elif ROUTES[4] in self.path:
-			response_code = self.try_change_volume('d')
-		else:
-			response_code = 404
-
-		self.send_header('Content-type','application/json')
-		self.end_headers()
-		# Send the html message
-		self.send_response(response_code)
-		if response_code == RETURN_CODE_ERROR:
-			self.wfile.write('{"message":"command failed to execute"}')
-		else:
-			self.wfile.write('{"message":"command executed"}')
+		try:
+			response_code = RETURN_CODE_SUCCESS		
+			#play
+			if ROUTES[0] in self.path:
+				response_code = self.try_play_music()
+			#pause
+			elif ROUTES[1] in self.path:
+				response_code = self.try_pause_music()
+			#stop
+			elif ROUTES[2] in self.path:
+				response_code = self.try_stop_music()
+			#increase volume
+			elif ROUTES[3] in self.path:
+				response_code = self.try_change_volume('u')
+			#decrease volume
+			elif ROUTES[4] in self.path:
+				response_code = self.try_change_volume('d')
+			else:
+				response_code = 404
+			# Send the html message
+			self.send_response(response_code)
+			self.send_header('Content-type','application/json')
+			self.end_headers()
 			
-		return
+			if response_code == RETURN_CODE_ERROR:
+				self.wfile.write('{"message":"command failed to execute"}')
+			else:
+				self.wfile.write('{"message":"command executed"}')
+
+			
+			return
+		except socket.error:
+			pass
 
 try:
 	#Create a web server and define the handler to manage the

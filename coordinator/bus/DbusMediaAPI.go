@@ -23,7 +23,7 @@ var DbusMediaAPIImpl = DbusMediaAPI{
 	{
 		_InterfacePath:_MEDIA_INTERFACE_PATH,
 		_ObjectPath:_MEDIA_OBJECT_PATH,
-		Method:".appendMovie",
+		Method:".bulkMoviesInsertion",
 	},
 	{
 		_InterfacePath:_MEDIA_INTERFACE_PATH,

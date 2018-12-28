@@ -11,8 +11,8 @@ import (
 
 func callWeather(weather structs.Weather) structs.OutWeatherSlice{
 	var cmd exec.Cmd
-	if weather.Forecast {
-		cmd = *exec.Command("weather",weather.Location," --forecast")
+	if *weather.Forecast {
+		cmd = *exec.Command("weather",weather.Location,"--forecast")
 	} else {
 		cmd = *exec.Command("weather",weather.Location)
 	}
@@ -35,7 +35,7 @@ func callWeather(weather structs.Weather) structs.OutWeatherSlice{
 
 func AppendWeather(weather structs.Weather){
 	go switchToWeatherView()
-	if weather.Forecast {
+	if *weather.Forecast {
 		go appendWeatherForecastAsync(weather)
 	} else{
 		go appendWeatherNoForecastAsync(weather)

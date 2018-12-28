@@ -9,14 +9,6 @@ type News struct {
 	Title string `json:"title"`
 }
 
-type Traffic struct {
-	Distance int `json:"distance"`
-	LocationCodes bool `json:"location_codes"`
-	Lat_lon float64 `json:"lat_lon"`
-	Severity []int `json:"severity"`
-	TypeV []int `json:"type_v"`
-}
-
 type Music struct {
 	Song_name string `json:"song_name"`
 }
@@ -24,7 +16,7 @@ type Music struct {
 
 type Weather struct {
 	Location string `json:"location"`
-	Forecast bool `json:"forecast"`
+	Forecast *bool `json:"forecast",omitempty`
 }
 
 type WeatherDate struct {
@@ -33,6 +25,22 @@ type WeatherDate struct {
 
 type Movies struct {
 	NumberOfMovies int32 `json:"number_of_movies"`
+}
+
+type Traffic struct {
+	Location string `json:"location"`
+	LocationCodes *bool `json:"location_codes",omitempty`
+	Severity *[]int `json:"severity",omitempty`
+	TypeV *[]int `json:"type_v",omitempty`
+}
+
+type Incident struct {
+	IncidentId string `json:"incident_id"`
+}
+
+type View struct {
+	ViewName string `json:"view_name"`
+	ViewPath string `json:"view_path"`
 }
 
 

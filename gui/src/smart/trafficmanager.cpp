@@ -59,18 +59,18 @@ bool TrafficManager::appendTrafficIncidentsAsJsonArray(QString traffic)
              && object.contains(QStringLiteral("latitude"))
              && object.contains(QStringLiteral("longitude"))
              && object.contains(QStringLiteral("description"))
-             && object.contains(QStringLiteral("isRoadClosed")))){
+             && object.contains(QStringLiteral("roadClosed")))){
 
             qDebug() << "JSON object not contains required keys.";
             ret &=  false;
 
         } else {
-
-            ret &= appendTraffic(object["incidentId"].toString(),
+            QString id = QString::number(object["incidentId"].toDouble());
+            ret &= appendTraffic(id,
                     object["latitude"].toDouble(),
                     object["longitude"].toDouble(),
                     object["description"].toString(),
-                    object["isRoadClosed"].toBool());
+                    object["roadClosed"].toBool());
         }
     }
 

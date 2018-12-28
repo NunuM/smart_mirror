@@ -18,3 +18,6 @@ type OutWeatherSlice []OutWeather
 
 
 
+type SongStreamHttpReply struct {
+	Message string `json:"message"`
+}

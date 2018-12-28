@@ -14,7 +14,7 @@ func news_execute(news structs.Newsheadlines) string{
 	if news.CountryISO == ""{
 		cmd = *exec.Command("newsheadlines")
 	} else{
-		cmd = *exec.Command("newsheadlines","-country "+news.CountryISO)
+		cmd = *exec.Command("newsheadlines","-country",news.CountryISO)
 	}
 	out := &bytes.Buffer{}
 	cmd.Stdout = out

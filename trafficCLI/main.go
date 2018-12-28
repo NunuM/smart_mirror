@@ -50,7 +50,20 @@ func main() {
 		var traffic = TrafficIncident{bbox, *boolPtr, severity, types}
 		resp, err1 := traffic.makeRequest()
 		if err1 == nil {
-			res, err1 := json.MarshalIndent(resp.ResourceSets, "", "    ")
+			var shortResponse ShortTrafficResponses
+			for _,resourceSet := range resp.ResourceSets{
+				for _,resource := range resourceSet.Resources {
+					shortTrafficResponse := ShortTrafficResponse{
+						Description:resource.Description,
+						Longitude:resource.Point.Coordinates[1],
+						Latitude:resource.Point.Coordinates[0],
+						IncidentID:resource.IncidentID,
+						RoadClosed:resource.RoadClosed,
+					}
+					shortResponse = append(shortResponse,shortTrafficResponse)
+				}
+			}
+			res, err1 := json.MarshalIndent(shortResponse, "", "    ")
 			if err1 == nil {
 				fmt.Println(string(res))
 			} else {

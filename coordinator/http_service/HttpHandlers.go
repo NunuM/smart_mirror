@@ -83,29 +83,111 @@ func httpAppendMovies(w http.ResponseWriter,r *http.Request){
 func httpNumberOfMoviesHandler(w http.ResponseWriter,r * http.Request){
 	var response = dispatcher.NumberOfMovies()
 	if response == -1 {
-		respondWithError(w,http.StatusInternalServerError,"Invalid number of News detected -1")
+		respondWithError(w,http.StatusInternalServerError,"Invalid number of Movies detected -1")
 	} else{
 		respondWithJson(w,http.StatusOK,response)
 	}
 }
 
 
-func httpTrafficHandler(w http.ResponseWriter,r *http.Request){
-
+func httpAppendTrafficHandler(w http.ResponseWriter,r *http.Request){
+	var trafficParams structs.Traffic
+	decoder := json.NewDecoder(r.Body)
+	if err := decoder.Decode(&trafficParams); err != nil || "" == strings.TrimSpace(trafficParams.Location) {
+		respondWithError(w,http.StatusBadRequest,"Invalid request payload")
+	} else {
+		defer r.Body.Close()
+		dispatcher.AppendTraffic(trafficParams)
+		reply(w)
+	}
 }
 
 
-func httpMusicPlayHandler(w http.ResponseWriter,r * http.Request){
-
+func httpNumberOfTrafficIncidentsHandler(w http.ResponseWriter, r *http.Request){
+	var response = dispatcher.NumberOfIncidents()
+	if response == -1 {
+		respondWithError(w,http.StatusInternalServerError,"Invalid number of Traffic Incidents detected -1")
+	}else{
+		respondWithJson(w,http.StatusOK,response)
+	}
 }
 
-func httpMusicCurrentHandler(w http.ResponseWriter,r * http.Request){
 
+
+func httpRemoveIncidentHandler(w http.ResponseWriter,r *http.Request){
+	var incident structs.Incident
+	decoder := json.NewDecoder(r.Body)
+	if err:= decoder.Decode(&incident); err != nil || "" == strings.TrimSpace(incident.IncidentId) {
+		respondWithError(w,http.StatusBadRequest,"Invalid request payload")
+	} else{
+		defer r.Body.Close()
+		dispatcher.RemoveIncident(incident.IncidentId)
+		reply(w)
+	}
 }
 
-func httpMusicStopHandler(w http.ResponseWriter,r * http.Request){
-
+func httpPlaySongHandler(w http.ResponseWriter,r *http.Request){
+	var song structs.Music
+	decoder := json.NewDecoder(r.Body)
+	if err:= decoder.Decode(&song); err != nil || "" == strings.TrimSpace(song.Song_name) {
+		respondWithError(w,http.StatusBadRequest,"Invalid request payload")
+	} else{
+		defer r.Body.Close()
+		dispatcher.PlaySong(song.Song_name)
+		reply(w)
+	}
 }
+
+func httpPauseSongHandler(w http.ResponseWriter,r *http.Request){
+	dispatcher.PauseSong()
+	reply(w)
+}
+
+func httpStopSongHandler(w http.ResponseWriter,r *http.Request){
+	dispatcher.StopSong()
+	reply(w)
+}
+
+func httpUpSongVolumeHandler(w http.ResponseWriter,r *http.Request){
+	dispatcher.UpSongVolume()
+	reply(w)
+}
+
+func httpDownSongVolumeHandler(w http.ResponseWriter,r *http.Request){
+	dispatcher.DownSongVolume()
+	reply(w)
+}
+
+func httpSetMediaViewHandler(w http.ResponseWriter,r *http.Request){
+	dispatcher.SetMediaViewAsRoot()
+	reply(w)
+}
+
+func httpSetNewsViewHandler(w http.ResponseWriter,r *http.Request){
+	dispatcher.SetNewsViewAsRoot()
+	reply(w)
+}
+
+func httpSetNotesViewHandler(w http.ResponseWriter,r *http.Request){
+	dispatcher.SetNotesViewAsRoot()
+	reply(w)
+}
+
+func httpSetSensorViewHandler(w http.ResponseWriter,r *http.Request){
+	//TODO dispatch sensor view
+	reply(w)
+}
+
+func httpSetTrafficViewHandler(w http.ResponseWriter,r *http.Request){
+	dispatcher.SetTrafficViewAsRoot()
+	reply(w)
+}
+
+func httpSetWeatherViewHandler(w http.ResponseWriter,r *http.Request){
+	dispatcher.SetMediaViewAsRoot()
+	reply(w)
+}
+
 
 
 func httpOrganizerCreateHandler(w http.ResponseWriter,r * http.Request){
