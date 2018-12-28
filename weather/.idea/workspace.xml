@@ -2,7 +2,39 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e40a80f9-9a2f-4cbc-9023-7d9fd463895d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/.idea/encodings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/CoordinatorRequests.postman_collection.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/bus/DbusCall.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/bus/DbusMediaAPI.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/bus/DbusNavigationAPI.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/bus/DbusNewsAPI.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/bus/DbusNotesAPI.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/bus/DbusRoutes.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/bus/DbusSensorAPI.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/bus/DbusWeatherAPI.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/coordinator.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/dbus/sensor_dbus.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/dispatcher/MediaDispatcher.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/dispatcher/NewsDispatcher.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/dispatcher/NotesDispatcher.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/dispatcher/SnapCalls.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/dispatcher/WeatherDispatcher.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/http_service/HttpHandlers.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/http_service/HttpRoutes.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/http_service/Router.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/http_service/http_handlers.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/http_service/http_routes.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/http_service/router.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/main.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/structs/JsonInputStructs.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/structs/JsonOutputStructs.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/structs/json_http_request_structs.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/system_exec/Dispatcher.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/system_exec/SnapCalls.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator/system_exec/snap_exec.go" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -21,7 +53,7 @@
         <entry file="file://$PROJECT_DIR$/command/weather.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="396">
-              <caret line="37" column="43" lean-forward="true" selection-start-line="37" selection-start-column="43" selection-end-line="37" selection-end-column="43" />
+              <caret line="37" column="43" selection-start-line="37" selection-start-column="43" selection-end-line="37" selection-end-column="43" />
             </state>
           </provider>
         </entry>
@@ -51,6 +83,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
@@ -68,7 +101,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -131,16 +163,18 @@
       <workItem from="1545444509557" duration="3872000" />
       <workItem from="1545504847406" duration="631000" />
       <workItem from="1545670383675" duration="478000" />
+      <workItem from="1545937984647" duration="8000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="4981000" />
+    <option name="totallyTimeSpent" value="4989000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="67" y="25" width="1853" height="1055" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.20365246" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.20586608" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -186,7 +220,7 @@
     <entry file="file://$PROJECT_DIR$/command/weather.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="396">
-          <caret line="37" column="43" lean-forward="true" selection-start-line="37" selection-start-column="43" selection-end-line="37" selection-end-column="43" />
+          <caret line="37" column="43" selection-start-line="37" selection-start-column="43" selection-end-line="37" selection-end-column="43" />
         </state>
       </provider>
     </entry>

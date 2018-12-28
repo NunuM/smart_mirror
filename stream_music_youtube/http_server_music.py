@@ -84,7 +84,7 @@ class myHandler(BaseHTTPRequestHandler):
 		else:
 			response_code = 404
 
-		self.send_header('Content-type','application/json')
+		self.send_header('Content-Type','application/json')
 		self.end_headers()
 		# Send the html message
 		self.send_response(response_code)

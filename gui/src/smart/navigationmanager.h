@@ -34,6 +34,7 @@ public slots:
     bool setWeatherViewAsRoot();
     bool setHomeViewAsRoot();
     bool setTrafficViewAsRoot();
+    bool setDinamicViewAsRoot(QString viewName);
 
 private:
     QHash<QString,QString> availableViews;
