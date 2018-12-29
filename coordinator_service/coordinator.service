@@ -2,7 +2,7 @@
 Description=Coordinator Service for Smart Mirror
 
 [Service]
-ExecStart=/usr/local/bin/coordinatorARM64
+ExecStart=/usr/local/bin/coordinator
 
 [Install]
 WantedBy=multi-user.target
