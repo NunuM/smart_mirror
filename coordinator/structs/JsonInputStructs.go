@@ -49,3 +49,7 @@ type Note struct {
 	Notifiable bool `json:"notifiable"`
 	Alarm string `json:"alarm"`
 }
+
+type Sensor struct {
+	Name string `json:"name"`
+}

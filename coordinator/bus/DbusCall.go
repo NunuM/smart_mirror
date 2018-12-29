@@ -4,10 +4,22 @@ import (
 	"errors"
 	"github.com/godbus/dbus"
 	"log"
+	"strings"
 )
 
 func DbusNotififyError(str string){
-	//TODO Notify Gui on error - must be hardcoded path
+	obj,err := OpenDbusCall("io.smart.Notification","/io/smart/Notification")
+	if strings.Contains(str,"error"){
+		DbusNotififyError(str)
+	}
+	if err == nil {
+		call := obj.Call("io.smart.Notification.notification", 0, 0,str)
+		if call.Err != nil {
+			log.Printf("Invocation on interface io.smart.Notification method notification failed with error %v", call.Err)
+		} else{
+			EndDbusCall(call,"notification")
+		}
+	}
 }
 
 func OpenDbusCall(interfacePath string,objectPath string) (dbus.BusObject,error){

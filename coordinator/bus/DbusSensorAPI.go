@@ -42,28 +42,30 @@ var DbusSensorImpl = DbusSensorAPI{
 
 
 
-func (d *DbusSensor) AddReading(name string,value float64){
+func (d *DbusSensor) AddReading(name string,value float64) bool{
 	obj,err := OpenDbusCall(d._InterfacePath,d._ObjectPath)
 	if err == nil {
 		call := obj.Call(d._InterfacePath+d.Method, 0, name,value)
 		if call.Err != nil {
 			log.Printf("Invocation on interface %s method %s failed with error %v", d._InterfacePath, d.Method, call.Err)
 		} else{
-			EndDbusCall(call,d.Method)
+			return EndDbusCall(call,d.Method)
 		}
 	}
+	return false
 }
 
-func (d *DbusSensor) AppendSensor(name string,unit string,values []float64){
+func (d *DbusSensor) AppendSensor(name string,unit string,values []float64) bool{
 	obj,err := OpenDbusCall(d._InterfacePath,d._ObjectPath)
 	if err == nil {
 		call := obj.Call(d._InterfacePath+d.Method, 0, name,unit,values)
 		if call.Err != nil {
 			log.Printf("Invocation on interface %s method %s failed with error %v", d._InterfacePath, d.Method, call.Err)
 		} else{
-			EndDbusCall(call,d.Method)
+			return EndDbusCall(call,d.Method)
 		}
 	}
+	return false
 }
 
 
@@ -84,16 +86,17 @@ func (d *DbusSensor) NumberOfSensors() int32{
 }
 
 
-func (d *DbusSensor) RemoveSensor(name string){
+func (d *DbusSensor) RemoveSensor(name string) bool{
 	obj,err := OpenDbusCall(d._InterfacePath,d._ObjectPath)
 	if err == nil {
 		call := obj.Call(d._InterfacePath+d.Method, 0, name)
 		if call.Err != nil {
 			log.Printf("Invocation on interface %s method %s failed with error %v", d._InterfacePath, d.Method, call.Err)
 		} else{
-			EndDbusCall(call,d.Method)
+			return EndDbusCall(call,d.Method)
 		}
 	}
+	return false
 }
 
 

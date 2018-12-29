@@ -66,6 +66,11 @@ var DbusnavigationAPIImpl = DbusNavigationAPI{
 	{
 		_InterfacePath: _NAVIGATION_INTERFACE_PATH,
 		_ObjectPath:    _NAVIGATION_OBJECT_PATH,
+		Method:         ".setRedditViewAsRoot",
+	},
+	{
+		_InterfacePath: _NAVIGATION_INTERFACE_PATH,
+		_ObjectPath:    _NAVIGATION_OBJECT_PATH,
 		Method:         ".setDinamicViewAsRoot",
 	},
 }
@@ -179,10 +184,22 @@ func (d *DbusNavigation) SetTrafficViewAsRoot() {
 	}
 }
 
-func (d *DbusNavigation) SetDinamicViewAsRoot() {
+func (d *DbusNavigation) SetRedditViewAsRoot() {
 	obj, err := OpenDbusCall(d._InterfacePath, d._ObjectPath)
 	if err == nil {
 		call := obj.Call(d._InterfacePath+d.Method, 0)
+		if call.Err != nil {
+			log.Printf("Invocation on interface %s method %s failed with error %v", d._InterfacePath, d.Method, call.Err)
+		} else {
+			EndDbusCall(call, d.Method)
+		}
+	}
+}
+
+func (d *DbusNavigation) SetDinamicViewAsRoot(viewname string) {
+	obj, err := OpenDbusCall(d._InterfacePath, d._ObjectPath)
+	if err == nil {
+		call := obj.Call(d._InterfacePath+d.Method, 0,viewname)
 		if call.Err != nil {
 			log.Printf("Invocation on interface %s method %s failed with error %v", d._InterfacePath, d.Method, call.Err)
 		} else {

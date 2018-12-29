@@ -141,7 +141,68 @@ var routes = Routes{
 		"/navigation/weather",
 		httpSetWeatherViewHandler,
 	},
+	Route{
+		"Set Application View",
+		"GET",
+		"/navigation/application",
+			httpSetDynamicViewHandler,
+	},
+	Route{
+		"Set Dynamic View",
+		"POST",
+		"/navigation/dynamic",
+		httpSetDynamicViewHandler,
+	},
+	Route{
+		"Add Dynamic View",
+		"POST",
+		"/navigation/add",
+		httpAddDynamicViewHandler,
+	},
+	Route{
+		"Set Reddit View",
+		"GET",
+		"/navigation/reddit",
+		httpSetRedditViewHandler,
+	},
+	Route{
+		"Append Reddit Posts",
+		"GET",
+		"/reddit/append",
+		httpAppendRedditPostsHandler,
+	},
+	Route{
+		"Get Number of Reddit Posts",
+		"GET",
+		"/reddit/numberofposts",
+		httpNumberOfRedditPostsHandler,
+	},
+	Route{
+		"Append Sensor Readings",
+		"GET",
+		"/sensor/append",
+httpAppendSensorHandler,
+	},
+	Route{
+		"Add Sensor Reading",
+		"POST",
+		"/sensor/addreading",
+httpAddSensorHandler,
+	},
+	Route{
+		"Number of Sensors",
+		"GET",
+		"/sensor/numberofsensors",
+httpNumberOfSensorssHandler,
+	},
+	Route{
+	"Remove Sensor",
+	"POST",
+	"/sensor/remove",
+	httpRemoveSensorHandler,
+	},
 
+	//TODO Bellow This Point, All Routes until this point are completed
 	Route{
 		"Organizer Create",
 		"POST",

@@ -11,7 +11,7 @@ import (
 
 func callWeather(weather structs.Weather) structs.OutWeatherSlice{
 	var cmd exec.Cmd
-	if *weather.Forecast {
+	if weather.Forecast != nil && *weather.Forecast {
 		cmd = *exec.Command("weather",weather.Location,"--forecast")
 	} else {
 		cmd = *exec.Command("weather",weather.Location)
@@ -60,7 +60,7 @@ func appendWeatherNoForecastAsync(weather structs.Weather){
 }
 
 func appendWeatherForecastAsync(weather structs.Weather){
-	call,err := bus.DbusWeatherAPIImp.FindDbusCall(".appendWeather")
+	call,err := bus.DbusWeatherAPIImp.FindDbusCall(".appendWeatherAsJson")
 	if err == nil {
 		var w = callWeather(weather)
 		if len(w) >= 1 {
