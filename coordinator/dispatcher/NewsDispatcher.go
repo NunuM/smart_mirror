@@ -79,16 +79,3 @@ func switchToNewsView(){
 		parseInitError("Error setting Navigation View to News")
 	}
 }
-
-func parseInitError(name string){
-	notifyError("Failed to initialize "+name)
-}
-
-func parseReplyError(methodName string){
-	notifyError("Method "+methodName+" failed with reply false")
-}
-
-
-func notifyError(errorStr string){
-	bus.DbusNotififyError("{\"error\":\""+errorStr+"\"}")
-}

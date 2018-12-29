@@ -21,3 +21,13 @@ type OutWeatherSlice []OutWeather
 type SongStreamHttpReply struct {
 	Message string `json:"message"`
 }
+
+type SensorErrorReply struct {
+	Error string `json:"error"`
+}
+
+type SensorReply []struct{
+	Name string `json:"name"`
+	Unit string `json:"unit"`
+	Values []float64 `json:"values"`
+}

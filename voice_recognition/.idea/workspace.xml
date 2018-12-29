@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="68b9e45e-a9d8-4248-8c59-bbead7075aa4" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../build-compu_smart-Desktop_Qt_5_12_0_GCC_64bit-Debug/compu_smart" beforeDir="false" afterPath="$PROJECT_DIR$/../build-compu_smart-Desktop_Qt_5_12_0_GCC_64bit-Debug/compu_smart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gui/src/smart/weathermanager.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../gui/src/smart/weathermanager.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/voice_recognition_wip.py" beforeDir="false" afterPath="$PROJECT_DIR$/voice_recognition_wip.py" afterDir="false" />
-    </list>
+    <list default="true" id="68b9e45e-a9d8-4248-8c59-bbead7075aa4" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,7 +18,7 @@
         <entry file="file://$PROJECT_DIR$/voice_recognition_wip.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="234">
-              <caret line="23" column="33" lean-forward="true" selection-start-line="23" selection-start-column="33" selection-end-line="23" selection-end-column="33" />
+              <caret line="23" column="33" selection-start-line="23" selection-start-column="33" selection-end-line="23" selection-end-column="33" />
               <folding>
                 <element signature="e#100#131#0" expanded="true" />
               </folding>
@@ -63,8 +59,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="432" />
-    <option name="y" value="64" />
+    <option name="x" value="-22" />
+    <option name="y" value="53" />
     <option name="width" value="1380" />
     <option name="height" value="1000" />
   </component>
@@ -198,7 +194,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32937366" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.32937366" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.37580994" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -265,7 +261,7 @@
     <entry file="file://$PROJECT_DIR$/voice_recognition_wip.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="234">
-          <caret line="23" column="33" lean-forward="true" selection-start-line="23" selection-start-column="33" selection-end-line="23" selection-end-column="33" />
+          <caret line="23" column="33" selection-start-line="23" selection-start-column="33" selection-end-line="23" selection-end-column="33" />
           <folding>
             <element signature="e#100#131#0" expanded="true" />
           </folding>

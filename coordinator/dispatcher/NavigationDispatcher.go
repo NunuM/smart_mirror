@@ -25,6 +25,14 @@ func SetWeatherViewAsRoot(){
 	go switchToWeatherView()
 }
 
+func SetSensorViewAsRoot(){
+	go switchToSensorView()
+}
+
+func SetRedditViewAsRoot(){
+	go switchToRedditView()
+}
+
 func SetApplicationsViewAsRoot(){
 	go setApplicationsViewAsRoot()
 }
@@ -38,15 +46,14 @@ func setApplicationsViewAsRoot(){
 	}
 }
 
-
-func SetDinamicViewAsRoot(){
- go setDinamicViewAsRoot()
+func SetDinamicViewAsRoot(view structs.View){
+ go setDinamicViewAsRoot(view)
 }
 
-func setDinamicViewAsRoot(){
+func setDinamicViewAsRoot(view structs.View){
 	call,err := bus.DbusnavigationAPIImpl.FindDbusCall(".setDinamicViewAsRoot")
 	if err == nil {
-		call.SetNewsViewAsRoot()
+		call.SetDinamicViewAsRoot(view.ViewName)
 	}else{
 		parseInitError("Error setting Navigation View to Dinamic")
 	}
