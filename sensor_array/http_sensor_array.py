@@ -61,11 +61,11 @@ class myHandler(BaseHTTPRequestHandler):
 			response = self.invoke_luminosity_script()
 		else:
 			response_code = 404
-
+		self.send_response(response_code)
 		self.send_header('Content-type','application/json')
 		self.end_headers()
 		# Send the html message
-		self.send_response(response_code)
+		
 		if response_code != RETURN_CODE_SUCCESS or isinstance(response, Exception):
 			print("return code = "+str(response_code))
 			print(response)
