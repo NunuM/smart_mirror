@@ -11,6 +11,64 @@ import re
 key_word = "mirror"
 
 
+ACCEPTED_COUNTRY_CODES = [
+["UNITED ARAB EMIRATES" , "ae"],
+["ARGENTINA" , "ar"],
+["AUSTRIA" ,"at"],
+["AUSTRALIA" ,"au"],
+["BELGIUM" ,"be"],
+["BULGARIA" ,"bg"],
+["BRAZIL" ,"br"],
+["CANADA" ,"ca"],
+["SWITZERLAND" ,"ch"],
+["CHINA" ,"cn"],
+["COLOMBIA" ,"co"],
+["CUBA" ,"cu"],
+["CZECH REPUBLIC" ,"cz"],
+["GERMANY" ,"de"],
+["EGYPT" ,"eg"],
+["FRANCE" ,"fr"],
+["UNITED KINGDOM" ,"gb"],
+["GREECE" ,"gr"],
+["HONG KONG" ,"hk"],
+["HUNGARY" ,"hu"],
+["INDONESIA" ,"id"],
+["IRELAND" ,"ie"],
+["ISRAEL" ,"il"],
+["INDIA" ,"in"],
+["ITALY" ,"it"],
+["JAPAN" ,"jp"],
+["REPUBLIC OF KOREA" ,"kr"],
+["LITHUANIA" ,"lt"],
+["LATVIA" ,"lv"],
+["MOROCCO" ,"ma"],
+["MEXICO" ,"mx"],
+["MALAYSIA" ,"my"],
+["NIGERIA" ,"ng"],
+["NETHERLANDS" ,"nl"],
+["NORWAY" ,"no"],
+["NEW ZEALAND" ,"nz"],
+["PHILIPPINES" ,"ph"],
+["POLAND" ,"pl"],
+["PORTUGAL" ,"pt"],
+["ROMANIA" ,"ro"],
+["RUSSIA" ,"ru"],
+["SAUDI ARABIA" ,"sa"],
+["SWEDEN" ,"se"],
+["SINGAPORE" ,"sg"],
+["SLOVENIA" ,"si"],
+["SLOVAKIA" ,"sk"],
+["THAILAND" ,"th"],
+["TURKEY" ,"tr"],
+["TAIWAN" ,"tw"],
+["UKRAINE" ,"ua"],
+["UNITED STATES" ,"us"],
+["VENEZUELA" ,"ve"],
+["SOUTH AFRICA" ,"za"]
+]
+
+
+
 #example payload
 """
 payload = {"number": 12524,
@@ -84,6 +142,18 @@ def check_command_display( str ):
 
      else :
          print("invalid display comand: " + str)
+
+
+
+def check_command_news( str ):
+    if str == "":
+        call_coordinator_api("post", "news/append", {})
+    else:
+        for i, elem in enumerate(ACCEPTED_COUNTRY_CODES):
+            if str.lower() == elem[0].lower():
+                print("news command detected: " + str   +  elem[1])
+                call_coordinator_api("post" ,"news/append", {})
+
 
 
 
@@ -162,7 +232,7 @@ def check_command( str ):
 
    elif str == "house sensors":
        print("house sensors command detected: " + str)
-       call_coordinator_api("", {})
+       call_coordinator_api("get" , "/sensor/append", "")
 
    elif firstWord == "reddit":
        print("movies command detected: " + str)
@@ -176,9 +246,6 @@ def check_command( str ):
        print("calender command detected: " + str)
        call_coordinator_api("news/append", {})
 
-   elif firstWord == "news":
-       print("news command detected: " + str)
-       call_coordinator_api("news/append", {})
 
    elif firstWord == "play":
        print("play command detected: " + firstWord + " - " + rest)
@@ -187,6 +254,9 @@ def check_command( str ):
    elif firstWord == "traffic":
        print("trafic command detected: " + firstWord + " - " + rest)
        call_coordinator_api("post", "/traffic/append", {"location": rest })
+
+   elif firstWord == "news":
+        check_command_news(rest)
 
    elif firstWord == "display":
         check_command_display(rest)
