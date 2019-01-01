@@ -147,12 +147,13 @@ def check_command_display( str ):
 
 def check_command_news( str ):
     if str == "":
-        call_coordinator_api("post", "news/append", {})
+        print("news command detected (auto detect country)")
+        call_coordinator_api("post", "news/append", {"country_iso" : ""})
     else:
         for i, elem in enumerate(ACCEPTED_COUNTRY_CODES):
             if str.lower() == elem[0].lower():
-                print("news command detected: " + str   +  elem[1])
-                call_coordinator_api("post" ,"news/append", {})
+                print("news command detected for country : " + str + " " + elem[1])
+                call_coordinator_api("post" ,"news/append",  {"country_iso" : elem[1]})
 
 
 
