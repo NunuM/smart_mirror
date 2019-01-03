@@ -46,8 +46,15 @@ type View struct {
 
 type Note struct {
 	Title string `json:"title"`
-	Notifiable bool `json:"notifiable"`
-	Alarm string `json:"alarm"`
+	Alarm *string `json:"alarm"`
+}
+
+type Notes []Note
+
+type ModifiableNote struct {
+	OldTitle string `json:"old_title"`
+	NewTitle string `json:"new_title"`
+	Alarm *string `json:"alarm"`
 }
 
 type Sensor struct {

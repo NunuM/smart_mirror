@@ -37,6 +37,19 @@ func SetApplicationsViewAsRoot(){
 	go setApplicationsViewAsRoot()
 }
 
+func SetHomeViewAsRoot(){
+	go setHomeViewAsRoot()
+}
+
+func setHomeViewAsRoot(){
+	call,err := bus.DbusnavigationAPIImpl.FindDbusCall(".setHomeViewAsRoot")
+	if err == nil {
+		call.SetNewsViewAsRoot()
+	}else{
+		parseInitError("Error setting Navigation View to Applications")
+	}
+}
+
 func setApplicationsViewAsRoot(){
 	call,err := bus.DbusnavigationAPIImpl.FindDbusCall(".setApplicationsViewAsRoot")
 	if err == nil {

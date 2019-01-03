@@ -183,6 +183,11 @@ func httpSetWeatherViewHandler(w http.ResponseWriter, r *http.Request) {
 	reply(w)
 }
 
+func httpSetHomeViewHandler(w http.ResponseWriter, r *http.Request) {
+	dispatcher.SetHomeViewAsRoot()
+	reply(w)
+}
+
 func httpAddDynamicViewHandler(w http.ResponseWriter, r *http.Request){
 	var view structs.View
 	decoder := json.NewDecoder(r.Body)
@@ -270,21 +275,75 @@ func httpNumberOfSensorssHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func httpOrganizerCreateHandler(w http.ResponseWriter, r *http.Request) {
-
+func httpLoadOrganizerNotesHandler(w http.ResponseWriter, r *http.Request) {
+	dispatcher.LoadNotes()
+	reply(w)
 }
 
-func httpOrganizerDeleteHandler(w http.ResponseWriter, r *http.Request) {
-
+func httpLoadGCalendarNotesHandler(w http.ResponseWriter, r *http.Request) {
+	dispatcher.LoadGCalanderNotes()
+	reply(w)
 }
 
-func httpOrganizerHandler(w http.ResponseWriter, r *http.Request) {
-
+func httpAppendNoteHandler(w http.ResponseWriter, r *http.Request) {
+	var note structs.Note
+	decoder := json.NewDecoder(r.Body)
+	if err := decoder.Decode(&note); err != nil || strings.TrimSpace(note.Title) == "" {
+		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
+	} else {
+		defer r.Body.Close()
+		dispatcher.CreateNote(note)
+		reply(w)
+	}
 }
 
-func httpSensorHandler(w http.ResponseWriter, r *http.Request) {
-
+func httpEditNoteAlarmHandler(w http.ResponseWriter, r *http.Request) {
+	var note structs.ModifiableNote
+	decoder := json.NewDecoder(r.Body)
+	if err := decoder.Decode(&note); err != nil || strings.TrimSpace(note.NewTitle) == "" || note.Alarm == nil || strings.TrimSpace(*note.Alarm) == "" {
+		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
+	} else {
+		defer r.Body.Close()
+		dispatcher.EditNoteAlarm(note)
+		reply(w)
+	}
 }
+
+func httpEditNoteTitleHandler(w http.ResponseWriter, r *http.Request) {
+	var note structs.ModifiableNote
+	decoder := json.NewDecoder(r.Body)
+	if err := decoder.Decode(&note); err != nil || strings.TrimSpace(note.NewTitle) == "" || strings.TrimSpace(note.OldTitle) == "" {
+		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
+	} else {
+		defer r.Body.Close()
+		dispatcher.EditNoteTitle(note)
+		reply(w)
+	}
+}
+
+func httpRemoveNoteHandler(w http.ResponseWriter, r *http.Request) {
+	var note structs.Note
+	decoder := json.NewDecoder(r.Body)
+	if err := decoder.Decode(&note); err != nil || strings.TrimSpace(note.Title) == "" {
+		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
+	} else {
+		defer r.Body.Close()
+		dispatcher.RemoveNote(note)
+		reply(w)
+	}
+}
+
+
+func httpNumberOfNotesHandler(w http.ResponseWriter, r *http.Request) {
+	var response = dispatcher.NumberOfNotes()
+	if response == -1 {
+		respondWithError(w, http.StatusInternalServerError, "Invalid number of Notes detected -1")
+	} else {
+		respondWithJson(w, http.StatusOK, response)
+	}
+}
+
+
 
 func reply(w http.ResponseWriter) {
 	respondWithJson(w, http.StatusAccepted, map[string]string{"message": "processing"})

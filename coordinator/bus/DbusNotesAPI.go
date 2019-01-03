@@ -31,6 +31,11 @@ var DbusNotesAPIImpl = DbusNotesAPI{
 	{
 		_InterfacePath:_NOTES_INTERFACE_PATH,
 		_ObjectPath:_NOTES_OBJECT_PATH,
+		Method:".editNoteTitle",
+	},
+	{
+		_InterfacePath:_NOTES_INTERFACE_PATH,
+		_ObjectPath:_NOTES_OBJECT_PATH,
 		Method:".numbersOfNotes",
 	},
 	{
