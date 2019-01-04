@@ -148,12 +148,12 @@ def check_command_display( str ):
 def check_command_news( str ):
     if str == "":
         print("news command detected (auto detect country)")
-        call_coordinator_api("post", "news/append", {"country_iso" : ""})
+        call_coordinator_api("post", "/news/append", {"country_iso" : ""})
     else:
         for i, elem in enumerate(ACCEPTED_COUNTRY_CODES):
             if str.lower() == elem[0].lower():
                 print("news command detected for country : " + str + " " + elem[1])
-                call_coordinator_api("post" ,"news/append",  {"country_iso" : elem[1]})
+                call_coordinator_api("post" ,"/news/append",  '{\"country_iso\" :'+'\"'+elem[1]+'\"}')
 
 
 
@@ -278,11 +278,11 @@ def check_command( str ):
 def listen():
     r = sr.Recognizer()
 
-    for index, name in enumerate(sr.Microphone.list_microphone_names()):
-        print("Microphone with name \"{1}\" found for `Microphone(device_index={0})`".format(index, name))
+    #for index, name in enumerate(sr.Microphone.list_microphone_names()):
+        #print("Microphone with name \"{1}\" found for `Microphone(device_index={0})`".format(index, name))
     #with sr.Microphone(device_index=2) as source:
     try:
-        with sr.Microphone() as source:
+        with sr.Microphone(device_index=2) as source:
             r.adjust_for_ambient_noise(source,2)
             print("Say something!")
             audio = r.listen(source, 2)
@@ -294,7 +294,7 @@ def listen():
             # instead of r.recognize_google(audio)
             text = r.recognize_google(audio).lower()
 
-            print("Google Speech Recognition thinks you said " + text)
+            print("\nGoogle Speech Recognition thinks you said: " + text+"\n")
 
             #spit first word if text contains more than one word
             firstWord = text
