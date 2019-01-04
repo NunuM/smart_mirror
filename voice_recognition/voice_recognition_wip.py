@@ -153,7 +153,7 @@ def check_command_news( str ):
         for i, elem in enumerate(ACCEPTED_COUNTRY_CODES):
             if str.lower() == elem[0].lower():
                 print("news command detected for country : " + str + " " + elem[1])
-                call_coordinator_api("post" ,"news/append",  {"country_iso" : elem[1]})
+                call_coordinator_api("post" ,"news/append",  '{\"country_iso\":' + '\"'+elem[1]+'\"}')
 
 
 

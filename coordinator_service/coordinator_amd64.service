@@ -1,0 +1,11 @@
+[Unit]
+Description=Coordinator Service for Smart Mirror
+
+[Service]
+Environment=PATH=/home/nuno/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/go/bin:/snap/bin:/var/lib/snapd/snap/bin
+Type=simple
+ExecStart=/usr/local/bin/coordinator_amd64
+User=nuno
+
+[Install]
+WantedBy=multi-user.target
