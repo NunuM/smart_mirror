@@ -1,0 +1,11 @@
+[Unit]
+Description=Coordinator Service for Smart Mirror
+
+[Service]
+Environment=PATH=/usr/local/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/games:/usr/games:/snap/bin:/home/pi/go/bin
+Type=simple
+ExecStart=/usr/local/bin/coordinator_armv5
+User=pi
+
+[Install]
+WantedBy=multi-user.target

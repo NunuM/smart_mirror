@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="68b9e45e-a9d8-4248-8c59-bbead7075aa4" name="Default Changelist" comment="" />
+    <list default="true" id="68b9e45e-a9d8-4248-8c59-bbead7075aa4" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../coordinator_service/coordinator" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator_service/coordinator.service" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../coordinator_service/install.sh" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/voice_recognition_wip.py" beforeDir="false" afterPath="$PROJECT_DIR$/voice_recognition_wip.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,8 +23,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/voice_recognition_wip.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="234">
-              <caret line="23" column="33" selection-start-line="23" selection-start-column="33" selection-end-line="23" selection-end-column="33" />
+            <state relative-caret-position="334">
+              <caret line="155" column="102" selection-start-line="155" selection-start-column="102" selection-end-line="155" selection-end-column="102" />
               <folding>
                 <element signature="e#100#131#0" expanded="true" />
               </folding>
@@ -29,7 +35,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/voice_test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="375">
+            <state relative-caret-position="360">
               <caret line="25" selection-start-line="25" selection-end-line="25" />
               <folding>
                 <element signature="e#79#93#0" expanded="true" />
@@ -59,9 +65,9 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-22" />
-    <option name="y" value="53" />
-    <option name="width" value="1380" />
+    <option name="x" value="288" />
+    <option name="y" value="199" />
+    <option name="width" value="1360" />
     <option name="height" value="1000" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -90,7 +96,7 @@
     <property name="aspect.path.notification.shown" value="true" />
     <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1546036139072" />
     <property name="go.gopath.indexing.explicitly.defined" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../coordinator" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="project.structure.last.edited" value="Modules" />
@@ -175,17 +181,18 @@
       <workItem from="1546032999439" duration="1424000" />
       <workItem from="1546034469084" duration="1682000" />
       <workItem from="1546036160367" duration="1954000" />
+      <workItem from="1546557341699" duration="812000" />
+      <workItem from="1546564023974" duration="13000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5229000" />
+    <option name="totallyTimeSpent" value="6054000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="67" y="25" width="1853" height="1055" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1925844" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19701162" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -234,16 +241,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/voice_test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="25" selection-start-line="25" selection-end-line="25" />
-          <folding>
-            <element signature="e#79#93#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/.local/lib/python2.7/site-packages/speech_recognition/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1998">
@@ -260,10 +257,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/voice_recognition_wip.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="23" column="33" selection-start-line="23" selection-start-column="33" selection-end-line="23" selection-end-column="33" />
+        <state relative-caret-position="334">
+          <caret line="155" column="102" selection-start-line="155" selection-start-column="102" selection-end-line="155" selection-end-column="102" />
           <folding>
             <element signature="e#100#131#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/voice_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="25" selection-start-line="25" selection-end-line="25" />
+          <folding>
+            <element signature="e#79#93#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -156,8 +156,6 @@ def check_command_news( str ):
                 call_coordinator_api("post" ,"/news/append",  '{\"country_iso\" :'+'\"'+elem[1]+'\"}')
 
 
-
-
 def check_command_weather( str ):
     #spit first word if str contains more than one word
     firstWord = str
