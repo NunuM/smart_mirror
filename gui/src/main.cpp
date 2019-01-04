@@ -64,6 +64,7 @@ int main(int argc, char *argv[])
     navigatorManager.appendView(QStringLiteral("notes"),QStringLiteral("notes/Notes.qml"));
     navigatorManager.appendView(QStringLiteral("weather"),QStringLiteral("weather/Weather.qml"));
     navigatorManager.appendView(QStringLiteral("traffic"),QStringLiteral("traffic/Traffic.qml"));
+    navigatorManager.appendView(QStringLiteral("reddit"),QStringLiteral("reddit/Reddit.qml"));
 
     notesManager.appendNote(QStringLiteral("Nova"), false, QStringLiteral("2019-08-08 11:15"));
 

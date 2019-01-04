@@ -1,3 +1,4 @@
+/*
 var KEYFRAME = 500,
         STROKE = 0.08,
         TAU = 2.0 * Math.PI,
@@ -632,5 +633,5 @@ var iconToFunction = function(iconImg){
     }
 
     return Skycons.CLEAR_DAY;
-}
+}*/
 

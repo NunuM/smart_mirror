@@ -8,7 +8,6 @@ import "../../js/ago.js" as Ago
 import "../sensor"
 Page {
     property var todayWeather: weatherManager.today
-    property var weatherAnimation : new Weather.Skycons({"color": "white"})
 
     RowLayout {
         anchors.fill: parent
@@ -137,16 +136,6 @@ Page {
                     }
                 }
 
-                Canvas {
-                    id: mycanvas
-                    width: parent.width
-                    height: 400
-                    onPaint: {
-                        var ctx = getContext("2d");
-                        weatherAnimation.add(Weather.iconToFunction(todayWeather.icon), ctx);
-                    }
-                }
-
                 Text {
                     text: todayWeather.description
                     color: "grey"
@@ -169,17 +158,6 @@ Page {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
             }
-        }
-    }
-
-    Timer {
-        interval: 60
-        running: true
-        repeat: true
-        onTriggered: {
-            mycanvas.requestAnimationFrame(function(){
-                weatherAnimation.play();
-            });
         }
     }
 
