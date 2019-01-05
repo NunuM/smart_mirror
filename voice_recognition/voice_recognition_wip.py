@@ -78,7 +78,7 @@ payload = {"number": 12524,
 
 
 def call_coordinator_api(call, endpoint, payload):
-     
+
      payload_json = json.dumps(payload, indent=4, sort_keys=True)
      print(payload_json)
      url = "http://localhost:8080" + endpoint
@@ -245,8 +245,7 @@ def check_command( str ):
 
    elif firstWord == "calendar":
        print("calender command detected: " + str)
-       call_coordinator_api("news/append", {})
-
+       call_coordinator_api("get", "/note/gcalendar", {})
 
    elif firstWord == "play":
        print("play command detected: " + firstWord + " - " + rest)
@@ -282,6 +281,7 @@ def listen():
       # print("Microphone with name \"{1}\" found for `Microphone(device_index={0})`".format(index, name))
     #with sr.Microphone(device_index=2) as source:
     try:
+        #with sr.Microphone() as source:
         with sr.Microphone(device_index=2) as source:
             r.adjust_for_ambient_noise(source,2)
             print("Say something!")
@@ -316,7 +316,10 @@ def listen():
 
 def main():
     while True:
-        listen()
+        try:
+            listen()
+        except :
+            print()
 
 if __name__== "__main__":
   main()
