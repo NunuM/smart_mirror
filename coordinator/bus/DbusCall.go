@@ -4,14 +4,10 @@ import (
 	"errors"
 	"github.com/godbus/dbus"
 	"log"
-	"strings"
 )
 
 func DbusNotififyError(str string){
 	obj,err := OpenDbusCall("io.smart.Notification","/io/smart/Notification")
-	if strings.Contains(str,"error"){
-		DbusNotififyError(str)
-	}
 	if err == nil {
 		call := obj.Call("io.smart.Notification.notification", 0, 0,str)
 		if call.Err != nil {

@@ -19,6 +19,10 @@ func callWeather(weather structs.Weather) structs.OutWeatherSlice{
 	out := &bytes.Buffer{}
 	cmd.Stdout = out
 	err := cmd.Run()
+
+	if err != nil {
+		log.Printf("Weather Call error %s\n",err.Error())
+	}
 	log.Print("Weather Call Executed")
 
 	var w structs.OutWeatherSlice

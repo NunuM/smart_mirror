@@ -12,13 +12,17 @@ import (
 func news_execute(news structs.Newsheadlines) string{
 	var cmd exec.Cmd
 	if news.CountryISO == ""{
-		cmd = *exec.Command("newsheadlines")
+		cmd = *exec.Command("newsz")
 	} else{
-		cmd = *exec.Command("newsheadlines","-country",news.CountryISO)
+		cmd = *exec.Command("newsz","-country",news.CountryISO)
 	}
 	out := &bytes.Buffer{}
 	cmd.Stdout = out
 	err1 := cmd.Run()
+
+	if err1 != nil {
+		log.Printf("News Call error %s\n",err1.Error())
+	}
 	str := parse_output(err1,"newsheadlines",*out)
 	log.Print("News Call Executed")
 	return str

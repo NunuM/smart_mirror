@@ -107,12 +107,12 @@ bool WeatherManager::appendWeatherAsJson(QString weather)
                     object["humidity"].toDouble(),
                     object["pressure"].toDouble(),
                     object["temp"].toDouble(),
-                    object["tempMax"].toDouble(),
-                    object["tempMin"].toDouble(),
+                    object["temp_max"].toDouble(),
+                    object["temp_min"].toDouble(),
                     object["description"].toString(),
                     object["icon"].toString(),
-                    object["WindDeg"].toDouble(),
-                    object["WindSpeed"].toDouble());
+                    object["wind_deg"].toDouble(),
+                    object["wind_speed"].toDouble());
         }
     }
 

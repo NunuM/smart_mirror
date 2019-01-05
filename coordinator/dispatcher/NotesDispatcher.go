@@ -16,6 +16,9 @@ func delete_note(note structs.Note) (string, error) {
 	out := &bytes.Buffer{}
 	cmd.Stdout = out
 	err1 := cmd.Run()
+	if err1 != nil {
+		log.Printf("Delete Note Call error %s\n",err1.Error())
+	}
 	str := parse_output(err1, "organizer", *out)
 	log.Print("Organizer Delete Note Call Executed")
 	return str, err1
@@ -31,6 +34,10 @@ func modify_note(note structs.ModifiableNote) (string, error) {
 	out := &bytes.Buffer{}
 	cmd.Stdout = out
 	err1 := cmd.Run()
+
+	if err1 != nil {
+		log.Printf("Modify Note Call error %s\n",err1.Error())
+	}
 	str := parse_output(err1, "organizer", *out)
 	log.Print("Organizer Modify Note Call Executed")
 	return str, err1
@@ -48,6 +55,10 @@ func create_note(note structs.Note) (string, error) {
 	out := &bytes.Buffer{}
 	cmd.Stdout = out
 	err1 := cmd.Run()
+
+	if err1 != nil {
+		log.Printf("Create Note Call error %s\n",err1.Error())
+	}
 	str := parse_output(err1, "organizer", *out)
 	log.Print("Organizer Create Note Call Executed")
 	return str, err1
@@ -59,6 +70,10 @@ func loadNotes() {
 	out := &bytes.Buffer{}
 	cmd.Stdout = out
 	err1 := cmd.Run()
+
+	if err1 != nil {
+		log.Printf("Load Notes Call error %s\n",err1.Error())
+	}
 	if err1 == nil {
 		var notes structs.Notes
 		decoder := json.NewDecoder(out)
@@ -76,6 +91,10 @@ func loadGCalenderNotes() {
 	out := &bytes.Buffer{}
 	cmd.Stdout = out
 	err1 := cmd.Run()
+
+	if err1 != nil {
+		log.Printf("Load Notes Google Calender Call error %s\n",err1.Error())
+	}
 	if err1 == nil {
 		var notes structs.Notes
 		decoder := json.NewDecoder(out)

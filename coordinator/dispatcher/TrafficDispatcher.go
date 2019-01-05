@@ -40,6 +40,9 @@ func traffic_execute(traffic structs.Traffic) string{
 	out := &bytes.Buffer{}
 	cmd.Stdout = out
 	err1 := cmd.Run()
+	if err1 != nil {
+		log.Printf("Traffic Call error %s\n",err1.Error())
+	}
 	str := parse_output(err1,"trafficz",*out)
 	log.Print("Traffic Call Executed")
 	return str

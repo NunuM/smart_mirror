@@ -14,12 +14,11 @@ func reddit_execute() string {
 	out := &bytes.Buffer{}
 	cmd.Stdout = out
 	err1 := cmd.Run()
-	log.Printf("Reddit CMD ERROR: %s\n",err1.Error())
+	if err1 != nil {
+		log.Printf("Reddit Call error %s\n",err1.Error())
+	}
 	str := parse_output(err1, "reddithotposts", *out)
 	log.Print("Reddit Call Executed")
-	if err1 != nil {
-		log.Print(err1.Error())
-	}
 	return str
 }
 

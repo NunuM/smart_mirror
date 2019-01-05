@@ -33,13 +33,13 @@ Item {
                     id: author
                     wrapMode: Text.Wrap
                     text: model.author
-                    color: "blue"
+                    color:"#33CCFF"
                     Layout.fillWidth: true
                 }
                 Text {
                     id: subreddit
                     wrapMode: Text.Wrap
-                    color: "blue"
+                    color: "#FF9900"
                     text: model.subreddit
                     horizontalAlignment: Text.AlignLeft
                     Layout.fillWidth: true
@@ -63,7 +63,7 @@ Item {
                 Text {
                     id: upvotes
                     wrapMode: Text.Wrap
-                    color:  "red"
+                    color:  "#99FF33"
                     text: model.upvotes
                 }
             }

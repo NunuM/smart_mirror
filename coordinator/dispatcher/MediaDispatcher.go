@@ -44,14 +44,17 @@ func blockbuster_execute(numberOfMovies string) string {
 	out := &bytes.Buffer{}
 	cmd.Stdout = out
 	err := cmd.Run()
+	if err != nil {
+		log.Printf("Blockbuster Call error %s\n",err.Error())
+	}
 	str := parse_output(err, "blockbuster", *out)
 	return str
 }
 
 func AppendMovie(numberOfMovies int32) {
 	go switchToMediaView()
-	if numberOfMovies == 1 {
-		go appendMovie()
+	if numberOfMovies == 0 {
+		go appendMovies(10)
 	} else {
 		go appendMovies(numberOfMovies)
 	}

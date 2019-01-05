@@ -7,7 +7,7 @@ import (
 )
 
 const _NOTES_INTERFACE_PATH = "io.smart.Notes"
-const _NOTES_OBJECT_PATH = "/io/sensor/Notes"
+const _NOTES_OBJECT_PATH = "/io/smart/Notes"
 
 type DbusNotes struct {
 	_InterfacePath string
