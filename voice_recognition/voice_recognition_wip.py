@@ -78,7 +78,9 @@ payload = {"number": 12524,
 
 
 def call_coordinator_api(call, endpoint, payload):
-     print(payload)
+     
+     payload_json = json.dumps(payload, indent=4, sort_keys=True)
+     print(payload_json)
      url = "http://localhost:8080" + endpoint
 
      header = {"Content-type": "application/json",
@@ -86,7 +88,7 @@ def call_coordinator_api(call, endpoint, payload):
 
      try:
          if call == "post" :
-             response_decoded_json = requests.post(url, data=payload, headers=header)
+             response_decoded_json = requests.post(url, data=payload_json, headers=header)
          else:
              response_decoded_json = requests.get(url, headers=header)
 
@@ -133,7 +135,7 @@ def check_command_display( str ):
          call_coordinator_api("get", "/navigation/reddit", "")
 
      elif str == "traffic":
-         print("trafic display command detected: " + rest)
+         print("trafic display command detected: " + str)
          call_coordinator_api("get", "/navigation/traffic", "")
 
      elif str == "weather":
@@ -153,7 +155,7 @@ def check_command_news( str ):
         for i, elem in enumerate(ACCEPTED_COUNTRY_CODES):
             if str.lower() == elem[0].lower():
                 print("news command detected for country : " + str + " " + elem[1])
-                call_coordinator_api("post" ,"/news/append",  '{\"country_iso\" :'+'\"'+elem[1]+'\"}')
+                call_coordinator_api("post" ,"/news/append",  {"country_iso" : elem[1]})
 
 
 def check_command_weather( str ):
@@ -191,7 +193,7 @@ def check_command_reminder( str ):
          date = date_matches[0]
          if name_text != "" :
              print("reminder command detected: " + date.isoformat() + " - " + name_text)
-             call_coordinator_api("post", "", {})
+             call_coordinator_api("post", "/note/append", {"title": name_text , "alarm": date.isoformat()})
          else:
              print("Error - reminder command for date: " + date.isoformat() + "with no name specified")
      else:
@@ -248,7 +250,7 @@ def check_command( str ):
 
    elif firstWord == "play":
        print("play command detected: " + firstWord + " - " + rest)
-       call_coordinator_api("post", "/music/play", "{\"song_name\":\""+rest+"\"}")
+       call_coordinator_api("post", "/music/play", {"song_name":rest})
 
    elif firstWord == "traffic":
        print("trafic command detected: " + firstWord + " - " + rest)
@@ -277,7 +279,7 @@ def listen():
     r = sr.Recognizer()
 
     #for index, name in enumerate(sr.Microphone.list_microphone_names()):
-        #print("Microphone with name \"{1}\" found for `Microphone(device_index={0})`".format(index, name))
+      # print("Microphone with name \"{1}\" found for `Microphone(device_index={0})`".format(index, name))
     #with sr.Microphone(device_index=2) as source:
     try:
         with sr.Microphone(device_index=2) as source:
