@@ -245,6 +245,7 @@ def check_command( str ):
 
    elif firstWord == "calendar":
        print("calender command detected: " + str)
+       call_coordinator_api("get", "/note/organizer", {})
        call_coordinator_api("get", "/note/gcalendar", {})
 
    elif firstWord == "play":
