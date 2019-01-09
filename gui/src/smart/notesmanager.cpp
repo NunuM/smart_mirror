@@ -20,10 +20,15 @@ bool NotesManager::appendNote(const QString &title, bool notifiable, const QStri
         return false;
     }
 
+    bool state = true;
+    auto date = QDateTime::fromString(alarm, QStringLiteral("yyyy-MM-dd hh:mm:ss"));
+    state = date.isValid();
+    if (!state){
+        date = QDateTime::fromString(alarm,QStringLiteral("yyyy-MM-dd hh:mm"));
+    }
+    state =date.isValid();
 
-    auto date = QDateTime::fromString(alarm, QStringLiteral("yyyy-MM-dd hh:mm"));
-
-    if(!date.isValid()){
+    if(!state){
         qDebug() << "Date is not valid";
         return false;
     }
@@ -63,7 +68,7 @@ bool NotesManager::editNoteTitle(const QString &oldTitle, const QString &newTitl
     if(index >= 0){
         qDebug() << "Updating note";
         emit preItemUpdated(index);
-        mItems.takeAt(index).title = newTitle;
+        mItems.operator[](index).title = newTitle;
         emit postItemUpdated(index);
         return true;
     }
@@ -86,7 +91,7 @@ bool NotesManager::editNoteAlarm(const QString &title, const QString &alarm)
         }
 
         emit preItemUpdated(index);
-        mItems.takeAt(index).alarm = date;
+        mItems.operator[](index).alarm = date;
         emit postItemUpdated(index);
         return true;
     }
@@ -128,7 +133,7 @@ int NotesManager::exists(const QString &title)
 
     for(int i=0; i < mItems.size(); i++){
         if(mItems.at(i).title == title){
-            return index;
+            return i;
         }
     }
 
