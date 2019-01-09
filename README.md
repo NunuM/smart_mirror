@@ -1,4 +1,4 @@
-Smart Mirror Project
+# Smart Mirror Project
 
 
 ## Architecture 
