@@ -152,8 +152,8 @@ def create_todo(conn, config, title, alarm=None, is_verbose=True) -> dict:
         cursor = conn.execute(query, row)
         conn.commit()
 
-        if row[2]:
-            with_notification(conn, config, cursor.lastrowid, title, alarm_utc, is_verbose)
+        # if row[2]:
+        #     with_notification(conn, config, cursor.lastrowid, title, alarm_utc, is_verbose)
 
         return {'title': title, 'alarm': row[1], 'notifiable': row[2], 'created': row[3]}
 
@@ -327,10 +327,15 @@ def print_in_json(container) -> bool:
     :param list container:
     :return:
     """
+    try:
+        for v in container:
+            a = v['title']
+            v['title'] = a.decode()
 
+        print(json.dumps(container, ensure_ascii=False).encode('ascii').decode())
 
-
-    print(json.dumps(container))
+    except Exception as e:
+        print(str(e))
     return True
 
 
