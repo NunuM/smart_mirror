@@ -1,0 +1,34 @@
+name: gcalendarevents
+version: '0.1'
+summary: Fetches the user events from google calendar
+description: Events from google calendar
+
+grade: stable
+confinement: strict
+
+parts:
+  gcalendarevents-part:
+    plugin: python
+    python-version: python2
+    source: .
+    after: [file-part]
+  
+  file-part:
+    plugin: dump
+    organize:
+      'credentials.json' : etc/gcalendar/credentials.json
+      'token.json' : etc/gcalendar/token.json
+    stage:
+      - etc/gcalendar/credentials.json
+      - etc/gcalendar/token.json
+    prime:
+      - etc/gcalendar/credentials.json
+      - etc/gcalendar/token.json
+
+apps:
+  gcalendarevents:
+    command: gcalendarevents
+    plugs:
+      - home
+      - network 
+      - network-bind

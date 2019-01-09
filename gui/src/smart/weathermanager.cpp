@@ -56,7 +56,10 @@ bool smart::WeatherManager::appendWeather(QString date,
     emit preItemAppended();
     mItems.insert(theDate, weather);
     emit postItemAppended();
-
+    QDate d = QDate::currentDate();
+    if(theDate.daysTo(d)==0){
+        emit todayWasChanged();
+    }
     return true;
 }
 

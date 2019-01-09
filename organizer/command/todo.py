@@ -327,6 +327,9 @@ def print_in_json(container) -> bool:
     :param list container:
     :return:
     """
+
+
+
     print(json.dumps(container))
     return True
 
@@ -495,6 +498,7 @@ def main():
         is_verbose = True
 
         config_filename = os.path.join(os.environ['SNAP_DATA'], "config.cfg")
+        #config_filename = "~/workplace/repos/compu_smart_mirror/organizer/config.cfg"
 
         for o, a in opts:
             if o in ("-h", "--help"):
@@ -525,7 +529,7 @@ def main():
             else:
                 print("Option {} is unknown".format(o))
 
-        config = config = configparser.ConfigParser(os.environ)
+        config = configparser.ConfigParser(os.environ)
 
         try:
             config.read(config_filename)

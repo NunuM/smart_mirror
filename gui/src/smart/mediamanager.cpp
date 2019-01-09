@@ -117,6 +117,7 @@ int MediaManager::numbersOfMovies()
     return mItems.size();
 }
 
+
 bool MediaManager::currentPlayingSong(const QString &songName)
 {
     emit notifiy(1, songName);

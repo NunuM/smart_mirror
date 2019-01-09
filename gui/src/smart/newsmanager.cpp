@@ -102,6 +102,8 @@ bool NewsManager::removeNews(QString title)
     return false;
 }
 
+
+
 int NewsManager::numberOfNews()
 {
     return mItems.size();
