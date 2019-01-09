@@ -3,7 +3,7 @@ Smart Mirror Project
 ## QT - UI 
 The GUI was made with QT framework. The comunication is done via DBUS. Several interfaces are exposed via DBUS.
 
-#### Widgets implemented  
+#### Available widgets  
 
 * Applications: list of widgets that are installed.
 * Media: list of movies.
