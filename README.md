@@ -1,5 +1,12 @@
 Smart Mirror Project
 
+
+## Architecture 
+
+The smart mirror has several CLI programs that have only one requirement: print in JSON format. They are packaged by using the Ubuntu Snap package system in order to provide easy installation on target machines.
+
+The cordinator, triggered by the voice control, executes the respective program, and makes an RPC call to the UI via DBUS, and the information is presented to the user.
+
 ## QT - UI 
 The GUI was made with QT framework. The comunication is done via DBUS. Several interfaces are exposed via DBUS.
 
@@ -11,5 +18,8 @@ The GUI was made with QT framework. The comunication is done via DBUS. Several i
 * Traffic
 * Notes
 * Reddit
+* Sensor: view of the sensors that you may have interconected.
 
 ![alt text](https://i.ibb.co/tzHcP1D/scrren.png)
+
+
