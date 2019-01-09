@@ -24,12 +24,12 @@ func delete_note(note structs.Note) (string, error) {
 	return str, err1
 }
 
-func modify_note(note structs.ModifiableNote) (string, error) {
+func modify_note(note structs.ModifiableNote) (structs.ModifiableNote, error) {
 	var cmd exec.Cmd
 	if note.Alarm != nil && "" != strings.TrimSpace(*note.Alarm) {
-		cmd = *exec.Command("organizer", "-j", "-a", *note.Alarm, "-u", note.OldTitle, note.NewTitle)
+		cmd = *exec.Command("organizer", "-a", *note.Alarm, "-u", note.OldTitle, note.NewTitle)
 	} else {
-		cmd = *exec.Command("organizer", "-j", "-u", note.OldTitle, note.NewTitle)
+		cmd = *exec.Command("organizer", "-u", note.OldTitle, note.NewTitle)
 	}
 	out := &bytes.Buffer{}
 	cmd.Stdout = out
@@ -38,9 +38,10 @@ func modify_note(note structs.ModifiableNote) (string, error) {
 	if err1 != nil {
 		log.Printf("Modify Note Call error %s\n",err1.Error())
 	}
-	str := parse_output(err1, "organizer", *out)
+
+	parse_output(err1, "organizer", *out)
 	log.Print("Organizer Modify Note Call Executed")
-	return str, err1
+	return note, err1
 }
 
 func create_note(note structs.Note) (string, error) {
@@ -66,7 +67,7 @@ func create_note(note structs.Note) (string, error) {
 
 func loadNotes() {
 	var cmd exec.Cmd
-	cmd = *exec.Command("organizer", "-f", "-l")
+	cmd = *exec.Command("organizer", "-f", "-j")
 	out := &bytes.Buffer{}
 	cmd.Stdout = out
 	err1 := cmd.Run()
@@ -87,7 +88,7 @@ func loadNotes() {
 
 func loadGCalenderNotes() {
 	var cmd exec.Cmd
-	cmd = *exec.Command("gcalender")
+	cmd = *exec.Command("gcalendarevents")
 	out := &bytes.Buffer{}
 	cmd.Stdout = out
 	err1 := cmd.Run()
@@ -107,11 +108,13 @@ func loadGCalenderNotes() {
 }
 
 func LoadNotes() {
+	go switchToNotesView()
 	go loadNotes()
 }
 
 func LoadGCalanderNotes() {
-	go LoadGCalanderNotes()
+	go switchToNotesView()
+	go loadGCalenderNotes()
 }
 
 func CreateNote(note structs.Note) {
@@ -222,9 +225,12 @@ func NumberOfNotes() int32 {
 func removeNote(note structs.Note) {
 	call, err := bus.DbusNotesAPIImpl.FindDbusCall(".removeNote")
 	if err == nil {
-		result := call.RemoveNote(note.Title)
-		if !result {
-			parseReplyError("Note.RemoveNote")
+		_, err1 := delete_note(note)
+		if err1 == nil {
+			result := call.RemoveNote(note.Title)
+			if !result {
+				parseReplyError("Note.RemoveNote")
+			}
 		}
 	} else {
 		parseInitError("Note.RemoveNote")

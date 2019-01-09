@@ -53,7 +53,8 @@ func appendWeatherNoForecastAsync(weather structs.Weather){
 		if len(w) == 1 {
 			result := call.AppendWeather(w[0])
 			if !result {
-				parseReplyError("Weather.AppendWeather")
+				log.Print("False reply from Weather.AppendWeather maybe date already exists")
+				//parseReplyError("Weather.AppendWeather")
 			}
 		} else{
 			notifyError("Weather Service responded to a no forecast call with invalid output")
