@@ -44,8 +44,9 @@ def usage():
     -i, --interactive   search for films in interactive mode.
     -c, --config        use this config over the default.
     -r, --recent        check and persist new movies.
-    -l, --list          list N recently added movies
+    -l, --list          list N recently added movies.
     -j, --json          print as json.
+    -p, --paginate      Paginate by N recent added movies.
     -h, --help          print this message and exits.
 
 \033[1mEXAMPLES:\033[0m
@@ -141,6 +142,22 @@ def recent_movies(conn, number):
     """
 
     cur = conn.execute("SELECT * FROM movies ORDER BY inserted DESC LIMIT {}".format(number))
+
+    return [dict((cur.description[i][0], value) \
+                 for i, value in enumerate(row)) for row in cur.fetchall()]
+
+
+def paginate_movies(conn, item_per_page, page):
+    """
+    :param sqlite3.Connection conn:
+    :param int item_per_page:
+    :param int page:
+    :return:
+    """
+    start = page * item_per_page
+    end = start + item_per_page
+
+    cur = conn.execute("SELECT * FROM movies ORDER BY inserted DESC LIMIT {}, {}".format(start, end))
 
     return [dict((cur.description[i][0], value) \
                  for i, value in enumerate(row)) for row in cur.fetchall()]
@@ -449,14 +466,15 @@ def paginate(movies, query, is_brief=False, config=None):
 def main():
     try:
         try:
-            opts, args = getopt.getopt(sys.argv[1:], "hjbril:c:g:",
+            opts, args = getopt.getopt(sys.argv[1:], "hjbril:c:g:p:",
                                        ["brief",
                                         "genre",
                                         "interactive",
                                         "json",
                                         "help",
                                         "recent",
-                                        "list"
+                                        "list",
+                                        "paginate",
                                         "config="])
         except getopt.GetoptError as err:
             print(str(err))
@@ -468,6 +486,8 @@ def main():
         is_genre = False
         is_brief = False
         is_to_list = False
+        is_to_paginate = False
+        page_number = 0
         number_to_list = 20
         genre = None
         config_filename = os.path.join(os.environ['SNAP_DATA'], "config.cfg")
@@ -499,7 +519,12 @@ def main():
                     number_to_list = int(a)
                 except ValueError as e:
                     pass
-
+            elif o in ("-p", "--paginate"):
+                is_to_paginate = True
+                try:
+                    page_number = int(a)
+                except ValueError as e:
+                    pass
             else:
                 print("Option {} is unknown".format(o))
 
@@ -552,11 +577,17 @@ def main():
             else:
                 paginate(matched_movies, genre, is_brief, config)
         elif is_to_list:
-            matched_movies = recent_movies(db_connection, number_to_list)
             if is_json:
-                print_in_json(matched_movies, is_brief, config)
+                if is_to_paginate:
+                    print_in_json(paginate_movies(db_connection, number_to_list, page_number))
+                else:
+                    print_in_json(recent_movies(db_connection, number_to_list), is_brief, config)
             else:
-                paginate(matched_movies, genre, is_brief, config)
+                if is_to_paginate:
+                    paginate(paginate_movies(db_connection, number_to_list, page_number),
+                             "Page {}".format(++page_number))
+                else:
+                    paginate(recent_movies(db_connection, number_to_list), '', is_brief, config)
         else:
             for search in args:
                 matched_movies = search_movies_by_tittle(db_connection, search)
